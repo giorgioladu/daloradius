@@ -42,7 +42,7 @@
 				$sql = "SELECT rateName FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGRATES'].";";
 				$res = $dbSocket->query($sql);
 
-				while ($row = $res->fetchRow()) {
+				while ($row = $res->fetch()) {
 					echo "<option value='$row[0]'>$row[0]</option>";
 				}
 			?>			

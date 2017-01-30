@@ -53,7 +53,7 @@
 	$sql = "select name from ".$configValues['CONFIG_DB_TBL_DALOHOTSPOTS']."";
 	$res = $dbSocket->query($sql);
 
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 			echo "
 					<option value='$row[0]'> $row[0]
 		";
