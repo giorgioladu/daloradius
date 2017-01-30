@@ -29,16 +29,16 @@
 	$logAction = "";
 	$logDebugSQL = "";
 
-	isset($_POST['username']) ? $username = $_POST['username'] : $username = "";
-	isset($_POST['password']) ? $password = $_POST['password'] : $password = "";
+	isset($_POST['username']) ? $username = str_replace(':', '-',$_POST['username']) : $username = "";
+	isset($_POST['password']) ? $password = str_replace(':', '-',$_POST['password']) : $password = "";
 	isset($_POST['groups']) ? $groups = $_POST['groups'] : $groups = "";
 	isset($_POST['authType']) ? $authType = $_POST['authType'] : $authType = "";
 
-	isset($_POST['username']) ? $username = $_POST['username'] : $username = "";
-	isset($_POST['password']) ? $password = $_POST['password'] : $password = "";
+	isset($_POST['username']) ?  $username = str_replace('-', ':',$_POST['username']) : $username = "";
+	isset($_POST['password']) ? $password = str_replace('-', ':',$_POST['password']) : $password = "";
 	isset($_POST['passwordType']) ? $passwordtype = $_POST['passwordType'] : $passwordtype = "";
 
-	isset($_POST['macaddress']) ? $macaddress = $_POST['macaddress'] : $macaddress = "";
+	isset($_POST['macaddress']) ? $macaddress = str_replace('-', ':',$_POST['macaddress']) : $macaddress = "";
 	isset($_POST['pincode']) ? $pincode = $_POST['pincode'] : $pincode = "";
 
 	isset($_POST['group_macaddress']) ? $group_macaddress = $_POST['group_macaddress'] : $group_macaddress = "";
@@ -109,7 +109,7 @@
 
 				if (trim($group) != "") {
 					$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADUSERGROUP']." (UserName,GroupName,priority) ".
-						" VALUES ('".$dbSocket->escapeSimple($username)."', '".$dbSocket->escapeSimple($group)."',0) ";
+						" VALUES ('".htmlspecialchars($username)."', '".htmlspecialchars($group)."',0) ";
 					$res = $dbSocket->query($sql);
 					$logDebugSQL .= $sql . "\n";
 				}
@@ -118,8 +118,11 @@
 	}
 
 
-	function addUserInfo($dbSocket, $username) {
+	function addUserInfo($dbSocket, $username)
+                {
 
+            $username = str_replace(':', '-',$username);
+            
 		global $firstname;
 		global $lastname;
 		global $email;
@@ -145,27 +148,30 @@
 		$currBy = $_SESSION['operator_user'];
 
 		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].
-				" WHERE username='".$dbSocket->escapeSimple($username)."'";
+				" WHERE username='".htmlspecialchars($username)."'";
 		$res = $dbSocket->query($sql);
-		$logDebugSQL .= $sql . "\n";
+		$logDebugSQL = $sql . "\n";
+                
+                echo '<pre>'.$sql. '</pre>';
+                
 
 		// if there were no records for this user present in the userinfo table
-		if ($res->numRows() == 0) {
+		if ($res->rowCount() == 0) {
 			// insert user information table
 			$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].
 				" (id, username, firstname, lastname, email, department, company, workphone, homephone, ".
 				" mobilephone, address, city, state, country, zip, notes, changeuserinfo, portalloginpassword, enableportallogin, creationdate, creationby, updatedate, updateby) ".
 				" VALUES (0, 
-				'".$dbSocket->escapeSimple($username)."', '".$dbSocket->escapeSimple($firstname)."', '".
-				$dbSocket->escapeSimple($lastname)."', '".$dbSocket->escapeSimple($email)."', '".
-				$dbSocket->escapeSimple($department)."', '".$dbSocket->escapeSimple($company)."', '".
-				$dbSocket->escapeSimple($workphone)."', '".$dbSocket->escapeSimple($homephone)."', '".
-				$dbSocket->escapeSimple($mobilephone)."', '".$dbSocket->escapeSimple($ui_address)."', '".
-				$dbSocket->escapeSimple($ui_city)."', '".$dbSocket->escapeSimple($ui_state)."', '".
-				$dbSocket->escapeSimple($ui_country)."', '".
-				$dbSocket->escapeSimple($ui_zip)."', '".$dbSocket->escapeSimple($notes)."', '".
-				$dbSocket->escapeSimple($ui_changeuserinfo)."', '".
-				$dbSocket->escapeSimple($ui_PortalLoginPassword)."', '".$dbSocket->escapeSimple($ui_enableUserPortalLogin).
+				'".htmlspecialchars($username)."', '".htmlspecialchars($firstname)."', '".
+				htmlspecialchars($lastname)."', '".htmlspecialchars($email)."', '".
+				htmlspecialchars($department)."', '".htmlspecialchars($company)."', '".
+				htmlspecialchars($workphone)."', '".htmlspecialchars($homephone)."', '".
+				htmlspecialchars($mobilephone)."', '".htmlspecialchars($ui_address)."', '".
+				htmlspecialchars($ui_city)."', '".htmlspecialchars($ui_state)."', '".
+				htmlspecialchars($ui_country)."', '".
+				htmlspecialchars($ui_zip)."', '".htmlspecialchars($notes)."', '".
+				htmlspecialchars($ui_changeuserinfo)."', '".
+				htmlspecialchars($ui_PortalLoginPassword)."', '".htmlspecialchars($ui_enableUserPortalLogin).
 				"', '$currDate', '$currBy', NULL, NULL)";
 			$res = $dbSocket->query($sql);
 			$logDebugSQL .= $sql . "\n";
@@ -177,7 +183,9 @@
 
 
 
-	function addUserBillInfo($dbSocket, $username) {
+	function addUserBillInfo($dbSocket, $username) 
+                {
+            $username = str_replace(':', '-',$username);
 
 		global $bi_contactperson;
 		global $bi_company;
@@ -215,12 +223,12 @@
 		$currBy = $_SESSION['operator_user'];
 
 		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'].
-				" WHERE username='".$dbSocket->escapeSimple($username)."'";
+				" WHERE username='".htmlspecialchars($username)."'";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 
 		// if there were no records for this user present in the userbillinfo table
-		if ($res->numRows() == 0) {
+		if ($res->rowCount() == 0) {
 			// insert user billing information table
 			$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'].
 				" (id, username, contactperson, company, email, phone, ".
@@ -230,23 +238,23 @@
                                 " lead, coupon, ordertaker, billstatus, lastbill, nextbill, nextinvoicedue, billdue, postalinvoice, faxinvoice, emailinvoice, ".
 				" creationdate, creationby, updatedate, updateby) ".
 				" VALUES (0, 
-				'".$dbSocket->escapeSimple($username)."', '".$dbSocket->escapeSimple($bi_contactperson)."', '".
-				$dbSocket->escapeSimple($bi_company)."', '".$dbSocket->escapeSimple($bi_email)."', '".
-				$dbSocket->escapeSimple($bi_phone)."', '".$dbSocket->escapeSimple($bi_address)."', '".
-				$dbSocket->escapeSimple($bi_city)."', '".$dbSocket->escapeSimple($bi_state)."', '".
-				$dbSocket->escapeSimple($bi_country)."', '".
-				$dbSocket->escapeSimple($bi_zip)."', '".$dbSocket->escapeSimple($bi_paymentmethod)."', '".
-				$dbSocket->escapeSimple($bi_cash)."', '".$dbSocket->escapeSimple($bi_creditcardname)."', '".
-				$dbSocket->escapeSimple($bi_creditcardnumber)."', '".$dbSocket->escapeSimple($bi_creditcardverification)."', '".
-				$dbSocket->escapeSimple($bi_creditcardtype)."', '".$dbSocket->escapeSimple($bi_creditcardexp)."', '".
-				$dbSocket->escapeSimple($bi_notes)."', '".
-				$dbSocket->escapeSimple($bi_changeuserbillinfo)."', '".
-                $dbSocket->escapeSimple($bi_lead)."', '".$dbSocket->escapeSimple($bi_coupon)."', '".
-                $dbSocket->escapeSimple($bi_ordertaker)."', '".$dbSocket->escapeSimple($bi_billstatus)."', '".
-                $dbSocket->escapeSimple($bi_lastbill)."', '".$dbSocket->escapeSimple($bi_nextbill)."', '".
-                $dbSocket->escapeSimple($bi_nextinvoicedue)."', '".$dbSocket->escapeSimple($bi_billdue)."', '".
-                $dbSocket->escapeSimple($bi_postalinvoice)."', '".$dbSocket->escapeSimple($bi_faxinvoice)."', '".
-                $dbSocket->escapeSimple($bi_emailinvoice).
+				'".htmlspecialchars($username)."', '".htmlspecialchars($bi_contactperson)."', '".
+				htmlspecialchars($bi_company)."', '".htmlspecialchars($bi_email)."', '".
+				htmlspecialchars($bi_phone)."', '".htmlspecialchars($bi_address)."', '".
+				htmlspecialchars($bi_city)."', '".htmlspecialchars($bi_state)."', '".
+				htmlspecialchars($bi_country)."', '".
+				htmlspecialchars($bi_zip)."', '".htmlspecialchars($bi_paymentmethod)."', '".
+				htmlspecialchars($bi_cash)."', '".htmlspecialchars($bi_creditcardname)."', '".
+				htmlspecialchars($bi_creditcardnumber)."', '".htmlspecialchars($bi_creditcardverification)."', '".
+				htmlspecialchars($bi_creditcardtype)."', '".htmlspecialchars($bi_creditcardexp)."', '".
+				htmlspecialchars($bi_notes)."', '".
+				htmlspecialchars($bi_changeuserbillinfo)."', '".
+                htmlspecialchars($bi_lead)."', '".htmlspecialchars($bi_coupon)."', '".
+                htmlspecialchars($bi_ordertaker)."', '".htmlspecialchars($bi_billstatus)."', '".
+                htmlspecialchars($bi_lastbill)."', '".htmlspecialchars($bi_nextbill)."', '".
+                htmlspecialchars($bi_nextinvoicedue)."', '".htmlspecialchars($bi_billdue)."', '".
+                htmlspecialchars($bi_postalinvoice)."', '".htmlspecialchars($bi_faxinvoice)."', '".
+                htmlspecialchars($bi_emailinvoice).
 				"', '$currDate', '$currBy', NULL, NULL)";
 			$res = $dbSocket->query($sql);
 			$logDebugSQL .= $sql . "\n";
@@ -259,6 +267,7 @@
 
 	function addAttributes($dbSocket, $username) {
 		
+            $username = str_replace(':', '-',$_POST['username']);
 		global $logDebugSQL;
 		global $configValues;
 
@@ -355,9 +364,9 @@
 				continue;
 	
 			$sql = "INSERT INTO $table (id,Username,Attribute,op,Value) ".
-					" VALUES (0, '".$dbSocket->escapeSimple($username)."', '".
-					$dbSocket->escapeSimple($attribute)."', '".$dbSocket->escapeSimple($op)."', '".
-					$dbSocket->escapeSimple($value)."')  ";
+					" VALUES (0, '".htmlspecialchars($username)."', '".
+					htmlspecialchars($attribute)."', '".htmlspecialchars($op)."', '".
+					htmlspecialchars($value)."')  ";
 			$res = $dbSocket->query($sql);
 			$logDebugSQL .= $sql . "\n";
 
@@ -387,11 +396,14 @@
 		}
 
 		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADCHECK']." WHERE UserName='".
-				$dbSocket->escapeSimple($username)."'";
+				htmlspecialchars($username)."'";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
+                
+                $username = str_replace(':', '-',$username);
+                 $password = str_replace(':', '-',$password);
 
-		if ($res->numRows() == 0) {
+		if ($res->rowCount() == 0) {
 
 		    if ($authType == "userAuth") {
 
@@ -399,7 +411,7 @@
 
 					// we need to perform the secure method escapeSimple on $dbPassword early because as seen below
 					// we manipulate the string and manually add to it the '' which screw up the query if added in $sql
-					$password = $dbSocket->escapeSimple($password);
+					$password = htmlspecialchars($password);
 
 					switch($configValues['CONFIG_DB_PASSWORD_ENCRYPTION']) {
 						case "cleartext":
@@ -440,7 +452,7 @@
 
 					// insert username/password
 					$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADCHECK']." (id,Username,Attribute,op,Value) ".
-							" VALUES (0, '".$dbSocket->escapeSimple($username)."', '".$dbSocket->escapeSimple($passwordtype).
+							" VALUES (0, '".htmlspecialchars($username)."', '".htmlspecialchars($passwordtype).
 							"', ':=', $dbPassword)";
 					$res = $dbSocket->query($sql);
 					$logDebugSQL .= $sql . "\n";
@@ -463,7 +475,7 @@
 
 				// insert username/password
 				$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADCHECK']." (id,Username,Attribute,op,Value) ".
-						" VALUES (0, '".$dbSocket->escapeSimple($macaddress)."', 'Auth-Type', ':=', 'Accept')";
+						" VALUES (0, '".htmlspecialchars($macaddress)."', 'Auth-Type', ':=', 'Accept')";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 				
@@ -479,7 +491,7 @@
 
 				// insert username/password
 				$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADCHECK']." (id,Username,Attribute,op,Value) ".
-						" VALUES (0, '".$dbSocket->escapeSimple($pincode)."', 'Auth-Type', ':=', 'Accept')";
+						" VALUES (0, '".htmlspecialchars($pincode)."', 'Auth-Type', ':=', 'Accept')";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 

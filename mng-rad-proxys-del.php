@@ -57,7 +57,7 @@
 
 				// delete all proxys
 				$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_DALOPROXYS'].
-					" WHERE proxyname='".$dbSocket->escapeSimple($proxyname)."'";
+					" WHERE proxyname='".htmlspecialchars($proxyname)."'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 				

@@ -53,11 +53,11 @@
 		include 'library/opendb.php';
 
 		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADNAS'].
-				" WHERE nasname='".$dbSocket->escapeSimple($nashost)."'";
+				" WHERE nasname='".htmlspecialchars($nashost)."'";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 
-		if ($res->numRows() == 0) {
+		if ($res->rowCount() == 0) {
 
 			if (trim($nashost) != "" and trim($nassecret) != "") {
 
@@ -71,11 +71,11 @@
 
 				// insert nas details
 				$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADNAS'].
-					" (id,nasname,shortname,type,ports,secret,server,community,description) ".
-					" values (0, '".$dbSocket->escapeSimple($nashost)."', '".$dbSocket->escapeSimple($nasname).
-					"', '".$dbSocket->escapeSimple($nastype)."', '".$dbSocket->escapeSimple($nasports).
-					"', '".$dbSocket->escapeSimple($nassecret)."', '".$dbSocket->escapeSimple($nasvirtualserver).
-					"', '".$dbSocket->escapeSimple($nascommunity)."', '".$dbSocket->escapeSimple($nasdescription)."')";
+					" (id,nasname,shortname,type,ports,secret,community,description) ".
+					" values (0, '".htmlspecialchars($nashost)."', '".htmlspecialchars($nasname).
+					"', '".htmlspecialchars($nastype)."', ".htmlspecialchars($nasports).
+					", '".htmlspecialchars($nassecret)."', '".htmlspecialchars($nascommunity).
+					"', '".htmlspecialchars($nasdescription)."')";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 			

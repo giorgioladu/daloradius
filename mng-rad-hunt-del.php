@@ -60,7 +60,7 @@
 
                                         // delete only a specific groupname and it's attribute
                                         $sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_RADHG'].
-                                                        " WHERE nasipaddress='".$dbSocket->escapeSimple($nasipaddress).
+                                                        " WHERE nasipaddress='".htmlspecialchars($nasipaddress).
                                                         "' AND nasportid='$nasportid' ";
                                         $res = $dbSocket->query($sql);
                                         $logDebugSQL .= $sql . "\n";
@@ -74,7 +74,7 @@
 
                                         include 'library/opendb.php';
 
-                                        $sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_RADHG']." WHERE nasipaddress='".$dbSocket->escapeSimple($nasipaddress)."'";
+                                        $sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_RADHG']." WHERE nasipaddress='".htmlspecialchars($nasipaddress)."'";
                                         $res = $dbSocket->query($sql);
                                         $logDebugSQL .= $sql . "\n";
 
@@ -103,7 +103,7 @@
 
 
 
-
+	
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
@@ -116,17 +116,17 @@
 <link rel="stylesheet" href="css/1.css" type="text/css" media="screen,projection" />
 
 </head>
-
-
+ 
+ 
 <?php
 	include ("menu-mng-rad-hunt.php");
 ?>
 
 	<div id="contentnorightbar">
-
+	
 		<h2 id="Intro"><a href="#" onclick="javascript:toggleShowDiv('helpPage')"><?php echo $l['Intro']['mngradhuntdel.php'] ?>
 		:: <?php if (isset($nasipaddress)) { echo $nasipaddress; } ?><h144>+</h144></a></h2>
-
+		
 		<div id="helpPage" style="display:none;visibility:visible" >
 			<?php echo $l['helpPage']['mngradhuntdel'] ?>
 			<br/>

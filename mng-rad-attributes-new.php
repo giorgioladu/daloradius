@@ -39,19 +39,19 @@
 
 		include 'library/opendb.php';
 
-		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALODICTIONARY']." WHERE vendor='".$dbSocket->escapeSimple($vendor).
-			"' AND attribute='".$dbSocket->escapeSimple($attribute)."'";
+		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALODICTIONARY']." WHERE vendor='".htmlspecialchars($vendor).
+			"' AND attribute='".htmlspecialchars($attribute)."'";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 
-		if ($res->numRows() == 0) {
+		if ($res->rowCount() == 0) {
 			if (trim($vendor) != "" and trim($attribute) != "") {
 				// insert vendor/attribute pairs to database
 				$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_DALODICTIONARY'].
 					" (id, type, attribute, vendor, RecommendedOP, RecommendedTable, RecommendedTooltip) VALUES (0, '".
-					$dbSocket->escapeSimple($type)."', '".$dbSocket->escapeSimple($attribute)."','".
-					$dbSocket->escapeSimple($vendor)."','".	$dbSocket->escapeSimple($RecommendedOP)."','".
-					$dbSocket->escapeSimple($RecommendedTable)."','".$dbSocket->escapeSimple($RecommendedTooltip)."')";
+					htmlspecialchars($type)."', '".htmlspecialchars($attribute)."','".
+					htmlspecialchars($vendor)."','".	htmlspecialchars($RecommendedOP)."','".
+					htmlspecialchars($RecommendedTable)."','".htmlspecialchars($RecommendedTooltip)."')";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 

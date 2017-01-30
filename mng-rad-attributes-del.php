@@ -54,15 +54,15 @@
 				include 'library/opendb.php';
 
 				$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALODICTIONARY']." WHERE vendor='".
-						$dbSocket->escapeSimple($vendor)."' AND attribute='".$dbSocket->escapeSimple($attribute)."'";
+						htmlspecialchars($vendor)."' AND attribute='".htmlspecialchars($attribute)."'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 
-				if ($res->numRows() == 1) {
+				if ($res->rowCount() == 1) {
 					if (trim($vendor) != "" and trim($attribute) != "") {
 						// remove vendor/attribute pairs from database
 						$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_DALODICTIONARY']." WHERE vendor='".
-							$dbSocket->escapeSimple($vendor)."' AND attribute='".$dbSocket->escapeSimple($attribute)."'";
+							htmlspecialchars($vendor)."' AND attribute='".htmlspecialchars($attribute)."'";
 						$res = $dbSocket->query($sql);
 						$logDebugSQL .= $sql . "\n";
 
@@ -76,8 +76,9 @@
 					$failureMsg = "You have tried to remove a vendor's attribute that either is not present in the database or there
 							may be more than 1 entry for this vendor attribute in database (attribute :$attribute)";
 					$logAction .= "Failed removing vendor attribute already in database [$attribute] on page: ";
-				} //if ($res->numRows() == 1)
-
+				} 
+//if ($res->rowCount() == 1)
+			
 				include 'library/closedb.php';
 
 			} // if (trim...

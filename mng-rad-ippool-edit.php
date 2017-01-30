@@ -41,20 +41,20 @@
 		include 'library/opendb.php';
 
 		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADIPPOOL'].
-			" WHERE pool_name='".$dbSocket->escapeSimple($poolname)."'".
-			" AND framedipaddress='".$dbSocket->escapeSimple($ipaddressold)."'";
+			" WHERE pool_name='".htmlspecialchars($poolname)."'".
+			" AND framedipaddress='".htmlspecialchars($ipaddressold)."'";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 
-		if ($res->numRows() == 1) {
+		if ($res->rowCount() == 1) {
 
 			if (trim($poolname) != "" and trim($ipaddress) != "" and trim($ipaddressold) != "") {
 
 				// insert ippool name and ip address
 				$sql = "UPDATE ".$configValues['CONFIG_DB_TBL_RADIPPOOL'].
-					" SET framedipaddress='".$dbSocket->escapeSimple($ipaddress)."'".
-					" WHERE pool_name='".$dbSocket->escapeSimple($poolname)."'".
-					" AND framedipaddress='".$dbSocket->escapeSimple($ipaddressold)."'";
+					" SET framedipaddress='".htmlspecialchars($ipaddress)."'".
+					" WHERE pool_name='".htmlspecialchars($poolname)."'".
+					" AND framedipaddress='".htmlspecialchars($ipaddressold)."'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 			

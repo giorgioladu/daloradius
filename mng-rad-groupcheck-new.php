@@ -77,19 +77,19 @@
 					$allAttributes .= $attribute . "\n";
 
 					$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADGROUPCHECK'].
-							" WHERE GroupName='".$dbSocket->escapeSimple($groupname).
-							"' AND Attribute='".$dbSocket->escapeSimple($attribute)."'";
+							" WHERE GroupName='".htmlspecialchars($groupname).
+							"' AND Attribute='".htmlspecialchars($attribute)."'";
 					$res = $dbSocket->query($sql);
 					$logDebugSQL .= $sql . "\n";
 
-					if ($res->numRows() == 0) {
+					if ($res->rowCount() == 0) {
 						// insert radgroupcheck details
 						// assuming there's no groupname with that attribute in the table
 						$sql = "INSERT INTO $table (id, GroupName, Attribute, Op, Value) ".
-								" VALUES (0,'".$dbSocket->escapeSimple($groupname)."','".
-								$dbSocket->escapeSimple($attribute)."', '".
-								$dbSocket->escapeSimple($op)."', '".
-								$dbSocket->escapeSimple($value)."')";
+								" VALUES (0,'".htmlspecialchars($groupname)."','".
+								htmlspecialchars($attribute)."', '".
+								htmlspecialchars($op)."', '".
+								htmlspecialchars($value)."')";
 						$res = $dbSocket->query($sql);
 						$logDebugSQL .= $sql . "\n";
 						$counter++;

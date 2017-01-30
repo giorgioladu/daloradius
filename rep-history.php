@@ -71,7 +71,7 @@
         " (SELECT 'payment' as section, id as item, creationdate,creationby,updatedate,updateby FROM payment) UNION ".
 		" (SELECT 'hotspot' as section, name as item, creationdate,creationby,updatedate,updateby FROM hotspots) ";
         $res = $dbSocket->query($sql);
-	$numrows = $res->numRows();
+	$numrows = $res->rowCount();
 
         $sql = "(SELECT 'proxy' as section, proxyname as item, creationdate,creationby,updatedate,updateby FROM proxys) UNION ".
 		" (SELECT 'realm' as section, realmname as item, creationdate,creationby,updatedate,updateby FROM realms) UNION ".
@@ -146,7 +146,7 @@
         </tr> </thread>";
 
 
-        while($row = $res->fetchRow()) {
+        while($row = $res->fetch()) {
 
 	        printqn("<tr>
                                 <td> $row[0] </td>

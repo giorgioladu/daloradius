@@ -49,7 +49,7 @@
 		}
 
 		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOPROXYS'].
-			" WHERE proxyname='".$dbSocket->escapeSimple($proxyname)."'";
+			" WHERE proxyname='".htmlspecialchars($proxyname)."'";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 
@@ -72,10 +72,10 @@
 
 			// update proxy entry in database
 			$sql = "UPDATE ".$configValues['CONFIG_DB_TBL_DALOPROXYS']." SET ".
-				" retry_delay=".$dbSocket->escapeSimple($retry_delay).", ".
-				" retry_count=".$dbSocket->escapeSimple($retry_count).", ".
-				" dead_time=".$dbSocket->escapeSimple($dead_time).", ".
-				" default_fallback=".$dbSocket->escapeSimple($default_fallback).", ".
+				" retry_delay=".htmlspecialchars($retry_delay).", ".
+				" retry_count=".htmlspecialchars($retry_count).", ".
+				" dead_time=".htmlspecialchars($dead_time).", ".
+				" default_fallback=".htmlspecialchars($default_fallback).", ".
                                 " updatedate='$currDate', updateby='$currBy' ".
 				" WHERE proxyname='$proxyname';";
 			$res = $dbSocket->query($sql);
@@ -103,11 +103,11 @@
 
 	// fill-in proxy information in html elements
 	$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOPROXYS'].
-			" WHERE proxyname='".$dbSocket->escapeSimple($proxyname)."'";
+			" WHERE proxyname='".htmlspecialchars($proxyname)."'";
 	$res = $dbSocket->query($sql);
 	$logDebugSQL .= $sql . "\n";
 
-	$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+	$row = $res->fetch(PDO::FETCH_ASSOC);
 	$retry_count = $row['retry_count'];
 	$retry_delay = $row['retry_delay'];
 	$dead_time = $row['dead_time'];

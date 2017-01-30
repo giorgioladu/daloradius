@@ -89,8 +89,8 @@
         $_SESSION['reportQuery'] = " WHERE UserName LIKE '%'";
         $_SESSION['reportType'] = "usernameListGeneric";
 
-	$orderBy = $dbSocket->escapeSimple($orderBy);
-	$orderType = $dbSocket->escapeSimple($orderType);
+	$orderBy = htmlspecialchars($orderBy);
+	$orderType = htmlspecialchars($orderType);
         
 	//orig: used as maethod to get total rows - this is required for the pages_numbering.php page
 	$sql = "SELECT distinct(".$configValues['CONFIG_DB_TBL_RADCHECK'].".username),".$configValues['CONFIG_DB_TBL_RADCHECK'].".value,
@@ -99,7 +99,7 @@
 		".$configValues['CONFIG_DB_TBL_RADCHECK'].".username=".$configValues['CONFIG_DB_TBL_RADUSERGROUP'].".username 
 		WHERE (Attribute='Auth-Type') or (Attribute LIKE '%-Password') GROUP BY UserName";
 	$res = $dbSocket->query($sql);
-	$numrows = $res->numRows();
+	$numrows = $res->rowCount();
 
 
 	/* we are searching for both kind of attributes for the password, being User-Password, the more
@@ -190,7 +190,7 @@
 		</th>
 		</tr> </thread>";
 
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 
 		printqn("
 			<td> <input type='checkbox' name='username[]' value='$row[0]'>$row[2]</td>

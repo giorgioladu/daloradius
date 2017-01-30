@@ -84,7 +84,7 @@
 	$logDebugSQL = "";
 	$logDebugSQL .= $sql . "\n";
 
-	$numrows = $res->numRows();
+	$numrows = $res->rowCount();
 
 	$sql = "SELECT id, Vendor, Attribute FROM dictionary WHERE Vendor = '$vendor' AND Type <> '' ".
 		"ORDER BY $orderBy $orderType LIMIT $offset, $rowsPerPage;";
@@ -146,7 +146,7 @@
 		</th>
 
 		</tr> </thread>";
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 
 		printqn ("<tr>
                                 <td> <input type='checkbox' name='vendor[]' value='$row[1]||$row[2]'> $row[0] </td>

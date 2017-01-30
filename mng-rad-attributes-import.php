@@ -106,7 +106,7 @@
                                 $res = $dbSocket->query($sql);
                                 $logDebugSQL .= $sql . "\n";
 
-				$row = $res->fetchRow();
+				$row = $res->fetch();
 
 				$vendorName = $row[0];
 				if ($vendorName == $myVendor) {

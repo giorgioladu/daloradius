@@ -40,13 +40,13 @@
 	$logDebugSQL = "";
 
 	// fill-in nashost details in html textboxes
-	$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADHG']." WHERE nasipaddress='".$dbSocket->escapeSimple($nasipaddress).
-			"' AND groupname='".$dbSocket->escapeSimple($groupname)."'";
+	$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADHG']." WHERE nasipaddress='".htmlspecialchars($nasipaddress).
+			"' AND groupname='".htmlspecialchars($groupname)."'";
 	$res = $dbSocket->query($sql);
 	$logDebugSQL = "";
 	$logDebugSQL .= $sql . "\n";
 
-	$row = $res->fetchRow();		// array fetched with values from $sql query
+	$row = $res->fetch();		// array fetched with values from $sql query
 
 	// assignment of values from query to local variables
 	// to be later used in html to display on textboxes (input)
@@ -67,12 +67,12 @@
 		include 'library/opendb.php';
 
 		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADHG'].
-		" WHERE nasipaddress='".$dbSocket->escapeSimple($nasipaddressold).
-		"' AND nasportid='". $dbSocket->escapeSimple($nasportidold)."' ";
+		" WHERE nasipaddress='".htmlspecialchars($nasipaddressold).
+		"' AND nasportid='". htmlspecialchars($nasportidold)."' ";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 
-		if ($res->numRows() == 1) {
+		if ($res->rowCount() == 1) {
 
 			if (trim($nasipaddress) != "" and trim($groupname) != "") {
 
@@ -82,11 +82,11 @@
 
 				// insert nas details
 				$sql = "UPDATE ".$configValues['CONFIG_DB_TBL_RADHG'].
-					" SET nasipaddress='".$dbSocket->escapeSimple($nasipaddress)."', ".
-					" groupname='".$dbSocket->escapeSimple($groupname)."', ".
-					" nasportid=".$dbSocket->escapeSimple($nasportid)." ".
-					" WHERE nasipaddress='".$dbSocket->escapeSimple($nasipaddressold)."'".
-					" AND nasportid='". $dbSocket->escapeSimple($nasportidold)."' ";
+					" SET nasipaddress='".htmlspecialchars($nasipaddress)."', ".
+					" groupname='".htmlspecialchars($groupname)."', ".
+					" nasportid=".htmlspecialchars($nasportid)." ".
+					" WHERE nasipaddress='".htmlspecialchars($nasipaddressold)."'".
+					" AND nasportid='". htmlspecialchars($nasportidold)."' ";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 
@@ -97,7 +97,7 @@
 				$logAction .= "Failed updating attributes for hg [$nasipaddress - $nasportid] on page: ";
 			}
 			
-		} elseif ($res->numRows() > 1) {
+		} elseif ($res->rowCount() > 1) {
 			$failureMsg = "The HG IP/Host - Port <b> $nasipaddress  - $nasportid</b> already exists in the database
 			<br/> Please check that there are no duplicate entries in the database";
 			$logAction .= "Failed updating attributes for already existing hg [$nasipaddress - $nasportid] on page: ";

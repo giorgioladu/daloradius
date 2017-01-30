@@ -37,8 +37,8 @@
 	$logDebugSQL = "";
 
 	if (isset($_POST['submit'])) {
-		$username = $_POST['username'];
-		$password = $_POST['password'];
+		$username =  str_replace(':', '-',$_POST['username']);
+		$password = str_replace(':', '-',$_POST['password']);
 		$passwordType = $_POST['passwordType'];
 		$groups = $_POST['groups'];
 		$maxallsession = $_POST['maxallsession'];
@@ -91,19 +91,22 @@
 		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADCHECK']." WHERE UserName='$username'";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
+                
+                 $username = str_replace(':', '-',$username);
+                 $password = str_replace(':', '-',$password);
 
-		if ($res->numRows() == 0) {
+		if ($res->rowCount() == 0) {
 		
 			if (trim($username) != "" and trim($password) != "") {
 
-				$password = $dbSocket->escapeSimple($password);
+				$password = htmlspecialchars($password);
 
                                 switch($configValues['CONFIG_DB_PASSWORD_ENCRYPTION']) {
                                 	case "cleartext":
                         	                $dbPassword = "'$password'";
                                                 break;
                                         case "crypt":
-                                                $dbPassword = "ENCRYPT('$password', 'SALT_DALORADIUS')";
+                                                $dbPassword = "ENCRYPT('$password')";
                                                 break;
                                         case "md5":
                                                 $dbPassword = "MD5('$password')";
@@ -115,55 +118,55 @@
 				// insert username/password
 				$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADCHECK'].
 						" (id,Username,Attribute,op,Value) ".
-						" VALUES (0, '".$dbSocket->escapeSimple($username)."', '$passwordType', ".
+						" VALUES (0, '".htmlspecialchars($username)."', '$passwordType', ".
 						" ':=', $dbPassword)";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 	
 				if ($maxallsession) {
 					$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADCHECK']." (id,Username,Attribute,op,Value) ".
-							" VALUES (0, '".$dbSocket->escapeSimple($username)."', 'Max-All-Session', ':=', '".
-							$dbSocket->escapeSimple($maxallsession)."')";
+							" VALUES (0, '".htmlspecialchars($username)."', 'Max-All-Session', ':=', '".
+							htmlspecialchars($maxallsession)."')";
 					$res = $dbSocket->query($sql);
 					$logDebugSQL .= $sql . "\n";
 				}
 
 				if ($expiration) {
 					$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADCHECK']." (id,Username,Attribute,op,Value) ".
-							" VALUES (0, '".$dbSocket->escapeSimple($username)."', 'Expiration', ':=', '".
-							$dbSocket->escapeSimple($expiration)."')";
+							" VALUES (0, '".htmlspecialchars($username)."', 'Expiration', ':=', '".
+							htmlspecialchars($expiration)."')";
 					$res = $dbSocket->query($sql);
 					$logDebugSQL .= $sql . "\n";
 				}
 
 				if ($sessiontimeout) {
 					$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADREPLY']." (id,Username,Attribute,op,Value) ".
-							" VALUES (0, '".$dbSocket->escapeSimple($username)."', 'Session-Timeout', ':=', '".
-							$dbSocket->escapeSimple($sessiontimeout)."')";
+							" VALUES (0, '".htmlspecialchars($username)."', 'Session-Timeout', ':=', '".
+							htmlspecialchars($sessiontimeout)."')";
 					$res = $dbSocket->query($sql);
 					$logDebugSQL .= $sql . "\n";
 				}
 
 				if ($idletimeout) {
 					$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADREPLY']." (id,Username,Attribute,op,Value) ".
-							" VALUES (0, '".$dbSocket->escapeSimple($username)."', 'Idle-Timeout', ':=', '".
-							$dbSocket->escapeSimple($idletimeout)."')";
+							" VALUES (0, '".htmlspecialchars($username)."', 'Idle-Timeout', ':=', '".
+							htmlspecialchars($idletimeout)."')";
 					$res = $dbSocket->query($sql);
 					$logDebugSQL .= $sql . "\n";
 				}
 
 				if ($simultaneoususe) {
 					$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADCHECK']." (id,Username,Attribute,op,Value) ".
-							" VALUES (0, '".$dbSocket->escapeSimple($username)."', 'Simultaneous-Use', ':=', '".
-							$dbSocket->escapeSimple($simultaneoususe)."')";
+							" VALUES (0, '".htmlspecialchars($username)."', 'Simultaneous-Use', ':=', '".
+							htmlspecialchars($simultaneoususe)."')";
 					$res = $dbSocket->query($sql);
 					$logDebugSQL .= $sql . "\n";
 				}
 
 				if ($framedipaddress) {
 					$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADREPLY']." (id,Username,Attribute,op,Value) ".
-							" VALUES (0, '".$dbSocket->escapeSimple($username)."', 'Framed-IP-Address', ':=', '".
-							$dbSocket->escapeSimple($framedipaddress)."')";
+							" VALUES (0, '".htmlspecialchars($username)."', 'Framed-IP-Address', ':=', '".
+							htmlspecialchars($framedipaddress)."')";
 					$res = $dbSocket->query($sql);
 					$logDebugSQL .= $sql . "\n";
 				}
@@ -174,7 +177,7 @@
 
 		                                if (trim($group) != "") {
 		                                        $sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADUSERGROUP']." (UserName,GroupName,priority) ".
-		                                                " VALUES ('".$dbSocket->escapeSimple($username)."', '".$dbSocket->escapeSimple($group)."',0) ";
+		                                                " VALUES ('".htmlspecialchars($username)."', '".htmlspecialchars($group)."',0) ";
 		                                        $res = $dbSocket->query($sql);
 		                                        $logDebugSQL .= $sql . "\n";
 		                                }
@@ -186,27 +189,27 @@
 				$currBy = $_SESSION['operator_user'];
 
 				$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].
-						" WHERE username='".$dbSocket->escapeSimple($username)."'";
+						" WHERE username='".htmlspecialchars($username)."'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 
 				// if there were no records for this user present in the userinfo table
-				if ($res->numRows() == 0) {
+				if ($res->rowCount() == 0) {
 					// insert user information table
 					$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].
 							" (id, username, firstname, lastname, email, department, company, workphone, homephone, ".
 							" mobilephone, address, city, state, country, zip, notes, changeuserinfo, portalloginpassword, enableportallogin, creationdate, creationby, updatedate, updateby) ".
 							" VALUES (0,
-							'".$dbSocket->escapeSimple($username)."', '".$dbSocket->escapeSimple($firstname)."', '".
-							$dbSocket->escapeSimple($lastname)."', '".$dbSocket->escapeSimple($email)."', '".
-							$dbSocket->escapeSimple($department)."', '".$dbSocket->escapeSimple($company)."', '".
-							$dbSocket->escapeSimple($workphone)."', '".$dbSocket->escapeSimple($homephone)."', '".
-							$dbSocket->escapeSimple($mobilephone)."', '".$dbSocket->escapeSimple($address)."', '".
-							$dbSocket->escapeSimple($city)."', '".$dbSocket->escapeSimple($state)."', '".
-							$dbSocket->escapeSimple($country)."', '".
-							$dbSocket->escapeSimple($zip)."', '".$dbSocket->escapeSimple($notes)."', '".
-							$dbSocket->escapeSimple($ui_changeuserinfo)."', '".
-							$dbSocket->escapeSimple($ui_PortalLoginPassword)."', '".$dbSocket->escapeSimple($ui_enableUserPortalLogin).
+							'".htmlspecialchars($username)."', '".htmlspecialchars($firstname)."', '".
+							htmlspecialchars($lastname)."', '".htmlspecialchars($email)."', '".
+							htmlspecialchars($department)."', '".htmlspecialchars($company)."', '".
+							htmlspecialchars($workphone)."', '".htmlspecialchars($homephone)."', '".
+							htmlspecialchars($mobilephone)."', '".htmlspecialchars($address)."', '".
+							htmlspecialchars($city)."', '".htmlspecialchars($state)."', '".
+							htmlspecialchars($country)."', '".
+							htmlspecialchars($zip)."', '".htmlspecialchars($notes)."', '".
+							htmlspecialchars($ui_changeuserinfo)."', '".
+							htmlspecialchars($ui_PortalLoginPassword)."', '".htmlspecialchars($ui_enableUserPortalLogin).
 							"', '$currDate', '$currBy', NULL, NULL)";
 					$res = $dbSocket->query($sql);
 					$logDebugSQL .= $sql . "\n";
@@ -215,12 +218,12 @@
 
 
 		                $sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'].
-		                                " WHERE username='".$dbSocket->escapeSimple($username)."'";
+		                                " WHERE username='".htmlspecialchars($username)."'";
 		                $res = $dbSocket->query($sql);
 		                $logDebugSQL .= $sql . "\n";
 		
 		                // if there were no records for this user present in the userbillinfo table
-		                if ($res->numRows() == 0) {
+		                if ($res->rowCount() == 0) {
 		                        // insert user billing information table
 		                        $sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'].
 		                                " (id, username, contactperson, company, email, phone, ".
@@ -229,17 +232,17 @@
 		                                " notes, changeuserbillinfo, ".
 		                                " creationdate, creationby, updatedate, updateby) ".
 		                                " VALUES (0,
-		                                '".$dbSocket->escapeSimple($username)."', '".$dbSocket->escapeSimple($bi_contactperson)."', '".
-		                                $dbSocket->escapeSimple($bi_company)."', '".$dbSocket->escapeSimple($bi_email)."', '".
-		                                $dbSocket->escapeSimple($bi_phone)."', '".$dbSocket->escapeSimple($bi_address)."', '".
-		                                $dbSocket->escapeSimple($bi_city)."', '".$dbSocket->escapeSimple($bi_state)."', '".
-		                                $dbSocket->escapeSimple($bi_country)."', '".
-		                                $dbSocket->escapeSimple($bi_zip)."', '".$dbSocket->escapeSimple($bi_paymentmethod)."', '".
-		                                $dbSocket->escapeSimple($bi_cash)."', '".$dbSocket->escapeSimple($bi_creditcardname)."', '".
-		                                $dbSocket->escapeSimple($bi_creditcardnumber)."', '".$dbSocket->escapeSimple($bi_creditcardverification)."', '".
-	                	                $dbSocket->escapeSimple($bi_creditcardtype)."', '".$dbSocket->escapeSimple($bi_creditcardexp)."', '".
-		                                $dbSocket->escapeSimple($bi_notes)."', '".
-		                                $dbSocket->escapeSimple($bi_changeuserbillinfo).
+		                                '".htmlspecialchars($username)."', '".htmlspecialchars($bi_contactperson)."', '".
+		                                htmlspecialchars($bi_company)."', '".htmlspecialchars($bi_email)."', '".
+		                                htmlspecialchars($bi_phone)."', '".htmlspecialchars($bi_address)."', '".
+		                                htmlspecialchars($bi_city)."', '".htmlspecialchars($bi_state)."', '".
+		                                htmlspecialchars($bi_country)."', '".
+		                                htmlspecialchars($bi_zip)."', '".htmlspecialchars($bi_paymentmethod)."', '".
+		                                htmlspecialchars($bi_cash)."', '".htmlspecialchars($bi_creditcardname)."', '".
+		                                htmlspecialchars($bi_creditcardnumber)."', '".htmlspecialchars($bi_creditcardverification)."', '".
+	                	                htmlspecialchars($bi_creditcardtype)."', '".htmlspecialchars($bi_creditcardexp)."', '".
+		                                htmlspecialchars($bi_notes)."', '".
+		                                htmlspecialchars($bi_changeuserbillinfo).
 		                                "', '$currDate', '$currBy', NULL, NULL)";
 			                        $res = $dbSocket->query($sql);
 		                        $logDebugSQL .= $sql . "\n";

@@ -83,7 +83,7 @@
 		$configValues['CONFIG_DB_TBL_RADGROUPCHECK'].".GroupName=".$configValues['CONFIG_DB_TBL_RADUSERGROUP'].".GroupName GROUP BY ".
 		$configValues['CONFIG_DB_TBL_RADGROUPCHECK'].".GroupName;";
 	$res = $dbSocket->query($sql);
-	$numrows = $res->numRows();
+	$numrows = $res->rowCount();
 
 	
 	$sql = "SELECT distinct(".$configValues['CONFIG_DB_TBL_RADGROUPREPLY'].".GroupName), count(distinct(".$configValues['CONFIG_DB_TBL_RADUSERGROUP'].".username)) ".
@@ -145,7 +145,7 @@
 		</th>
 
 	</tr> </thread>";
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		echo "<tr>
 			<td> <input type='checkbox' name='profile[]' value='$row[0]'>
 				<a class='tablenovisit' href='javascript:return;'

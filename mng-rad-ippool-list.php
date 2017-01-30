@@ -77,7 +77,7 @@
 	$logDebugSQL = "";
 	$logDebugSQL .= $sql . "\n";
 
-	$numrows = $res->numRows();
+	$numrows = $res->rowCount();
 
 	$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADIPPOOL'].
 			" ORDER BY $orderBy $orderType LIMIT $offset, $rowsPerPage;";
@@ -173,7 +173,7 @@
 		<br/>
 		</th>
 	</tr> </thread>";
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		echo "<tr>
                                 <td> <input type='checkbox' name='poolname[]' value='$row[1]||$row[2]'> $row[0] </td>
 				<td> $row[1] </td>

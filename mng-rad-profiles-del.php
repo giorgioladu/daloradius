@@ -22,7 +22,7 @@
 
     include ("library/checklogin.php");
     $operator = $_SESSION['operator_user'];
-
+        
 	include('library/check_operator_perm.php');
 
 	isset($_REQUEST['profile']) ? $profile = $_REQUEST['profile'] : $profile = "";
@@ -34,8 +34,8 @@
 		$removeProfileAssoc = true;
 	else
 		$removeProfileAssoc = false;
-
-
+	
+	
 	$logAction = "";
 	$logDebugSQL = "";
 
@@ -60,24 +60,24 @@
 
 				// delete all attributes associated with a profile
 				$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_RADGROUPCHECK'].
-					" WHERE GroupName='".$dbSocket->escapeSimple($profile)."'";
+					" WHERE GroupName='".htmlspecialchars($profile)."'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 
 				$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_RADGROUPREPLY'].
-					" WHERE GroupName='".$dbSocket->escapeSimple($profile)."'";
+					" WHERE GroupName='".htmlspecialchars($profile)."'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 
 				// delete all user associations with the profile
 				if ($removeProfileAssoc == true) {
 					$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_RADUSERGROUP'].
-						" WHERE GroupName='".$dbSocket->escapeSimple($profile)."'";
+						" WHERE GroupName='".htmlspecialchars($profile)."'";
 					$res = $dbSocket->query($sql);
 					$logDebugSQL .= $sql . "\n";
 				}
-
-
+				
+				
 				$successMsg = "Deleted profile(s): <b> $allProfiles </b>";
 				$logAction .= "Successfully deleted profile(s) [$allProfiles] on page: ";
 
@@ -102,13 +102,13 @@
 
                 if (isset($attribute)) {
                         if (preg_match('/__/', $attribute))
-                                list($columnId, $attribute) = explode("__", $attribute);
+                                list($columnId, $attribute) = split("__", $attribute);
                         else
                                 $attribute = $attribute;
-                }
+                }	
 
-		$sql = "DELETE FROM ".$dbSocket->escapeSimple($tablename)." WHERE GroupName='".$dbSocket->escapeSimple($profile).
-				"' AND Attribute='".$dbSocket->escapeSimple($attribute)."' AND id=".$dbSocket->escapeSimple($columnId);
+		$sql = "DELETE FROM ".htmlspecialchars($tablename)." WHERE GroupName='".htmlspecialchars($profile).
+				"' AND Attribute='".htmlspecialchars($attribute)."' AND id=".htmlspecialchars($columnId);
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 
@@ -122,7 +122,7 @@
 
 	include_once('library/config_read.php');
 	$log = "visited page: ";
-
+	
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
@@ -135,14 +135,14 @@
 <link rel="stylesheet" href="css/1.css" type="text/css" media="screen,projection" />
 
 </head>
-
-
+ 
+ 
 <?php
 	include ("menu-mng-rad-profiles.php");
 ?>
-
+		
 		<div id="contentnorightbar">
-
+		
 				<h2 id="Intro"><a href="#" onclick="javascript:toggleShowDiv('helpPage')"><?php echo $l['Intro']['mngradprofilesdel.php'] ?>
 				:: <?php if (isset($profile)) { echo $profile; } ?><h144>+</h144></a></h2>
 
@@ -165,7 +165,7 @@
                 <label for='profile' class='form'>Profile Name</label>
                 <input name='profile[]' type='text' id='profile' value='<?php echo $profile ?>' tabindex=100 />
                 <br/>
-
+                
                 <label for='profile' class='form'>Remove all user associations with this profile(s)</label>
                 <input name='profile_delete_assoc' type='checkbox' id='profile_delete_assoc' value='1' tabindex=100 />
                 <br/>

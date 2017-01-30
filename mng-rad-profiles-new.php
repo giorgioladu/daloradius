@@ -72,9 +72,9 @@
 					continue;
 
 				$sql = "INSERT INTO $table (id,GroupName,Attribute,op,Value) ".
-						" VALUES (0, '".$dbSocket->escapeSimple($profile)."', '".
-						$dbSocket->escapeSimple($attribute)."','".$dbSocket->escapeSimple($op)."', '".
-						$dbSocket->escapeSimple($value)."')  ";
+						" VALUES (0, '".htmlspecialchars($profile)."', '".
+						htmlspecialchars($attribute)."','".htmlspecialchars($op)."', '".
+						htmlspecialchars($value)."')  ";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 

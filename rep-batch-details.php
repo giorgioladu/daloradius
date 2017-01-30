@@ -70,7 +70,7 @@
 	
 	if ($batch_name) {
 
-		$batch_name = $dbSocket->escapeSimple($batch_name);
+		$batch_name = htmlspecialchars($batch_name);
 		
 		$sql = "SELECT ".
 				$configValues['CONFIG_DB_TBL_DALOBATCHHISTORY'].".id ".
@@ -80,11 +80,11 @@
 				$configValues['CONFIG_DB_TBL_DALOBATCHHISTORY'].".batch_name = '$batch_name' ".
 				" GROUP by ".$configValues['CONFIG_DB_TBL_DALOBATCHHISTORY'].".batch_name LIMIT 1";
 		$res = $dbSocket->query($sql);
-		$numrows = $res->numRows();
+		$numrows = $res->rowCount();
 		$logDebugSQL .= $sql . "\n";
 		
 		if ($numrows > 0) {
-			$row = $res->fetchRow();
+			$row = $res->fetch();
 			$batch_id = $row[0];
 		}
 	}
@@ -208,7 +208,7 @@
 		$total_users = 0;
 		$active_users = 0;
 		$batch_cost = 0;
-		while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+		while($row = $res->fetch(PDO::FETCH_ASSOC)) {
 	
 			$hotspot_name = $row['HotspotName'];
 			$batch_status = $row['batch_status'];
@@ -344,7 +344,7 @@
 	$_SESSION['reportQuery'] = $sql;
 	
 	$res = $dbSocket->query($sql);
-	$numrows = $res->numRows();
+	$numrows = $res->rowCount();
 	$logDebugSQL .= $sql . "\n";
 
 
@@ -430,7 +430,7 @@
 	$total_users = 0;
 	$active_users = 0;
 	$batch_cost = 0;
-	while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+	while($row = $res->fetch(PDO::FETCH_ASSOC)) {
 
 		$username = $row['username'];
 		$acctstarttime = $row['acctstarttime'];

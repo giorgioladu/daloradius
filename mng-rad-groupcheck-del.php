@@ -62,7 +62,7 @@
                                         include 'library/opendb.php';
                                         // delete only a specific groupname and it's attribute
                                         $sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_RADGROUPCHECK']."
-WHERE GroupName='".$dbSocket->escapeSimple($groupname)."'AND Value='$value' AND Attribute='$attribute'";
+WHERE GroupName='".htmlspecialchars($groupname)."'AND Value='$value' AND Attribute='$attribute'";
                                         $res = $dbSocket->query($sql);
                                         $logDebugSQL .= $sql . "\n";
 
@@ -75,7 +75,7 @@ WHERE GroupName='".$dbSocket->escapeSimple($groupname)."'AND Value='$value' AND 
 
                                         include 'library/opendb.php';
 
-                                        $sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_RADGROUPCHECK']." WHERE GroupName='".$dbSocket->escapeSimple($groupname)."'";
+                                        $sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_RADGROUPCHECK']." WHERE GroupName='".htmlspecialchars($groupname)."'";
                                         $res = $dbSocket->query($sql);
                                         $logDebugSQL .= $sql . "\n";
 

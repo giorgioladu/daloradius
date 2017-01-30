@@ -74,7 +74,7 @@
 	//orig: used as maethod to get total rows - this is required for the pages_numbering.php page
 	$sql = "select GroupName, Attribute, op, Value FROM ".$configValues['CONFIG_DB_TBL_RADGROUPCHECK'].";";
 	$res = $dbSocket->query($sql);
-	$numrows = $res->numRows();
+	$numrows = $res->rowCount();
 
 	$sql = "select GroupName, Attribute, op, Value FROM ".$configValues['CONFIG_DB_TBL_RADGROUPCHECK']." ORDER BY $orderBy $orderType LIMIT $offset, $rowsPerPage;";
 	$res = $dbSocket->query($sql);
@@ -136,7 +136,7 @@
 		</th>
 
 	</tr> </thread>";
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		echo "<tr>
 			<td> <input type='checkbox' name='group[]' value='$row[0]||$row[1]||$row[3]'> 
 				<a class='tablenovisit' href='javascript:return;'

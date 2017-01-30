@@ -91,7 +91,7 @@
 
         // setup php session variables for exporting
         $_SESSION['reportTable'] = $configValues['CONFIG_DB_TBL_RADACCT'];
-        $_SESSION['reportQuery'] = " WHERE (AcctStopTime IS NULL OR AcctStopTime = '0000-00-00 00:00:00') AND (UserName LIKE '".$dbSocket->escapeSimple($usernameOnline)."%')";
+        $_SESSION['reportQuery'] = " WHERE (AcctStopTime IS NULL OR AcctStopTime = '0000-00-00 00:00:00') AND (UserName LIKE '".htmlspecialchars($usernameOnline)."%')";
         $_SESSION['reportType'] = "reportsOnlineUsers";
 	
 	//orig: used as maethod to get total rows - this is required for the pages_numbering.php page
@@ -101,9 +101,9 @@
 			".$configValues['CONFIG_DB_TBL_RADACCT'].".CalledStationId, ".$configValues['CONFIG_DB_TBL_RADACCT'].".AcctSessionId FROM ".
 			$configValues['CONFIG_DB_TBL_RADACCT']." WHERE (".$configValues['CONFIG_DB_TBL_RADACCT'].".AcctStopTime IS NULL OR ". 
 			$configValues['CONFIG_DB_TBL_RADACCT'].".AcctStopTime = '0000-00-00 00:00:00') AND ".
-			" (".$configValues['CONFIG_DB_TBL_RADACCT'].".Username LIKE '".$dbSocket->escapeSimple($usernameOnline)."%')";
+			" (".$configValues['CONFIG_DB_TBL_RADACCT'].".Username LIKE '".htmlspecialchars($usernameOnline)."%')";
 	$res = $dbSocket->query($sql);
-	$numrows = $res->numRows();
+	$numrows = $res->rowCount();
 
 
 	/* we are searching for both kind of attributes for the password, being User-Password, the more
@@ -129,7 +129,7 @@
 		" LEFT JOIN ".$configValues['CONFIG_DB_TBL_DALOUSERINFO']." ON (".$configValues['CONFIG_DB_TBL_RADACCT'].".Username = ".
 		$configValues['CONFIG_DB_TBL_DALOUSERINFO'].".Username)".
 		" WHERE (".$configValues['CONFIG_DB_TBL_RADACCT'].".AcctStopTime IS NULL OR ".
-		$configValues['CONFIG_DB_TBL_RADACCT'].".AcctStopTime = '0000-00-00 00:00:00') AND (".$configValues['CONFIG_DB_TBL_RADACCT'].".Username LIKE '".$dbSocket->escapeSimple($usernameOnline)."%')".
+		$configValues['CONFIG_DB_TBL_RADACCT'].".AcctStopTime = '0000-00-00 00:00:00') AND (".$configValues['CONFIG_DB_TBL_RADACCT'].".Username LIKE '".htmlspecialchars($usernameOnline)."%')".
 		" ORDER BY $orderBy $orderType LIMIT $offset, $rowsPerPage";
 	$res = $dbSocket->query($sql);
 	$logDebugSQL = "";
@@ -211,7 +211,7 @@
 
 	</tr> </thread>";
 
-	while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+	while($row = $res->fetch(PDO::FETCH_ASSOC)) {
 
 		$username = $row['Username'];
 		$ip = $row['FramedIPAddress'];

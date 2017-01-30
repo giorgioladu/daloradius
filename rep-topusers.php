@@ -164,7 +164,7 @@
 		</th>
 		</tr> </thread>";
 		
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		echo "<tr>
 				<td> $row[0] </td>
 				<td> $row[1] </td>

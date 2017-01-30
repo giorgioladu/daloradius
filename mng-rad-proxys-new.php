@@ -47,11 +47,11 @@
 		}
 
 		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOPROXYS'].
-				" WHERE proxyname='".$dbSocket->escapeSimple($proxyname)."'";
+				" WHERE proxyname='".htmlspecialchars($proxyname)."'";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 
-		if ($res->numRows() == 0) {
+		if ($res->rowCount() == 0) {
 
 			if (!(file_exists($filenameRealmsProxys))) {
 				$logAction .= "Failed non-existed proxys configuration file [$filenameRealmsProxys] on page: ";
@@ -74,11 +74,11 @@
 				$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_DALOPROXYS'].
 					" (id,proxyname,retry_delay,retry_count,dead_time,default_fallback,creationdate,".
 					" 	creationby,updatedate,updateby) ".
-					" VALUES (0, '".$dbSocket->escapeSimple($proxyname)."','".
-					$dbSocket->escapeSimple($retry_delay)."','".
-					$dbSocket->escapeSimple($retry_count)."','".
-					$dbSocket->escapeSimple($dead_time)."','".
-					$dbSocket->escapeSimple($default_fallback)."', ".
+					" VALUES (0, '".htmlspecialchars($proxyname)."','".
+					htmlspecialchars($retry_delay)."','".
+					htmlspecialchars($retry_count)."','".
+					htmlspecialchars($dead_time)."','".
+					htmlspecialchars($default_fallback)."', ".
 					" '$currDate', '$currBy', NULL, NULL)";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";

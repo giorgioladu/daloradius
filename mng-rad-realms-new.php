@@ -51,11 +51,11 @@
 		}
 
 		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOREALMS'].
-				" WHERE realmname='".$dbSocket->escapeSimple($realmname)."'";
+				" WHERE realmname='".htmlspecialchars($realmname)."'";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 
-		if ($res->numRows() == 0) {
+		if ($res->rowCount() == 0) {
 
 			if (!(file_exists($filenameRealmsProxys))) {
 				$logAction .= "Failed non-existed realms configuration file [$filenameRealmsProxys] on page: ";
@@ -79,11 +79,11 @@
 					" (id,realmname,type,authhost,accthost,secret,ldflag,nostrip,hints,notrealm,creationdate,creationby,".
 					"	updatedate,updateby) ".
 					" VALUES (0, '".
-					$dbSocket->escapeSimple($realmname)."', '".$dbSocket->escapeSimple($type)."', '".
-					$dbSocket->escapeSimple($authhost)."','".$dbSocket->escapeSimple($accthost)."','".
-					$dbSocket->escapeSimple($secret)."','".$dbSocket->escapeSimple($ldflag)."','".
-					$dbSocket->escapeSimple($nostrip)."','".$dbSocket->escapeSimple($hints)."','".
-					$dbSocket->escapeSimple($notrealm)."' ".
+					htmlspecialchars($realmname)."', '".htmlspecialchars($type)."', '".
+					htmlspecialchars($authhost)."','".htmlspecialchars($accthost)."','".
+					htmlspecialchars($secret)."','".htmlspecialchars($ldflag)."','".
+					htmlspecialchars($nostrip)."','".htmlspecialchars($hints)."','".
+					htmlspecialchars($notrealm)."' ".
 					", '$currDate', '$currBy', NULL, NULL)";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";

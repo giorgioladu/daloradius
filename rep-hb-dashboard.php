@@ -97,7 +97,7 @@
 			"(".$configValues['CONFIG_DB_TBL_DALOHOTSPOTS'].".mac = ".
 			$configValues['CONFIG_DB_TBL_DALONODE'].".mac) ";
 	$res = $dbSocket->query($sql);
-	$numrows = $res->numRows();
+	$numrows = $res->rowCount();
 	$logDebugSQL .= $sql . "\n";
 
 
@@ -216,7 +216,7 @@
 
 		</tr> </thread>";
 
-	while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+	while($row = $res->fetch(PDO::FETCH_ASSOC)) {
 
 		
 		

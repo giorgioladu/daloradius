@@ -44,21 +44,21 @@
 
 		include 'library/opendb.php';
 
-		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALODICTIONARY']." WHERE vendor='".$dbSocket->escapeSimple($vendor).
-			"' AND attribute='".$dbSocket->escapeSimple($attribute)."'";
+		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALODICTIONARY']." WHERE vendor='".htmlspecialchars($vendor).
+			"' AND attribute='".htmlspecialchars($attribute)."'";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 
-		if ($res->numRows() == 1) {
+		if ($res->rowCount() == 1) {
 			if (trim($vendor) != "" and trim($attribute) != "") {
 				// update vendor/attribute pairs to database
 				$sql = "UPDATE ".$configValues['CONFIG_DB_TBL_DALODICTIONARY']." SET 
 					type='".
-					$dbSocket->escapeSimple($type)."', attribute='".$dbSocket->escapeSimple($attribute).
-					"', RecommendedOP='".$dbSocket->escapeSimple($RecommendedOP).
-					"', RecommendedTable='".$dbSocket->escapeSimple($RecommendedTable).
-					"', RecommendedTooltip='".$dbSocket->escapeSimple($RecommendedTooltip).
-					"', RecommendedHelper='".$dbSocket->escapeSimple($RecommendedHelper).
+					htmlspecialchars($type)."', attribute='".htmlspecialchars($attribute).
+					"', RecommendedOP='".htmlspecialchars($RecommendedOP).
+					"', RecommendedTable='".htmlspecialchars($RecommendedTable).
+					"', RecommendedTooltip='".htmlspecialchars($RecommendedTooltip).
+					"', RecommendedHelper='".htmlspecialchars($RecommendedHelper).
 					"' WHERE Vendor='$vendor' AND Attribute='$attributeOld'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
@@ -83,12 +83,12 @@
 
 	include 'library/opendb.php';
 
-	$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALODICTIONARY']." WHERE vendor='".$dbSocket->escapeSimple($vendor).
-		"' AND attribute='".$dbSocket->escapeSimple($attribute)."'";
+	$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALODICTIONARY']." WHERE vendor='".htmlspecialchars($vendor).
+		"' AND attribute='".htmlspecialchars($attribute)."'";
 	$res = $dbSocket->query($sql);
 	$logDebugSQL .= $sql . "\n";
 
-	$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+	$row = $res->fetch(PDO::FETCH_ASSOC);
 
 	isset($row['Attribute']) ? $attribute = $row['Attribute'] : $attribute = "";
 	isset($row['Type']) ? $type = $row['Type'] : $type = "";

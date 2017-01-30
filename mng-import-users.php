@@ -63,18 +63,18 @@
 						((isset($users[1]) && (!empty($users[1])))) )
 					{
 
-						$user = trim($dbSocket->escapeSimple($users[0]));
-						$pass = trim($dbSocket->escapeSimple($users[1]));
-
+						$user = trim(htmlspecialchars($users[0]));
+						$pass = trim(htmlspecialchars($users[1]));
+	
 						// perform further cleanup on $pass to make sure it doesn't contain invalid chars like \r\n
 						// whether they are literal or encoded
 						$pass = str_replace("\\r", "", $pass);
 						$pass = str_replace("\\n", "", $pass);
 						$pass = str_replace(chr(0xC2), "", $pass);
 						$pass = str_replace(chr(0xA0), "", $pass);
-						
-						$planName = trim($dbSocket->escapeSimple($planName));
-						$userType = trim($dbSocket->escapeSimple($userType));
+			
+						$planName = trim(htmlspecialchars($planName));
+						$userType = trim(htmlspecialchars($userType));
 						
 						if ($userType == "userType") {
 							$passwordType = "Auth-Type";
@@ -102,7 +102,7 @@
 							if ( (isset($groupName)) && (!empty($groupName)) ) {
 								
 								$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADUSERGROUP']." (UserName,GroupName,priority) ".
-									" VALUES ('".$dbSocket->escapeSimple($user)."', '".$dbSocket->escapeSimple($groupName)."',0) ";
+									" VALUES ('".htmlspecialchars($user)."', '".htmlspecialchars($groupName)."',0) ";
 								$res = $dbSocket->query($sql);
 								$logDebugSQL .= $sql . "\n";
 								

@@ -56,7 +56,7 @@
 
 				// // delete only a specific groupname and it's attribute
 				$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_RADUSERGROUP'].
-					" WHERE UserName='".$dbSocket->escapeSimple($username)."' AND GroupName='".$dbSocket->escapeSimple($group)."'";
+					" WHERE UserName='".htmlspecialchars($username)."' AND GroupName='".htmlspecialchars($group)."'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 
@@ -70,7 +70,7 @@
 			} else {
 				// delete all attributes associated with a username
 				$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_RADUSERGROUP'].
-						" WHERE UserName='".$dbSocket->escapeSimple($username)."'";
+						" WHERE UserName='".htmlspecialchars($username)."'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 

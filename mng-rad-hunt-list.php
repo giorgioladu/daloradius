@@ -78,7 +78,7 @@
 	$logDebugSQL = "";
 	$logDebugSQL .= $sql . "\n";
 
-	$numrows = $res->numRows();
+	$numrows = $res->rowCount();
 
 	$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADHG']." ORDER BY $orderBy $orderType LIMIT $offset, $rowsPerPage;";
 	$res = $dbSocket->query($sql);
@@ -148,7 +148,7 @@
 		</th>
 
 	</tr> </thread>";
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		echo "<tr>
                                 <td> <input type='checkbox' name='nashost[]' value='$row[2]||$row[3]'> $row[0] </td>
                                 <td> <a class='tablenovisit' href='javascript:return;'

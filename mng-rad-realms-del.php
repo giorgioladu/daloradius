@@ -57,7 +57,7 @@
 
 				// delete all realms
 				$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_DALOREALMS']." WHERE realmname='".
-					$dbSocket->escapeSimple($realmname)."'";
+					htmlspecialchars($realmname)."'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 				

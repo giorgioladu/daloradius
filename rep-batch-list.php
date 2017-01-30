@@ -112,7 +112,7 @@
 	$_SESSION['reportQuery'] = $sql;
 	
 	$res = $dbSocket->query($sql);
-	$numrows = $res->numRows();
+	$numrows = $res->rowCount();
 	$logDebugSQL .= $sql . "\n";
 
 
@@ -246,7 +246,7 @@
 	$total_users = 0;
 	$active_users = 0;
 	$batch_cost = 0;
-	while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+	while($row = $res->fetch(PDO::FETCH_ASSOC)) {
 
 		$hotspot_name = $row['HotspotName'];
 		$batch_status = $row['batch_status'];

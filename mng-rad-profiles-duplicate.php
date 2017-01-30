@@ -39,15 +39,15 @@
 
 			// get all sets of attributes from radgroupcheck for this profile/group
 			$sql = "SELECT Attribute,Op,Value FROM ".$configValues['CONFIG_DB_TBL_RADGROUPCHECK'].
-				" WHERE GroupName='".$dbSocket->escapeSimple($sourceProfile)."'";
+				" WHERE GroupName='".htmlspecialchars($sourceProfile)."'";
 			$res = $dbSocket->query($sql);
 			$logDebugSQL .= $sql . "\n";
 
-			while($row = $res->fetchRow()) {
+			while($row = $res->fetch()) {
 
 				$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADGROUPCHECK'].
 					" (GroupName,Attribute,Op,Value) VALUES (".
-					"'".$dbSocket->escapeSimple($targetProfile)."',".
+					"'".htmlspecialchars($targetProfile)."',".
 					"'".$row[0]."',".
 					"'".$row[1]."',".
 					"'".$row[2]."'".
@@ -60,15 +60,15 @@
 
 			// get all sets of attributes from radgroupreply for this profile/group
 			$sql = "SELECT Attribute,Op,Value FROM ".$configValues['CONFIG_DB_TBL_RADGROUPREPLY'].
-				" WHERE GroupName='".$dbSocket->escapeSimple($sourceProfile)."'";
+				" WHERE GroupName='".htmlspecialchars($sourceProfile)."'";
 			$res = $dbSocket->query($sql);
 			$logDebugSQL .= $sql . "\n";
 	
-			while($row = $res->fetchRow()) {
+			while($row = $res->fetch()) {
 
 				$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADGROUPREPLY'].
 					" (GroupName,Attribute,Op,Value) VALUES (".
-					"'".$dbSocket->escapeSimple($targetProfile)."',".
+					"'".htmlspecialchars($targetProfile)."',".
 					"'".$row[0]."',".
 					"'".$row[1]."',".
 					"'".$row[2]."'".

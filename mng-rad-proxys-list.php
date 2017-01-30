@@ -74,7 +74,7 @@
 	//orig: used as maethod to get total rows - this is required for the pages_numbering.php page	
 	$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOPROXYS']." ";
 	$res = $dbSocket->query($sql);
-	$numrows = $res->numRows();
+	$numrows = $res->rowCount();
 
 	$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOPROXYS'].
 		" ORDER BY $orderBy $orderType LIMIT $offset, $rowsPerPage;";
@@ -121,7 +121,7 @@
 		".$l['all']['ProxyName']."</a>
 		</th>
 	</tr> </thread>";
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		echo "<tr>
 			<td> <input type='checkbox' name='proxyname[]' value='$row[1]'>
 				<a class='tablenovisit' href='javascript:return;'

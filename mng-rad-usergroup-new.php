@@ -42,11 +42,11 @@
 		include 'library/opendb.php';
 
 		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADUSERGROUP'].
-				" WHERE UserName='".$dbSocket->escapeSimple($username)."' AND GroupName='".$dbSocket->escapeSimple($group)."'";
+				" WHERE UserName='".htmlspecialchars($username)."' AND GroupName='".htmlspecialchars($group)."'";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 
-		if ($res->numRows() == 0) {
+		if ($res->rowCount() == 0) {
 
 			if (trim($username) != "" and trim($group) != "") {
 
@@ -56,8 +56,8 @@
 				
 				// insert usergroup details
 				$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADUSERGROUP']." (UserName,GroupName,priority) ".
-						" VALUES ('".$dbSocket->escapeSimple($username)."', '".
-						$dbSocket->escapeSimple($group)."', ".$dbSocket->escapeSimple($priority).")";
+						" VALUES ('".htmlspecialchars($username)."', '".
+						htmlspecialchars($group)."', ".htmlspecialchars($priority).")";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 				

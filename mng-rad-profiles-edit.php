@@ -33,24 +33,24 @@
 		$profile = $_REQUEST['profile'];
 
 		include 'library/opendb.php';
-
+	
 		if ($profile != "") {
-			foreach( $_POST as $element=>$field ) {
+			foreach( $_POST as $element=>$field ) { 
 				switch ($element) {
 					case "submit":
 					case "profile":
-							$skipLoopFlag = 1;
+							$skipLoopFlag = 1; 
 							break;
 				}
-
+		
 				if ($skipLoopFlag == 1) {
-					$skipLoopFlag = 0;
+					$skipLoopFlag = 0;             
 					continue;
 				}
 
                                 if (isset($field[0])) {
                                         if (preg_match('/__/', $field[0]))
-                                                list($columnId, $attribute) = explode("__", $field[0]);
+                                                list($columnId, $attribute) = split("__", $field[0]);
                                         else {
                                                 $columnId = 0;                          // we need to set a non-existent column id so that the attribute would
                                                                                         // not match in the database (as it is added from the Attributes tab)
@@ -75,18 +75,18 @@
 				if (!($value))
 					continue;
 
-				$value = $dbSocket->escapeSimple($value);
+				$value = htmlspecialchars($value);
 
-				$sql = "SELECT Attribute FROM $table WHERE GroupName='".$dbSocket->escapeSimple($profile).
-						"' AND Attribute='".$dbSocket->escapeSimple($attribute)."' AND id=".$dbSocket->escapeSimple($columnId);
+				$sql = "SELECT Attribute FROM $table WHERE GroupName='".htmlspecialchars($profile).
+						"' AND Attribute='".htmlspecialchars($attribute)."' AND id=".htmlspecialchars($columnId);
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
-				if ($res->numRows() == 0) {
+				if ($res->rowCount() == 0) {
 
 					/* if the returned rows equal 0 meaning this attribute is not found and we need to add it */
 					$sql = "INSERT INTO $table (id,GroupName,Attribute,op,Value) ".
-							" VALUES (0,'".$dbSocket->escapeSimple($profile)."', '".
-							$dbSocket->escapeSimple($attribute)."','".$dbSocket->escapeSimple($op)."', '$value')";
+							" VALUES (0,'".htmlspecialchars($profile)."', '".
+							htmlspecialchars($attribute)."','".htmlspecialchars($op)."', '$value')";
 					$res = $dbSocket->query($sql);
 					$logDebugSQL .= $sql . "\n";
 
@@ -94,15 +94,15 @@
 
 					/* we update the $value[0] entry which is the attribute's value */
 					$sql = "UPDATE $table SET Value='$value' WHERE GroupName='".
-							$dbSocket->escapeSimple($profile)."' AND Attribute='".$dbSocket->escapeSimple($attribute)."'".
-							" AND id=".$dbSocket->escapeSimple($columnId);
+							htmlspecialchars($profile)."' AND Attribute='".htmlspecialchars($attribute)."'".
+							" AND id=".htmlspecialchars($columnId);
 					$res = $dbSocket->query($sql);
 					$logDebugSQL .= $sql . "\n";
 
 					/* then we update $value[1] which is the attribute's operator */
-					$sql = "UPDATE $table SET Op='".$dbSocket->escapeSimple($op).
-							"' WHERE GroupName='".$dbSocket->escapeSimple($profile)."' AND Attribute='".
-							$dbSocket->escapeSimple($attribute)."' AND id=".$dbSocket->escapeSimple($columnId);
+					$sql = "UPDATE $table SET Op='".htmlspecialchars($op).
+							"' WHERE GroupName='".htmlspecialchars($profile)."' AND Attribute='".
+							htmlspecialchars($attribute)."' AND id=".htmlspecialchars($columnId);
 					$res = $dbSocket->query($sql);
 					$logDebugSQL .= $sql . "\n";
 
@@ -123,7 +123,7 @@
 		}
 
 
-	}
+	} 
 
 
 	include_once('library/config_read.php');
@@ -150,7 +150,7 @@
 <?php
         include_once ("library/tabber/tab-layout.php");
 ?>
-
+ 
 <?php
 	include ("menu-mng-rad-profiles.php");
 ?>
@@ -159,7 +159,7 @@
 
 		<h2 id="Intro"><a href="#" onclick="javascript:toggleShowDiv('helpPage')"><?php echo $l['Intro']['mngradprofilesedit.php'] ?>
 		:: <?php if (isset($profile)) { echo $profile; } ?><h144>+</h144></a></h2>
-
+		
 
 		<div id="helpPage" style="display:none;visibility:visible" >
 			<?php echo $l['helpPage']['mngradprofilesedit'] ?>
@@ -168,7 +168,7 @@
 		<?php
 			include_once('include/management/actionMessages.php');
 		?>
-
+		
 		<form name="mngradprofiles" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 
 			<input type="hidden" value="<?php echo $profile ?>" name="profile" />
@@ -203,17 +203,17 @@
                 $configValues['CONFIG_DB_TBL_DALODICTIONARY'].".attribute ".
 		" AND ".$configValues['CONFIG_DB_TBL_DALODICTIONARY'].".Value IS NULL ".
 		" WHERE ".
-                $configValues['CONFIG_DB_TBL_RADGROUPCHECK'].".GroupName='".$dbSocket->escapeSimple($profile)."'";
+                $configValues['CONFIG_DB_TBL_RADGROUPCHECK'].".GroupName='".htmlspecialchars($profile)."'";
         $res = $dbSocket->query($sql);
         $logDebugSQL .= $sql . "\n";
 
-        if ($numrows = $res->numRows() == 0) {
+        if ($numrows = $res->rowCount() == 0) {  
 			echo "<center>";
 			echo $l['messages']['noCheckAttributesForGroup'];
 			echo "</center>";
         }
 
-        while($row = $res->fetchRow()) {
+        while($row = $res->fetch()) {
 
                 echo "<label class='attributes'>";
                 echo "<a class='tablenovisit' href='mng-rad-profiles-del.php?profile=$profile&attribute=$row[5]__$row[0]&tablename=radgroupcheck'>
@@ -298,17 +298,17 @@
                 $configValues['CONFIG_DB_TBL_DALODICTIONARY'].".attribute ".
 		" AND ".$configValues['CONFIG_DB_TBL_DALODICTIONARY'].".Value IS NULL ".
 		" WHERE ".
-                $configValues['CONFIG_DB_TBL_RADGROUPREPLY'].".GroupName='".$dbSocket->escapeSimple($profile)."'";
+                $configValues['CONFIG_DB_TBL_RADGROUPREPLY'].".GroupName='".htmlspecialchars($profile)."'";
         $res = $dbSocket->query($sql);
         $logDebugSQL .= $sql . "\n";
 
-        if ($numrows = $res->numRows() == 0) {
+        if ($numrows = $res->rowCount() == 0) {
                 echo "<center>";
                 echo $l['messages']['noReplyAttributesForGroup'];
                 echo "</center>";
         }
 
-        while($row = $res->fetchRow()) {
+        while($row = $res->fetch()) {
 
 
                 echo "<label class='attributes'>";
@@ -335,7 +335,7 @@
                         echo "</select>";
                 }
 
-                echo "
+                echo "       
                         <input type='hidden' name='editValues".$editCounter."[]' value='radgroupreply' style='width: 90px'>
                 ";
 
@@ -374,9 +374,9 @@
         </fieldset>
 	</div>
 
-<?php
+<?php   
 	include 'library/closedb.php';
-?>
+?>  
 
 
 

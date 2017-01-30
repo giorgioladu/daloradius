@@ -53,7 +53,7 @@
 		}
 
 		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOREALMS'].
-				" WHERE realmname='".$dbSocket->escapeSimple($realmname)."'";
+				" WHERE realmname='".htmlspecialchars($realmname)."'";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 
@@ -76,14 +76,14 @@
 
 			// update realm entry in database
 			$sql = "UPDATE ".$configValues['CONFIG_DB_TBL_DALOREALMS']." SET ".
-				" type='".$dbSocket->escapeSimple($type)."', ".
-				" authhost='".$dbSocket->escapeSimple($authhost)."', ".
-				" accthost='".$dbSocket->escapeSimple($accthost)."', ".
-				" secret='".$dbSocket->escapeSimple($secret)."', ".
-				" ldflag='".$dbSocket->escapeSimple($ldflag)."', ".
-				" nostrip='".$dbSocket->escapeSimple($nostrip)."', ".
-				" hints='".$dbSocket->escapeSimple($hints)."', ".
-				" notrealm='".$dbSocket->escapeSimple($notrealm)."', ".
+				" type='".htmlspecialchars($type)."', ".
+				" authhost='".htmlspecialchars($authhost)."', ".
+				" accthost='".htmlspecialchars($accthost)."', ".
+				" secret='".htmlspecialchars($secret)."', ".
+				" ldflag='".htmlspecialchars($ldflag)."', ".
+				" nostrip='".htmlspecialchars($nostrip)."', ".
+				" hints='".htmlspecialchars($hints)."', ".
+				" notrealm='".htmlspecialchars($notrealm)."', ".
 				" updatedate='$currDate', updateby='$currBy' ".
 				" WHERE realmname='$realmname';";
 			$res = $dbSocket->query($sql);
@@ -110,11 +110,11 @@
 	include 'library/opendb.php';
 
         // fill-in realm information in html elements
-        $sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOREALMS']." WHERE realmname='".$dbSocket->escapeSimple($realmname)."'";
+        $sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOREALMS']." WHERE realmname='".htmlspecialchars($realmname)."'";
         $res = $dbSocket->query($sql);
         $logDebugSQL .= $sql . "\n";
 
-        $row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+        $row = $res->fetch(PDO::FETCH_ASSOC);
         $type = $row['type'];
         $authhost = $row['authhost'];
         $accthost = $row['accthost'];

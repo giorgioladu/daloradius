@@ -43,11 +43,11 @@
 		include 'library/opendb.php';
 
 		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADHG'].
-				" WHERE nasipaddress='".$dbSocket->escapeSimple($nasipaddress)."'";
+				" WHERE nasipaddress='".htmlspecialchars($nasipaddress)."'";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 
-		if ($res->numRows() == 0) {
+		if ($res->rowCount() == 0) {
 
 			if (trim($nasipaddress) != "" and trim($groupname) != "") {
 
@@ -58,8 +58,8 @@
 				// insert nas details
 				$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_RADHG'].
 					" (id,nasipaddress,groupname,nasportid) ".
-					" values (0, '".$dbSocket->escapeSimple($nasipaddress)."', '".$dbSocket->escapeSimple($groupname).
-					"', '".$dbSocket->escapeSimple($nasportid)."')";
+					" values (0, '".htmlspecialchars($nasipaddress)."', '".htmlspecialchars($groupname).
+					"', '".htmlspecialchars($nasportid)."')";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 			

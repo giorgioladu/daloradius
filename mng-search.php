@@ -79,15 +79,15 @@
 
 	// setup php session variables for exporting
 	$_SESSION['reportTable'] = $configValues['CONFIG_DB_TBL_RADCHECK'];
-	$_SESSION['reportQuery'] = " WHERE UserName LIKE '".$dbSocket->escapeSimple($username)."%'";
+	$_SESSION['reportQuery'] = " WHERE UserName LIKE '".htmlspecialchars($username)."%'";
 	$_SESSION['reportType'] = "usernameListGeneric";
 
 	//orig: used as method to get total rows - this is required for the pages_numbering.php page
-	$sql = "SELECT distinct(username) as username, concat(coalesce(firstname,''),' ',coalesce(lastname,'')) as value, id FROM userinfo WHERE firstname like '".$dbSocket->escapeSimple($username)."%' 
-	or lastname like '".$dbSocket->escapeSimple($username)."%' or username like '".$dbSocket->escapeSimple($username)."%' or homephone  like '".$dbSocket->escapeSimple($username)."%'  or workphone  like '".$dbSocket->escapeSimple($username)."%'  or mobilephone  like '".$dbSocket->escapeSimple($username)."%'
+	$sql = "SELECT distinct(username) as username, concat(coalesce(firstname,''),' ',coalesce(lastname,'')) as value, id FROM userinfo WHERE firstname like '".htmlspecialchars($username)."%' 
+	or lastname like '".htmlspecialchars($username)."%' or username like '".htmlspecialchars($username)."%' or homephone  like '".htmlspecialchars($username)."%'  or workphone  like '".htmlspecialchars($username)."%'  or mobilephone  like '".htmlspecialchars($username)."%'
 	GROUP BY UserName";
 	$res = $dbSocket->query($sql);
-	$numrows = $res->numRows();
+	$numrows = $res->rowCount();
 
 	$sql = "SELECT distinct(".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].".Username) as UserName,
 			concat(coalesce(".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].".firstname,''),' ',coalesce(".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].".lastname,'')) as value,
@@ -95,7 +95,7 @@
 			FROM userinfo
 			LEFT JOIN ".$configValues['CONFIG_DB_TBL_RADUSERGROUP']." disabled
 			 ON disabled.username=".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].".username AND disabled.groupname = 'daloRADIUS-Disabled-Users'
-			WHERE ".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].".firstname like '".$dbSocket->escapeSimple($username)."%' or ".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].".lastname like '".$dbSocket->escapeSimple($username)."%' or ".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].".username like '".$dbSocket->escapeSimple($username)."%' or ".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].".homephone  like '".$dbSocket->escapeSimple($username)."%' or ".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].".workphone  like '".$dbSocket->escapeSimple($username)."%'  or ".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].".mobilephone  like '".$dbSocket->escapeSimple($username)."%'" .
+			WHERE ".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].".firstname like '".htmlspecialchars($username)."%' or ".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].".lastname like '".htmlspecialchars($username)."%' or ".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].".username like '".htmlspecialchars($username)."%' or ".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].".homephone  like '".htmlspecialchars($username)."%' or ".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].".workphone  like '".htmlspecialchars($username)."%'  or ".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].".mobilephone  like '".htmlspecialchars($username)."%'" .
 			" GROUP BY ".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].".UserName ORDER BY $orderBy $orderType LIMIT $offset, $rowsPerPage";
 	$res = $dbSocket->query($sql);
 	$logDebugSQL = "";
@@ -154,7 +154,7 @@
 		Full name</a>
 		</th>
 	</tr> </thread>";
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		
 		if ($row[3] !== '0')
 			$img = "<img title='user is disabled' src='images/icons/userStatusDisabled.gif' alt='[disabled]'>";

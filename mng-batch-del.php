@@ -56,7 +56,7 @@
 					
 			$res_q_batch = $dbSocket->query($sql);
 			$logDebugSQL .= $sql . "\n";
-			$row_q_batch = $res_q_batch->fetchRow();
+			$row_q_batch = $res_q_batch->fetch();
 			$batch_id = array($row_q_batch[0]);
 				
 		}
@@ -79,7 +79,7 @@
 				$allBatches .= $batch . ", ";
 				
 				// delete all attributes associated with a username
-				$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_DALOBATCHHISTORY']." WHERE id='".$dbSocket->escapeSimple($batch)."'";
+				$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_DALOBATCHHISTORY']." WHERE id='".htmlspecialchars($batch)."'";
 				$req_q_delete = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 				
@@ -105,7 +105,7 @@
 				}
 								
 				// loop through each user and delete it
-				while($row = $res->fetchRow()) {
+				while($row = $res->fetch()) {
 	
 					$username = $row[1];
 					

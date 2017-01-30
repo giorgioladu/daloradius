@@ -78,12 +78,12 @@
 	
 	//orig: used as method to get total rows - this is required for the pages_numbering.php page
 	$sql = "SELECT GroupName, Attribute, op, Value FROM ".$configValues['CONFIG_DB_TBL_RADGROUPCHECK'].
-			" WHERE GroupName LIKE '".$dbSocket->escapeSimple($groupname)."%' GROUP BY GroupName";
+			" WHERE GroupName LIKE '".htmlspecialchars($groupname)."%' GROUP BY GroupName";
 	$res = $dbSocket->query($sql);
-	$numrows = $res->numRows();
+	$numrows = $res->rowCount();
 
 	$sql = "SELECT GroupName, Attribute, op, Value FROM ".$configValues['CONFIG_DB_TBL_RADGROUPCHECK'].
-			" WHERE GroupName LIKE '".$dbSocket->escapeSimple($groupname)."%' ".
+			" WHERE GroupName LIKE '".htmlspecialchars($groupname)."%' ".
 			" ORDER BY $orderBy $orderType LIMIT $offset, $rowsPerPage;";
 	$res = $dbSocket->query($sql);
 	$logDebugSQL = "";
@@ -144,7 +144,7 @@
 		</th>
 
 	</tr> </thread>";
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		echo "<tr>
                                 <td> <input type='checkbox' name='group[]' value='$row[0]||$row[1]||$row[3]'> 
                                         <a class='tablenovisit' href='mng-rad-groupcheck-edit.php?groupname=$row[0]&value=$row[3]'> $row[0] </td>

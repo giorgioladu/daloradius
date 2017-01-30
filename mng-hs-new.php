@@ -52,11 +52,11 @@
 		
 		include 'library/opendb.php';
 
-		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOHOTSPOTS']." WHERE name='".$dbSocket->escapeSimple($name)."'";
+		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOHOTSPOTS']." WHERE name='".htmlspecialchars($name)."'";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 
-		if ($res->numRows() == 0) {
+		if ($res->rowCount() == 0) {
 			if (trim($name) != "" and trim($macaddress) != "") {
 
 				$currDate = date('Y-m-d H:i:s');
@@ -67,17 +67,17 @@
 				" (id, name, mac, geocode, owner, email_owner, manager, email_manager, address, company, ".
 				"  phone1, phone2, type, companywebsite, companyemail, companycontact, companyphone, ".
 				"  creationdate, creationby, updatedate, updateby) ".
-				" VALUES (0, '".$dbSocket->escapeSimple($name)."', '".
-				$dbSocket->escapeSimple($macaddress)."', '".
-				$dbSocket->escapeSimple($geocode)."','".$dbSocket->escapeSimple($owner)."','".
-				$dbSocket->escapeSimple($email_owner)."','".$dbSocket->escapeSimple($manager)."','".
-				$dbSocket->escapeSimple($email_manager)."','".
-				$dbSocket->escapeSimple($address)."','".$dbSocket->escapeSimple($company)."','".
-				$dbSocket->escapeSimple($phone1)."','".$dbSocket->escapeSimple($phone2)."','".
-				$dbSocket->escapeSimple($hotspot_type)."','".$dbSocket->escapeSimple($companywebsite)."','".
-				$dbSocket->escapeSimple($companyemail)."','".
-				$dbSocket->escapeSimple($companycontact)."','".
-				$dbSocket->escapeSimple($companyphone).	"', ".
+				" VALUES (0, '".htmlspecialchars($name)."', '".
+				htmlspecialchars($macaddress)."', '".
+				htmlspecialchars($geocode)."','".htmlspecialchars($owner)."','".
+				htmlspecialchars($email_owner)."','".htmlspecialchars($manager)."','".
+				htmlspecialchars($email_manager)."','".
+				htmlspecialchars($address)."','".htmlspecialchars($company)."','".
+				htmlspecialchars($phone1)."','".htmlspecialchars($phone2)."','".
+				htmlspecialchars($hotspot_type)."','".htmlspecialchars($companywebsite)."','".
+				htmlspecialchars($companyemail)."','".
+				htmlspecialchars($companycontact)."','".
+				htmlspecialchars($companyphone).	"', ".
 				" '$currDate', '$currBy', NULL, NULL)";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";

@@ -79,7 +79,7 @@
 		$configValues['CONFIG_DB_TBL_RADUSERGROUP'].".username=".$configValues['CONFIG_DB_TBL_DALOUSERINFO'].".username ".
 			" GROUP BY UserName;";
 	$res = $dbSocket->query($sql);
-	$numrows = $res->numRows();
+	$numrows = $res->rowCount();
 
 	
 	$sql = "SELECT distinct(".$configValues['CONFIG_DB_TBL_RADUSERGROUP'].".UserName), ".$configValues['CONFIG_DB_TBL_RADUSERGROUP'].".GroupName, ".
@@ -149,7 +149,7 @@
 		</th>
 
 	</tr> </thread>";
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		echo "<tr>
 			<td> <input type='checkbox' name='usergroup[]' value='$row[0]||$row[1]'> $row[0] </td>
 			<td> $row[3] $row[4] </td>

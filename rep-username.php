@@ -68,7 +68,7 @@
 
 	// table to display the radcheck information per the $username
 
-        $sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADCHECK']." WHERE UserName='".$dbSocket->escapeSimple($username)."'  ORDER BY $orderBy $orderType;";
+        $sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADCHECK']." WHERE UserName='".htmlspecialchars($username)."'  ORDER BY $orderBy $orderType;";
 	$res = $dbSocket->query($sql);
 	$logDebugSQL = "";
 	$logDebugSQL .= "";
@@ -106,7 +106,7 @@
 						</th>
                         <th scope='col'> ".$l['all']['Action']." </th>
                 </tr> </thread>";
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
                 echo "<tr>
                         <td> $row[0] </td>
                         <td> $row[1] </td>
@@ -124,7 +124,7 @@
 	
 	
 	// table to display the radreply information per the $username
-        $sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADREPLY']." WHERE UserName='".$dbSocket->escapeSimple($username)."'  ORDER BY $orderBy $orderType;";
+        $sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADREPLY']." WHERE UserName='".htmlspecialchars($username)."'  ORDER BY $orderBy $orderType;";
 	$res = $dbSocket->query($sql);
 	$logDebugSQL .= $sql . "\n";
 
@@ -159,7 +159,7 @@
 						<a class='novisit' href=\"" . $_SERVER['PHP_SELF'] . "?username=$username&orderBy=value&orderType=desc\"> < </a>
 						</th>
                         <th scope='col'> ".$l['all']['Action']." </th>                </tr> </thread>";
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
                 echo "<tr>
                         <td> $row[0] </td>
                         <td> $row[1] </td>

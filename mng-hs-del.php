@@ -48,7 +48,7 @@
 
 				// delete all attributes associated with a username
 				$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_DALOHOTSPOTS']." WHERE name='".
-						$dbSocket->escapeSimple($name)."'";
+						htmlspecialchars($name)."'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 				

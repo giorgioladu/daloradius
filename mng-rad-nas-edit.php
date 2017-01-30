@@ -44,12 +44,12 @@
 	$logDebugSQL = "";
 
 	// fill-in nashost details in html textboxes
-	$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADNAS']." WHERE nasname='".$dbSocket->escapeSimple($nashost)."'";
+	$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADNAS']." WHERE nasname='".htmlspecialchars($nashost)."'";
 	$res = $dbSocket->query($sql);
 	$logDebugSQL = "";
 	$logDebugSQL .= $sql . "\n";
 
-	$row = $res->fetchRow();		// array fetched with values from $sql query
+	$row = $res->fetch();		// array fetched with values from $sql query
 
 	// assignment of values from query to local variables
 	// to be later used in html to display on textboxes (input)
@@ -76,11 +76,11 @@
 		include 'library/opendb.php';
 
 		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADNAS'].
-				" WHERE nasname='".$dbSocket->escapeSimple($nashostold)."' ";
+				" WHERE nasname='".htmlspecialchars($nashostold)."' ";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 
-		if ($res->numRows() == 1) {
+		if ($res->rowCount() == 1) {
 
 			if (trim($nashost) != "" and trim($nassecret) != "") {
 
@@ -94,15 +94,15 @@
 				
 				// insert nas details
 				$sql = "UPDATE ".$configValues['CONFIG_DB_TBL_RADNAS'].
-					" SET nasname='".$dbSocket->escapeSimple($nashost)."', ".
-					" shortname='".$dbSocket->escapeSimple($nasname)."', ".
-					" type='".$dbSocket->escapeSimple($nastype)."', ".
-					" ports=".$dbSocket->escapeSimple($nasports).", ".
-					" secret='".$dbSocket->escapeSimple($nassecret)."', ".
-                   " server='".$dbSocket->escapeSimple($nasvirtualserver)."', ".
-					" community='".$dbSocket->escapeSimple($nascommunity)."', ".
-					" description='".$dbSocket->escapeSimple($nasdescription)."' ".
-					" WHERE nasname='".$dbSocket->escapeSimple($nashostold)."'";
+					" SET nasname='".htmlspecialchars($nashost)."', ".
+					" shortname='".htmlspecialchars($nasname)."', ".
+					" type='".htmlspecialchars($nastype)."', ".
+					" ports=".htmlspecialchars($nasports).", ".
+					" secret='".htmlspecialchars($nassecret)."', ".
+			                " server='".htmlspecialchars($nasvirtualserver)."', ".
+					" community='".htmlspecialchars($nascommunity)."', ".
+					" description='".htmlspecialchars($nasdescription)."' ".
+					" WHERE nasname='".htmlspecialchars($nashostold)."'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 
@@ -113,7 +113,7 @@
 				$logAction .= "Failed updating attributes for nas [$nashost] on page: ";
 			}
 			
-		} elseif ($res->numRows() > 1) {
+		} elseif ($res->rowCount() > 1) {
 			$failureMsg = "The NAS IP/Host <b> $nashost </b> already exists in the database
 			<br/> Please check that there are no duplicate entries in the database";
 			$logAction .= "Failed updating attributes for already existing nas [$nashost] on page: ";

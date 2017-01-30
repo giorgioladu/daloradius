@@ -40,14 +40,14 @@
 	isset($_GET['value']) ? $valueOld = $_GET['value'] : $valueOld = "";
 	isset($_GET['attribute']) ? $attribute = $_GET['attribute'] : $attribute = "";
 
-	$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADGROUPCHECK']." WHERE GroupName='".$dbSocket->escapeSimple($groupname).
-		"' AND Value='".$dbSocket->escapeSimple($value)."' AND Attribute='".$dbSocket->escapeSimple($attribute)."'";
+	$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADGROUPCHECK']." WHERE GroupName='".htmlspecialchars($groupname).
+		"' AND Value='".htmlspecialchars($value)."' AND Attribute='".htmlspecialchars($attribute)."'";
 	$res = $dbSocket->query($sql);
 
 	$logDebugSQL = "";
 	$logDebugSQL .= $sql . "\n";
 
-	$row = $res->fetchRow();		// array fetched with values from $sql query
+	$row = $res->fetch();		// array fetched with values from $sql query
 
 	$op = $row[3];
 	$attribute = $row[2];
@@ -62,19 +62,19 @@
 
 		include 'library/opendb.php';
 
-		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADGROUPCHECK']." WHERE GroupName='".$dbSocket->escapeSimple($groupname).
-			"'AND Value='".$dbSocket->escapeSimple($valueOld)."'  AND Attribute='".$dbSocket->escapeSimple($attribute)."'";
+		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADGROUPCHECK']." WHERE GroupName='".htmlspecialchars($groupname).
+			"'AND Value='".htmlspecialchars($valueOld)."'  AND Attribute='".htmlspecialchars($attribute)."'";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 
-		if ($res->numRows() == 1) {
+		if ($res->rowCount() == 1) {
 
 			if (trim($groupname) != "" and trim($value) != "" and trim($op) != "" and trim($attribute) != "") {
 
-				$sql = "UPDATE ".$configValues['CONFIG_DB_TBL_RADGROUPCHECK']." SET Value='".$dbSocket->escapeSimple($value).
-					"', op='".$dbSocket->escapeSimple($op)."', Attribute='".$dbSocket->escapeSimple($attribute).
-					"' WHERE GroupName='".$dbSocket->escapeSimple($groupname)."' AND Value='".$dbSocket->escapeSimple($valueOld).
-					"' AND Attribute='".$dbSocket->escapeSimple($attribute)."'";
+				$sql = "UPDATE ".$configValues['CONFIG_DB_TBL_RADGROUPCHECK']." SET Value='".htmlspecialchars($value).
+					"', op='".htmlspecialchars($op)."', Attribute='".htmlspecialchars($attribute).
+					"' WHERE GroupName='".htmlspecialchars($groupname)."' AND Value='".htmlspecialchars($valueOld).
+					"' AND Attribute='".htmlspecialchars($attribute)."'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 			

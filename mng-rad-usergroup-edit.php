@@ -43,11 +43,11 @@
 
 	// fill-in nashost details in html textboxes
 	$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADUSERGROUP'].
-		" WHERE UserName='".$dbSocket->escapeSimple($username)."' AND GroupName='".$dbSocket->escapeSimple($groupOld)."'";
+		" WHERE UserName='".htmlspecialchars($username)."' AND GroupName='".htmlspecialchars($groupOld)."'";
 	$res = $dbSocket->query($sql);
 	$logDebugSQL = "";
 	$logDebugSQL .= $sql . "\n";
-	$row = $res->fetchRow();		// array fetched with values from $sql query
+	$row = $res->fetch();		// array fetched with values from $sql query
 
 	// assignment of values from query to local variables
 	// to be later used in html to display on textboxes (input)
@@ -62,11 +62,11 @@
 		include 'library/opendb.php';
 
 		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_RADUSERGROUP'].
-			" WHERE UserName='".$dbSocket->escapeSimple($username)."' AND GroupName='".$dbSocket->escapeSimple($groupOld)."'";
+			" WHERE UserName='".htmlspecialchars($username)."' AND GroupName='".htmlspecialchars($groupOld)."'";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 
-		if ($res->numRows() == 1) {
+		if ($res->rowCount() == 1) {
 
 			if (trim($username) != "" and trim($group) != "") {
 
@@ -75,9 +75,9 @@
 				}
 
 				// insert nas details
-				$sql = "UPDATE ".$configValues['CONFIG_DB_TBL_RADUSERGROUP']." SET GroupName='".$dbSocket->escapeSimple($group)."',
-priority='".$dbSocket->escapeSimple($priority)."' WHERE UserName='".$dbSocket->escapeSimple($username)."'
-AND GroupName='".$dbSocket->escapeSimple($groupOld)."'";
+				$sql = "UPDATE ".$configValues['CONFIG_DB_TBL_RADUSERGROUP']." SET GroupName='".htmlspecialchars($group)."',
+priority='".htmlspecialchars($priority)."' WHERE UserName='".htmlspecialchars($username)."'
+AND GroupName='".htmlspecialchars($groupOld)."'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 						

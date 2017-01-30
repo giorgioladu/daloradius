@@ -82,7 +82,7 @@
 	$logDebugSQL = "";
 	$logDebugSQL .= $sql . "\n";
 
-	$numrows = $res->numRows();
+	$numrows = $res->rowCount();
 
 	$sql = "SELECT id, Vendor, Attribute FROM dictionary WHERE Attribute like '%$attribute%' AND Type <> '' ".
 		" GROUP BY Attribute ORDER BY $orderBy $orderType LIMIT $offset, $rowsPerPage;";
@@ -140,7 +140,7 @@
 		</th>
 
 		</tr> </thread>";
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		printqn ("<tr>
                                 <td> <input type='checkbox' name='vendor[]' value='$row[1]||$row[2]'> $row[0] </td>
 				<td> <a class='tablenovisit' href='mng-rad-attributes-list.php?vendor=$row[1]'>$row[1]</a></td>
