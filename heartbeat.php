@@ -27,33 +27,33 @@ require_once('library/config_read.php');
 $secret_key = $configValues['CONFIG_DASHBOARD_DALO_SECRETKEY'];
 $debug_mode = $configValues['CONFIG_DASHBOARD_DALO_DEBUG'];
 
-isset($_GET['secret_key']) ? $secretKey = $dbSocket->escapeSimple($_GET['secret_key']) : $secretKey = "";
+isset($_GET['secret_key']) ? $secretKey = htmlspecialchars($_GET['secret_key']) : $secretKey = "";
 if ($secretKey != $secret_key) {
 	die("authorization denied\n");
 }
 
-isset($_GET['wan_iface']) ? $wan_iface = $dbSocket->escapeSimple($_GET['wan_iface']) : $wan_iface = "";
-isset($_GET['wan_ip']) ? $wan_ip = $dbSocket->escapeSimple($_GET['wan_ip']) : $wan_ip = "";
-isset($_GET['wan_mac']) ? $wan_mac = $dbSocket->escapeSimple($_GET['wan_mac']) : $wan_mac = "";
-isset($_GET['wan_gateway']) ? $wan_gateway = $dbSocket->escapeSimple($_GET['wan_gateway']) : $wan_gateway = "";
-isset($_GET['wifi_iface']) ? $wifi_iface = $dbSocket->escapeSimple($_GET['wifi_iface']) : $wifi_iface = "";
-isset($_GET['wifi_ip']) ? $wifi_ip = $dbSocket->escapeSimple($_GET['wifi_ip']) : $wifi_ip = "";
-isset($_GET['wifi_mac']) ? $wifi_mac = $dbSocket->escapeSimple($_GET['wifi_mac']) : $wifi_mac = "";
-isset($_GET['wifi_ssid']) ? $wifi_ssid = $dbSocket->escapeSimple($_GET['wifi_ssid']) : $wifi_ssid = "";
-isset($_GET['wifi_key']) ? $wifi_key = $dbSocket->escapeSimple($_GET['wifi_key']) : $wifi_key = "";
-isset($_GET['wifi_channel']) ? $wifi_channel = $dbSocket->escapeSimple($_GET['wifi_channel']) : $wifi_channel = "";
-isset($_GET['lan_iface']) ? $lan_iface = $dbSocket->escapeSimple($_GET['lan_iface']) : $lan_iface = "";
-isset($_GET['lan_mac']) ? $lan_mac = $dbSocket->escapeSimple($_GET['lan_mac']) : $lan_mac = "";
-isset($_GET['lan_ip']) ? $lan_ip = $dbSocket->escapeSimple($_GET['lan_ip']) : $lan_ip = "";
-isset($_GET['uptime']) ? $uptime = $dbSocket->escapeSimple($_GET['uptime']) : $uptime = "";
-isset($_GET['memfree']) ? $memfree = $dbSocket->escapeSimple($_GET['memfree']) : $memfree = "";
-isset($_GET['wan_bup']) ? $wan_bup = $dbSocket->escapeSimple($_GET['wan_bup']) : $wan_bup = "";
-isset($_GET['wan_bdown']) ? $wan_bdown = $dbSocket->escapeSimple($_GET['wan_bdown']) : $wan_bdown = "";
-isset($_GET['nas_mac']) ? $nas_mac = $dbSocket->escapeSimple($_GET['nas_mac']) : $nas_mac = "";
-isset($_GET['firmware']) ? $firmware = $dbSocket->escapeSimple($_GET['firmware']) : $firmware = "";
-isset($_GET['firmware_revision']) ? $firmware_revision = $dbSocket->escapeSimple($_GET['firmware_revision']) : $firmware_revision = "";
-isset($_GET['cpu']) ? $cpu = $dbSocket->escapeSimple($_GET['cpu']) : $cpu = "";
-//isset($_GET['checkin_date']) ? $checkin_date = $dbSocket->escapeSimple($_GET['checkin_date']) : $checkin_date = "";
+isset($_GET['wan_iface']) ? $wan_iface = htmlspecialchars($_GET['wan_iface']) : $wan_iface = "";
+isset($_GET['wan_ip']) ? $wan_ip = htmlspecialchars($_GET['wan_ip']) : $wan_ip = "";
+isset($_GET['wan_mac']) ? $wan_mac = htmlspecialchars($_GET['wan_mac']) : $wan_mac = "";
+isset($_GET['wan_gateway']) ? $wan_gateway = htmlspecialchars($_GET['wan_gateway']) : $wan_gateway = "";
+isset($_GET['wifi_iface']) ? $wifi_iface = htmlspecialchars($_GET['wifi_iface']) : $wifi_iface = "";
+isset($_GET['wifi_ip']) ? $wifi_ip = htmlspecialchars($_GET['wifi_ip']) : $wifi_ip = "";
+isset($_GET['wifi_mac']) ? $wifi_mac = htmlspecialchars($_GET['wifi_mac']) : $wifi_mac = "";
+isset($_GET['wifi_ssid']) ? $wifi_ssid = htmlspecialchars($_GET['wifi_ssid']) : $wifi_ssid = "";
+isset($_GET['wifi_key']) ? $wifi_key = htmlspecialchars($_GET['wifi_key']) : $wifi_key = "";
+isset($_GET['wifi_channel']) ? $wifi_channel = htmlspecialchars($_GET['wifi_channel']) : $wifi_channel = "";
+isset($_GET['lan_iface']) ? $lan_iface = htmlspecialchars($_GET['lan_iface']) : $lan_iface = "";
+isset($_GET['lan_mac']) ? $lan_mac = htmlspecialchars($_GET['lan_mac']) : $lan_mac = "";
+isset($_GET['lan_ip']) ? $lan_ip = htmlspecialchars($_GET['lan_ip']) : $lan_ip = "";
+isset($_GET['uptime']) ? $uptime = htmlspecialchars($_GET['uptime']) : $uptime = "";
+isset($_GET['memfree']) ? $memfree = htmlspecialchars($_GET['memfree']) : $memfree = "";
+isset($_GET['wan_bup']) ? $wan_bup = htmlspecialchars($_GET['wan_bup']) : $wan_bup = "";
+isset($_GET['wan_bdown']) ? $wan_bdown = htmlspecialchars($_GET['wan_bdown']) : $wan_bdown = "";
+isset($_GET['nas_mac']) ? $nas_mac = htmlspecialchars($_GET['nas_mac']) : $nas_mac = "";
+isset($_GET['firmware']) ? $firmware = htmlspecialchars($_GET['firmware']) : $firmware = "";
+isset($_GET['firmware_revision']) ? $firmware_revision = htmlspecialchars($_GET['firmware_revision']) : $firmware_revision = "";
+isset($_GET['cpu']) ? $cpu = htmlspecialchars($_GET['cpu']) : $cpu = "";
+//isset($_GET['checkin_date']) ? $checkin_date = htmlspecialchars($_GET['checkin_date']) : $checkin_date = "";
 
 $currDate = date('Y-m-d H:i:s');
 
@@ -61,7 +61,7 @@ $currDate = date('Y-m-d H:i:s');
 
 $sql = "SELECT mac FROM ".$configValues['CONFIG_DB_TBL_DALONODE']." WHERE mac='$nas_mac'";
 $res = $dbSocket->query($sql);
-if ($res->numRows() >= 1) {
+if ($res->rowCount() >= 1) {
 	// we update
 	$sql = "UPDATE ".$configValues['CONFIG_DB_TBL_DALONODE']." SET ".
 			"wan_iface='".$wan_iface."',".

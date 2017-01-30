@@ -114,7 +114,7 @@ function createMarker(point,html) {
 	$logDebugSQL = "";
 	$logDebugSQL .= $sql . "\n";
 
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
                 echo "
 		var point_$row[0] = new GLatLng($row[3]);
 

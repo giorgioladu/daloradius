@@ -51,12 +51,12 @@
 		if ( (trim($operator_username) != "") && (trim($operator_password) != "") ) {
 
 			$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOOPERATORS']." WHERE username='".
-					$dbSocket->escapeSimple($operator_username)."'";
+					htmlspecialchars($operator_username)."'";
 			$res = $dbSocket->query($sql);
 			$logDebugSQL .= $sql . "\n";
 			
 			// there is no operator in the database with this username
-			if ($res->numRows() == 0) {
+			if ($res->rowCount() == 0) {
 
 				$currDate = date('Y-m-d H:i:s');
 				$currBy = $_SESSION['operator_user'];
@@ -66,20 +66,20 @@
 					" (id, username, password, firstname, lastname, title, department, company, ".
 					" phone1, phone2, email1, email2, messenger1, messenger2, notes, ".
 					" creationdate, creationby, updatedate, updateby) VALUES (0, ".
-					"'".$dbSocket->escapeSimple($operator_username)."', ".
-					"'".$dbSocket->escapeSimple($operator_password)."', ".
-					"'".$dbSocket->escapeSimple($firstname)."', ".
-					"'".$dbSocket->escapeSimple($lastname)."', ".
-					"'".$dbSocket->escapeSimple($title)."', ".
-					"'".$dbSocket->escapeSimple($department)."', ".
-					"'".$dbSocket->escapeSimple($company)."', ".
-					"'".$dbSocket->escapeSimple($phone1)."', ".
-					"'".$dbSocket->escapeSimple($phone2)."', ".
-					"'".$dbSocket->escapeSimple($email1)."', ".
-					"'".$dbSocket->escapeSimple($email2)."', ".
-					"'".$dbSocket->escapeSimple($messenger1)."', ".
-					"'".$dbSocket->escapeSimple($messenger2)."', ".
-					"'".$dbSocket->escapeSimple($notes)."', ".
+					"'".htmlspecialchars($operator_username)."', ".
+					"'".htmlspecialchars($operator_password)."', ".
+					"'".htmlspecialchars($firstname)."', ".
+					"'".htmlspecialchars($lastname)."', ".
+					"'".htmlspecialchars($title)."', ".
+					"'".htmlspecialchars($department)."', ".
+					"'".htmlspecialchars($company)."', ".
+					"'".htmlspecialchars($phone1)."', ".
+					"'".htmlspecialchars($phone2)."', ".
+					"'".htmlspecialchars($email1)."', ".
+					"'".htmlspecialchars($email2)."', ".
+					"'".htmlspecialchars($messenger1)."', ".
+					"'".htmlspecialchars($messenger2)."', ".
+					"'".htmlspecialchars($notes)."', ".
 					" '$currDate', '$currBy', '$currDate', '$currBy' ".
 					" )";
 				$res = $dbSocket->query($sql);
@@ -88,13 +88,13 @@
 				
 				// lets make sure we've inserted the new operator successfully and grab his operator_id
 				$sql = "SELECT id FROM ".$configValues['CONFIG_DB_TBL_DALOOPERATORS']." WHERE username='".
-						$dbSocket->escapeSimple($operator_username)."'";
+						htmlspecialchars($operator_username)."'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 				
-				if ($res->numRows() == 1) {
+				if ($res->rowCount() == 1) {
 					
-					$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+					$row = $res->fetch(PDO::FETCH_ASSOC);
 					$new_operator_id = $row['id'];
 
 					// insert operators acl for this operator

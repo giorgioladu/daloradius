@@ -27,8 +27,8 @@
 		$hotspot_geo = substr($hotspot_geo, 0, strlen($hotspot_geo)-1);
 
 		$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_DALOHOTSPOTS']." (id, name, mac, geocode) ".
-				" VALUES (0, '".$dbSocket->escapeSimple($hotspot_name)."', '".$dbSocket->escapeSimple($hotspot_mac)."', ".
-				" '".$dbSocket->escapeSimple($hotspot_geo)."');";
+				" VALUES (0, '".htmlspecialchars($hotspot_name)."', '".htmlspecialchars($hotspot_mac)."', ".
+				" '".htmlspecialchars($hotspot_geo)."');";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 
@@ -39,7 +39,7 @@
 		(isset($_REQUEST['hotspotname'])) ? $hotspot_name = $_REQUEST['hotspotname'] : $hotspot_name = " ";
 
 		$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_DALOHOTSPOTS'].
-				" WHERE name='".$dbSocket->escapeSimple($hotspot_name)."'";
+				" WHERE name='".htmlspecialchars($hotspot_name)."'";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 
@@ -146,7 +146,7 @@ function load() {
 	$res = $dbSocket->query($sql);
 	$logDebugSQL .= $sql . "\n";
 
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		echo "
 			var point_$row[0] = new GLatLng($row[3]);
 			var marker_$row[0] = createMarker(point_$row[0], '$row[1]');

@@ -44,16 +44,16 @@
 		foreach ($operator_username as $variable=>$value) {
 			if (trim($value) != "") {
 				
-				$username = $dbSocket->escapeSimple($value);
+				$username = htmlspecialchars($value);
 				$allOperators .= $username . ", ";
 
 				$sql = "SELECT id FROM ".$configValues['CONFIG_DB_TBL_DALOOPERATORS']." WHERE username='$username'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 				
-				if ($res->numRows() == 1) {
+				if ($res->rowCount() == 1) {
 					
-					$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+					$row = $res->fetch(PDO::FETCH_ASSOC);
 					$new_operator_id = $row['id'];
 
 					// delete operator from database

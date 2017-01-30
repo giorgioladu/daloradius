@@ -168,7 +168,7 @@
         $sql = "SELECT distinct(nasname), shortname, secret FROM ".$configValues['CONFIG_DB_TBL_RADNAS'].";";
         $res = $dbSocket->query($sql);
 
-        while($row = $res->fetchRow()) {
+        while($row = $res->fetch()) {
                 echo "
                         <option value='$row[0]||$row[2]'> $row[1] - $row[0] </option>
                         ";

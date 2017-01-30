@@ -77,7 +77,7 @@
 	$res = $dbSocket->query($sql);
 	$logDebugSQL .= $sql . "\n";
 	
-	$numrows = $res->numRows();
+	$numrows = $res->rowCount();
 
 
 	/* we are searching for both kind of attributes for the password, being User-Password, the more
@@ -157,7 +157,7 @@
 
 	</tr> </thread>";
 
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 
 		if ( ($row[4] == "") && ($row[3] == "") )
 			$fullname = "";

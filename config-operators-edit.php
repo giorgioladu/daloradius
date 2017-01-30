@@ -32,7 +32,7 @@
 
 	if (isset($_POST['submit'])) {
 
-		$operator_username = $dbSocket->escapeSimple($_POST['operator_username']);
+		$operator_username = htmlspecialchars($_POST['operator_username']);
 		if (trim($operator_username) != "") {
 
 			$currDate = date('Y-m-d H:i:s');
@@ -55,18 +55,18 @@
 			// update username and password of operator into the database
 			$sql = "UPDATE ".$configValues['CONFIG_DB_TBL_DALOOPERATORS'].
 				" SET ".
-				"password='".$dbSocket->escapeSimple($operator_password)."', ".
-				"firstname='".$dbSocket->escapeSimple($firstname)."', ".
-				"lastname='".$dbSocket->escapeSimple($lastname)."', ".
-				"title='".$dbSocket->escapeSimple($title)."', ".
-				"department='".$dbSocket->escapeSimple($department)."', ".
-				"company='".$dbSocket->escapeSimple($company)."', ".
-				"phone1='".$dbSocket->escapeSimple($phone1)."', ".
-				"phone2='".$dbSocket->escapeSimple($phone2)."', ".
-				"email1='".$dbSocket->escapeSimple($email1)."', ".
-				"email2='".$dbSocket->escapeSimple($email2)."', ".
-				"messenger1='".$dbSocket->escapeSimple($messenger1)."', ".
-				"messenger2='".$dbSocket->escapeSimple($messenger2)."', ".
+				"password='".htmlspecialchars($operator_password)."', ".
+				"firstname='".htmlspecialchars($firstname)."', ".
+				"lastname='".htmlspecialchars($lastname)."', ".
+				"title='".htmlspecialchars($title)."', ".
+				"department='".htmlspecialchars($department)."', ".
+				"company='".htmlspecialchars($company)."', ".
+				"phone1='".htmlspecialchars($phone1)."', ".
+				"phone2='".htmlspecialchars($phone2)."', ".
+				"email1='".htmlspecialchars($email1)."', ".
+				"email2='".htmlspecialchars($email2)."', ".
+				"messenger1='".htmlspecialchars($messenger1)."', ".
+				"messenger2='".htmlspecialchars($messenger2)."', ".
 				"updatedate='$currDate', updateby='$currBy' ".
 				" WHERE username='$operator_username' ";
 			$res = $dbSocket->query($sql);
@@ -77,9 +77,9 @@
 			$res = $dbSocket->query($sql);
 			$logDebugSQL .= $sql . "\n";
 			
-			if ($res->numRows() == 1) {
+			if ($res->rowCount() == 1) {
 				
-				$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+				$row = $res->fetch(PDO::FETCH_ASSOC);
 				$curr_operator_id = $row['id'];
 			
 				// insert operators acl for this operator
@@ -95,7 +95,7 @@
 						$res = $dbSocket->query($sql);
 						$logDebugSQL .= $sql . "\n";
 						
-						if ($res->numRows() == 0) {
+						if ($res->rowCount() == 0) {
 							$sql = "INSERT INTO  ".$configValues['CONFIG_DB_TBL_DALOOPERATORS_ACL'].
 								" ( operator_id, file, access ) VALUES ".
 								" ( '$curr_operator_id', '$file', '$access') ";
@@ -145,7 +145,7 @@
 	$res = $dbSocket->query($sql);
 	$logDebugSQL .= $sql . "\n";
 
-	$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+	$row = $res->fetch(PDO::FETCH_ASSOC);
 	$curr_operator_id = $row['id'];
 	$operator_password = $row['password'];
 	$operator_firstname = $row['firstname'];

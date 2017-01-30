@@ -48,19 +48,20 @@ $_SESSION['location_name'] = $location_name;					// since the whole point is to 
 
 include 'library/opendb.php';
 
-$operator_user = $dbSocket->escapeSimple($_POST['operator_user']);
-$operator_pass = $dbSocket->escapeSimple($_POST['operator_pass']);
+$operator_user = htmlspecialchars($_POST['operator_user']);
+$operator_pass = htmlspecialchars($_POST['operator_pass']);
 
 // check if the user id and password combination exist in database
 $sql = "SELECT id, username FROM ".$configValues['CONFIG_DB_TBL_DALOOPERATORS']." WHERE username = '".
 		$operator_user."' AND password = '".$operator_pass."'";
+$dbSocket->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $res = $dbSocket->query($sql);
 
-if ($res->numRows() == 1) {
+if ($res->rowCount() == 1) {
 	// the user id and password match,
 	// set the session
 
-	$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+	$row = $res->fetch(PDO::FETCH_ASSOC);
 	$operator_id = $row['id'];
 	
 	$_SESSION['daloradius_logged_in'] = true;
