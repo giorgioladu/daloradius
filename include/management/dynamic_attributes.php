@@ -15,7 +15,7 @@ if(isset($_GET['getVendorsList'])) {
 	$sql = "SELECT distinct(Vendor) as Vendor FROM dictionary WHERE Vendor>'' ORDER BY Vendor ASC";
         $res = $dbSocket->query($sql);
 
-        while($row = $res->fetchRow()) {
+        while($row = $res->fetch()) {
 		echo "objVendors.options[objVendors.options.length] = 
 			new Option('".trim($row[0])."','".trim($row[0])."');\n";
 	}
@@ -36,13 +36,13 @@ if(isset($_GET['vendorAttributes'])) {
 	include '../../library/opendb.php';
 
 	$sql = "SELECT attribute FROM dictionary WHERE Vendor='".
-		$dbSocket->escapeSimple($vendor)."' AND Value IS NULL";
+		htmlspecialchars($vendor)."' AND Value IS NULL";
         $res = $dbSocket->query($sql);
 
 		echo "objAttributes.options[objAttributes.options.length] = 
 			new Option('Select Attribute...','');\n";
 
-        while($row = $res->fetchRow()) {
+        while($row = $res->fetch()) {
 		echo "objAttributes.options[objAttributes.options.length] = 
 			new Option('".trim($row[0])."','".trim($row[0])."');\n";
 	}
@@ -74,10 +74,10 @@ if(isset($_GET['getValuesForAttribute'])) {
 	include '../../library/opendb.php';
 
 	$sql = "SELECT RecommendedOP,RecommendedTable,RecommendedTooltip,type,RecommendedHelper FROM dictionary 
-		WHERE Attribute='".$dbSocket->escapeSimple($attribute)."'";
+		WHERE Attribute='".htmlspecialchars($attribute)."'";
 
 	$res = $dbSocket->query($sql);
-	$row = $res->fetchRow();
+	$row = $res->fetch();
 	$RecommendedOP = trim($row[0]);
 	$RecommendedTable = trim($row[1]);
 	$RecommendedTooltip = trim($row[2]);

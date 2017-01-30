@@ -41,7 +41,7 @@ if ($fileFlag == 1) {
 			$res = $dbSocket->query($sql);
 			$logDebugSQL .= $sql . "\n";
 	
-            while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+            while($row = $res->fetch(PDO::FETCH_ASSOC)) {
 						if ($row['proxyname']) {
                                 fwrite($realmsFd, "proxy ".$row['proxyname']. " { \n");
 
@@ -65,7 +65,7 @@ if ($fileFlag == 1) {
 			$res = $dbSocket->query($sql);
 			$logDebugSQL .= $sql . "\n";
 	
-            while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+            while($row = $res->fetch(PDO::FETCH_ASSOC)) {
                         if ($row['realmname']) {
                                 fwrite($realmsFd, "realm ".$row['realmname']. " { \n");
 

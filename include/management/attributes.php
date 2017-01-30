@@ -20,7 +20,7 @@
 				$configValues['CONFIG_DB_TBL_DALODICTIONARY']." WHERE Vendor>'' ORDER BY Vendor ASC";
 			$res = $dbSocket->query($sql);
 
-			while($row = $res->fetchRow()) {
+			while($row = $res->fetch()) {
 				echo "<option value=$row[0]>$row[0]</option>";
 			}
 

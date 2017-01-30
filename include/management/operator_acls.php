@@ -57,7 +57,7 @@ function drawOperatorACLs($operator_id = "") {
 	
 	$res = $dbSocket->query($sql);
 	
-	while ($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+	while ($row = $res->fetch(PDO::FETCH_ASSOC)) {
 		
 		$file = $row['file'];
 		$category = $row['category'];

@@ -19,12 +19,12 @@ if (isset($_GET['retHotspotGeneralStat'])) {
                 $configValues['CONFIG_DB_TBL_RADACCT']." JOIN ".$configValues['CONFIG_DB_TBL_DALOHOTSPOTS'].
                 " on (".$configValues['CONFIG_DB_TBL_RADACCT'].".calledstationid LIKE ".
                 $configValues['CONFIG_DB_TBL_DALOHOTSPOTS'].".mac) WHERE ".$configValues['CONFIG_DB_TBL_DALOHOTSPOTS'].
-		".name='".$dbSocket->escapeSimple($hotspot)."' ".
+		".name='".htmlspecialchars($hotspot)."' ".
 		" GROUP BY ".$configValues['CONFIG_DB_TBL_DALOHOTSPOTS'].
                 ".name ;";
 
 	$res = $dbSocket->query($sql);
-	$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+	$row = $res->fetch(PDO::FETCH_ASSOC);
 
 	$sumUpload = toxbyte($row['sumInputOctets']);
 	$sumDownload = toxbyte($row['sumOutputOctets']);

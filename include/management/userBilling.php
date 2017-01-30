@@ -30,7 +30,7 @@
  *********************************************************************************************************
  * userInvoiceAdd
  * general billing function to add invoices to the user based on the user_id
- *
+ * 
  * $userId 				   the userbillinfo user id or the username (autodetects)
  * $invoiceInfo            array holding the invoice information
  * $invoiceItems           array holding the invoice items information
@@ -45,17 +45,17 @@ function userInvoiceAdd($userId, $invoiceInfo = array(), $invoiceItems = array()
 
 	// if provided a numeric user id then this is the user_id that we need
 	if (is_numeric($userId)) {
-		$user_id = $dbSocket->escapeSimple($userId);			// sanitize variable for sql statement
+		$user_id = htmlspecialchars($userId);			// sanitize variable for sql statement
 	} else {
 		// otherwise this is the username and we need to look up the user id from the userbillinfo table
-
-		$username = $dbSocket->escapeSimple($userId);
+		
+		$username = htmlspecialchars($userId);
 		$sql = 'SELECT id FROM '.$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'].
 				' WHERE username="'.$username.'"';
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
-
-		$row = $res->fetchRow();
+		
+		$row = $res->fetch();
 		$user_id = $row[0];
 
 	}
@@ -82,10 +82,10 @@ function userInvoiceAdd($userId, $invoiceInfo = array(), $invoiceItems = array()
 	$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICE'].
 			" (id, user_id, date, status_id, type_id, notes, creationdate, creationby, updatedate, updateby) ".
 			" VALUES (0, '".$user_id."', '".
-			$dbSocket->escapeSimple($invoiceInfo['date'])."', '".
-			$dbSocket->escapeSimple($invoiceInfo['status_id'])."', '".
-			$dbSocket->escapeSimple($invoiceInfo['type_id'])."', '".
-			$dbSocket->escapeSimple($invoiceInfo['notes'])."', ".
+			htmlspecialchars($invoiceInfo['date'])."', '".
+			htmlspecialchars($invoiceInfo['status_id'])."', '".
+			htmlspecialchars($invoiceInfo['type_id'])."', '".
+			htmlspecialchars($invoiceInfo['notes'])."', ".
 			" '$currDate', '$currBy', NULL, NULL)";
 	$res = $dbSocket->query($sql);
 	$logDebugSQL .= $sql . "\n";
@@ -114,10 +114,10 @@ function userInvoiceAdd($userId, $invoiceInfo = array(), $invoiceItems = array()
 				" (id, invoice_id, plan_id, amount, tax_amount, notes, ".
 				" creationdate, creationby, updatedate, updateby) ".
 				" VALUES (0, '".$invoice_id."', '".
-				$dbSocket->escapeSimple($invoiceItem['plan_id'])."', '".
-				$dbSocket->escapeSimple($invoiceItem['amount'])."', '".
-				$dbSocket->escapeSimple($invoiceItem['tax'])."', '".
-				$dbSocket->escapeSimple($invoiceItem['notes'])."', ".
+				htmlspecialchars($invoiceItem['plan_id'])."', '".
+				htmlspecialchars($invoiceItem['amount'])."', '".
+				htmlspecialchars($invoiceItem['tax'])."', '".
+				htmlspecialchars($invoiceItem['notes'])."', ".
 				" '$currDate', '$currBy', NULL, NULL)";
 
 			$res = $dbSocket->query($sql);
@@ -153,9 +153,9 @@ function userInvoicesStatus($user_id, $drawTable) {
 
 	include_once('include/management/pages_common.php');
 	include 'library/opendb.php';
-
-	$user_id = $dbSocket->escapeSimple($user_id);			// sanitize variable for sql statement
-
+	
+	$user_id = htmlspecialchars($user_id);			// sanitize variable for sql statement
+	
 	$sql = "SELECT COUNT(distinct(a.id)) AS TotalInvoices, a.id, a.date, a.status_id, a.type_id, b.contactperson, b.username, ".
 			" c.value AS status, COALESCE(SUM(e2.totalpayed), 0) as totalpayed, COALESCE(SUM(d2.totalbilled), 0) as totalbilled, ".
 			" SUM(a.status_id = 1) as openInvoices ".
@@ -171,7 +171,7 @@ function userInvoicesStatus($user_id, $drawTable) {
 			" GROUP BY b.id ";
 
 	$res = $dbSocket->query($sql);
-	$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+	$row = $res->fetch(PDO::FETCH_ASSOC);
 
 	$totalInvoices = $row['TotalInvoices'];
 	$totalBilled = $row['totalbilled'];
@@ -282,20 +282,20 @@ function userBillingRatesSummary($username, $startdate, $enddate, $ratename, $dr
 	include_once('include/management/pages_common.php');
 	include 'library/opendb.php';
 
-	$username = $dbSocket->escapeSimple($username);			// sanitize variable for sql statement
-    $startdate = $dbSocket->escapeSimple($startdate);
-    $enddate = $dbSocket->escapeSimple($enddate);
-    $ratename = $dbSocket->escapeSimple($ratename);
+	$username = htmlspecialchars($username);			// sanitize variable for sql statement
+    $startdate = htmlspecialchars($startdate);
+    $enddate = htmlspecialchars($enddate);
+    $ratename = htmlspecialchars($ratename);
 
     // get rate type
     $sql = "SELECT rateType FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGRATES']." WHERE ".$configValues['CONFIG_DB_TBL_DALOBILLINGRATES'].".rateName = '$ratename'";
     $res = $dbSocket->query($sql);
 
-	if ($res->numRows() == 0)
+	if ($res->rowCount() == 0)
 		return;
 
-        $row = $res->fetchRow();
-        list($ratetypenum, $ratetypetime) = explode("/",$row[0]);
+        $row = $res->fetch();
+        list($ratetypenum, $ratetypetime) = split("/",$row[0]);
 
         switch ($ratetypetime) {                                        // we need to translate any kind of time into seconds, so a minute is 60 seconds, an hour is 3600,
                 case "second":                                          // and so on...
@@ -330,7 +330,7 @@ function userBillingRatesSummary($username, $startdate, $enddate, $ratename, $dr
 		" SUM(".$configValues['CONFIG_DB_TBL_RADACCT'].".AcctOutputOctets) AS AcctOutputOctets ".
                 " FROM ".$configValues['CONFIG_DB_TBL_RADACCT'].", ".$configValues['CONFIG_DB_TBL_DALOBILLINGRATES']." WHERE (AcctStartTime >= '$startdate') and (AcctStartTime <= '$enddate') and (UserName = '$username') and (".$configValues['CONFIG_DB_TBL_DALOBILLINGRATES'].".rateName = '$ratename') GROUP BY UserName";
 	$res = $dbSocket->query($sql);
-	$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+	$row = $res->fetch(PDO::FETCH_ASSOC);
 
 	$rateCost = $row['rateCost'];
 	$userUpload = toxbyte($row['AcctInputOctets']);
@@ -348,24 +348,24 @@ function userBillingRatesSummary($username, $startdate, $enddate, $ratename, $dr
                 echo "
         		<thead>
         			<tr>
-        	                <th colspan='10' align='left'>
+        	                <th colspan='10' align='left'> 
         				<a class=\"table\" href=\"javascript:toggleShowDiv('divBillingRatesSummary')\">Billing Summary</a>
         	                </th>
         	                </tr>
         		</thead>
         		</table>
         	";
-
+        
                 echo "
                         <div id='divBillingRatesSummary' style='display:none;visibility:visible'>
                		<table border='0' class='table1'>
         		<thread>
 
-                        <tr>
+                        <tr>        
                         <th scope='col' align='right'>
                         Username
-                        </th>
-
+                        </th> 
+        
                         <th scope='col' align='left'>
                         $username
                         </th>
@@ -374,8 +374,8 @@ function userBillingRatesSummary($username, $startdate, $enddate, $ratename, $dr
                         <tr>
                         <th scope='col' align='right'>
                         Billing for period of
-                        </th>
-
+                        </th> 
+        
                         <th scope='col' align='left'>
                         $startdate until $enddate (inclusive)
                         </th>
@@ -384,8 +384,8 @@ function userBillingRatesSummary($username, $startdate, $enddate, $ratename, $dr
                         <tr>
                         <th scope='col' align='right'>
                         Online Time
-                        </th>
-
+                        </th> 
+        
                         <th scope='col' align='left'>
                         $userOnlineTime
                         </th>
@@ -394,8 +394,8 @@ function userBillingRatesSummary($username, $startdate, $enddate, $ratename, $dr
                         <tr>
                         <th scope='col' align='right'>
                         User Upload
-                        </th>
-
+                        </th> 
+        
                         <th scope='col' align='left'>
                         $userUpload
                         </th>
@@ -405,8 +405,8 @@ function userBillingRatesSummary($username, $startdate, $enddate, $ratename, $dr
                         <tr>
                         <th scope='col' align='right'>
                         User Download
-                        </th>
-
+                        </th> 
+        
                         <th scope='col' align='left'>
                         $userDownload
                         </th>
@@ -416,8 +416,8 @@ function userBillingRatesSummary($username, $startdate, $enddate, $ratename, $dr
                         <tr>
                         <th scope='col' align='right'>
                         Rate Name
-                        </th>
-
+                        </th> 
+        
                         <th scope='col' align='left'>
                         $ratename
                         </th>
@@ -427,8 +427,8 @@ function userBillingRatesSummary($username, $startdate, $enddate, $ratename, $dr
                         <tr>
                         <th scope='col' align='right'>
                         Total Billed
-                        </th>
-
+                        </th> 
+        
                         <th scope='col' align='left'>
                         $sumBilled
                         </th>
@@ -439,7 +439,7 @@ function userBillingRatesSummary($username, $startdate, $enddate, $ratename, $dr
         		</div>
         	";
 
-	}
+	}		
 
 
 }
@@ -452,7 +452,7 @@ function userBillingRatesSummary($username, $startdate, $enddate, $ratename, $dr
  * $startdate		starting date, first accounting session
  * $enddate		ending date, last accounting session
  * $drawTable           if set to 1 (enabled) a toggled on/off table will be drawn
- *
+ * 
  * returns user connection information: uploads, download, session time, total billed, etc...
  *
  *********************************************************************************************************
@@ -462,12 +462,12 @@ function userBillingPayPalSummary($startdate, $enddate, $payer_email, $payment_a
 	include_once('include/management/pages_common.php');
 	include 'library/opendb.php';
 
-        $startdate = $dbSocket->escapeSimple($startdate);
-        $enddate = $dbSocket->escapeSimple($enddate);
-        $payer_email = $dbSocket->escapeSimple($payer_email);
-        $payment_address_status = $dbSocket->escapeSimple($payment_address_status);
-        $payer_status = $dbSocket->escapeSimple($payer_status);
-        $payment_status = $dbSocket->escapeSimple($payment_status);
+        $startdate = htmlspecialchars($startdate);
+        $enddate = htmlspecialchars($enddate);
+        $payer_email = htmlspecialchars($payer_email);
+        $payment_address_status = htmlspecialchars($payment_address_status);
+        $payer_status = htmlspecialchars($payer_status);
+        $payment_status = htmlspecialchars($payment_status);
 
         $sql = "SELECT ".$configValues['CONFIG_DB_TBL_DALOBILLINGMERCHANT'].".Username AS Username, business_email, ".
         $configValues['CONFIG_DB_TBL_DALOBILLINGPLANS'].".planName, ".$configValues['CONFIG_DB_TBL_DALOBILLINGMERCHANT'].".planId, SUM(payment_total) AS total, SUM(payment_fee) ".
@@ -488,10 +488,10 @@ function userBillingPayPalSummary($startdate, $enddate, $payer_email, $payment_a
 		" GROUP BY Username";
         $res = $dbSocket->query($sql);
 
-	if ($res->numRows() == 0)
+	if ($res->rowCount() == 0)
 		return;
 
-	$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+	$row = $res->fetch(PDO::FETCH_ASSOC);
 
 	$planTotalCost = $row['total'];
 	$planTotalTax = $row['tax'];
@@ -523,7 +523,7 @@ function userBillingPayPalSummary($startdate, $enddate, $payer_email, $payment_a
         		</thead>
         		</table>
         	";
-
+        
                 echo "
                         <div id='divBillingPayPalSummary' style='display:none;visibility:visible'>
                		<table border='0' class='table1'>
@@ -622,3 +622,5 @@ function userBillingPayPalSummary($startdate, $enddate, $payer_email, $payment_a
 
 
 }
+
+

@@ -289,7 +289,7 @@
 		$batch_id = "";
 		$planname = "";
 		
-		while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+		while($row = $res->fetch(PDO::FETCH_ASSOC)) {
 			
 			$batch_id = $row['id'];
 			$hotspot_name = $row['HotspotName'];
@@ -367,7 +367,7 @@
 				$configValues['CONFIG_DB_TBL_DALOBILLINGPLANS'].
 				" WHERE planName = '".$planname."'";
 		$res = $dbSocket->query($sql);
-		$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+		$row = $res->fetch(PDO::FETCH_ASSOC);
 		
 		$service_plan_info = "";
 		$service_plan_info = "<table $tableTags>";
@@ -388,7 +388,7 @@
 		$sql = "SELECT id, name, owner, address, companyphone, companyemail, companywebsite FROM ".$configValues['CONFIG_DB_TBL_DALOHOTSPOTS'].
 					" WHERE name='".$hotspot_name."'";
 		$res = $dbSocket->query($sql);
-		$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+		$row = $res->fetch(PDO::FETCH_ASSOC);
 		
 		$customerInfo['business_name'] = $row['name'];
 		$customerInfo['business_owner_name'] = $row['owner'];
@@ -449,7 +449,7 @@
 		$total_users = 0;
 		$active_users = 0;
 		$batch_cost = 0;
-		while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+		while($row = $res->fetch(PDO::FETCH_ASSOC)) {
 	
 			$username = $row['username'];
 			$acctstarttime = $row['acctstarttime'];

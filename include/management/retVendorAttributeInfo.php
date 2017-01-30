@@ -11,9 +11,9 @@ if (isset($_GET['retAttributeInfo'])) {
 	include('../../library/opendb.php');
 
 	$sql = "SELECT RecommendedTooltip FROM ".$configValues['CONFIG_DB_TBL_DALODICTIONARY']. 
-		" WHERE Attribute='".$dbSocket->escapeSimple($attribute)."'";
+		" WHERE Attribute='".htmlspecialchars($attribute)."'";
 	$res = $dbSocket->query($sql);
-	$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+	$row = $res->fetch(PDO::FETCH_ASSOC);
 
 	$desc = $row['RecommendedTooltip'];
 

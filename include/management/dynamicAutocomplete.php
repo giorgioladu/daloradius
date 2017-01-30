@@ -37,7 +37,7 @@ if(isset($_GET['getAjaxAutocompletePaymentName'])) {
                         " WHERE value LIKE '$getAjaxAutocompletePaymentName%' ORDER BY value ASC";
                 $res = $dbSocket->query($sql);
 
-                while($row = $res->fetchRow()) {
+                while($row = $res->fetch()) {
                         echo "$row[0]###$row[0]|";
                 }
 
@@ -61,7 +61,7 @@ if(isset($_GET['getAjaxAutocompleteContactPerson'])) {
 			" WHERE contactperson LIKE '$getAjaxAutocompleteContactPerson%' ORDER BY contactperson ASC";
 	        $res = $dbSocket->query($sql);
 
-	        while($row = $res->fetchRow()) {
+	        while($row = $res->fetch()) {
 	                echo "$row[0]###$row[0]|";
 	        }
 
@@ -86,7 +86,7 @@ if(isset($_GET['getAjaxAutocompleteBatchNames'])) {
 			" WHERE batch_name LIKE '$getAjaxAutocompleteBatchNames%' ORDER BY batch_name ASC";
 	        $res = $dbSocket->query($sql);
 
-	        while($row = $res->fetchRow()) {
+	        while($row = $res->fetch()) {
 	                echo "$row[0]###$row[0]|";
 	        }
 
@@ -109,7 +109,7 @@ if(isset($_GET['getAjaxAutocompleteNASHost'])) {
 			" WHERE nasName LIKE '$getAjaxAutocompleteNASHost%' ORDER BY nasName ASC";
 	        $res = $dbSocket->query($sql);
 
-	        while($row = $res->fetchRow()) {
+	        while($row = $res->fetch()) {
 	                echo "$row[0]###$row[0]|";
 	        }
 
@@ -132,7 +132,7 @@ if(isset($_GET['getAjaxAutocompleteHGHost'])) {
 		" WHERE nasipaddress LIKE '$getAjaxAutocompleteHGHost%' ORDER BY nasipaddress ASC";
 		$res = $dbSocket->query($sql);
 
-		while($row = $res->fetchRow()) {
+		while($row = $res->fetch()) {
 				echo "$row[0]###$row[0]|";
 		}
 
@@ -159,7 +159,7 @@ if(isset($_GET['getAjaxAutocompleteGroupName'])) {
 
 	        $res = $dbSocket->query($sql);
 
-	        while($row = $res->fetchRow()) {
+	        while($row = $res->fetch()) {
 	                echo "$row[0]###$row[0]|";
 	        }
 
@@ -185,7 +185,7 @@ if(isset($_GET['getAjaxAutocompleteRateName'])) {
 			" WHERE rateName LIKE '$getAjaxAutocompleteRateName%' ORDER BY rateName ASC";
 	        $res = $dbSocket->query($sql);
 
-	        while($row = $res->fetchRow()) {
+	        while($row = $res->fetch()) {
 	                echo "$row[0]###$row[0]|";
 	        }
 
@@ -212,7 +212,7 @@ if(isset($_GET['getAjaxAutocompleteBillingPlans'])) {
 			" WHERE planName LIKE '$getAjaxAutocompleteBillingPlans%' ORDER BY planName ASC";
 	        $res = $dbSocket->query($sql);
 
-	        while($row = $res->fetchRow()) {
+	        while($row = $res->fetch()) {
 	                echo "$row[0]###$row[0]|";
 	        }
 
@@ -238,7 +238,7 @@ if(isset($_GET['getAjaxAutocompleteHotspots'])) {
 			" WHERE Name LIKE '$getAjaxAutocompleteHotspots%' ORDER BY Name ASC";
 	        $res = $dbSocket->query($sql);
 
-	        while($row = $res->fetchRow()) {
+	        while($row = $res->fetch()) {
 	                echo "$row[0]###$row[0]|";
 	        }
 
@@ -265,7 +265,7 @@ if(isset($_GET['getAjaxAutocompleteUsernames'])) {
 			" WHERE Username LIKE '$getAjaxAutocompleteUsernames%' ORDER BY Username ASC";
 	        $res = $dbSocket->query($sql);
 
-	        while($row = $res->fetchRow()) {
+	        while($row = $res->fetch()) {
 	                echo "$row[0]###$row[0]|";
 	        }
 
@@ -296,7 +296,7 @@ if(isset($_GET['getAjaxAutocompleteAttributes'])) {
                 "ORDER BY Vendor ASC";
 	        $res = $dbSocket->query($sql);
 
-	        while($row = $res->fetchRow()) {
+	        while($row = $res->fetch()) {
 	                echo "$row[0]###$row[0]|";
 	        }
 
@@ -321,7 +321,7 @@ if(isset($_GET['getAjaxAutocompleteVendorName'])) {
 			" WHERE Vendor LIKE '$getAjaxAutocompleteVendorName%' ORDER BY VendorName ASC";
 	        $res = $dbSocket->query($sql);
 
-	        while($row = $res->fetchRow()) {
+	        while($row = $res->fetch()) {
 	                echo "$row[0]###$row[0]|";
 	        }
 

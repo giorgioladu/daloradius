@@ -67,7 +67,7 @@ if(isset($_GET['getGroups'])) {
 	");
 			
 
-        while($row = $res->fetchRow()) {
+        while($row = $res->fetch()) {
 
 		printqn("
 	        	'<option value=\'$row[0]\'>$row[0]</option>'+

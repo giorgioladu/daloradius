@@ -52,14 +52,14 @@ if (isset($_GET['reportFormat'])) {
 
 				        $res = $dbSocket->query($sql);
 
-				        while($row = $res->fetchRow()) {
+				        while($row = $res->fetch()) {
 						$outputContent .= "$row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],".
 									"$row[7],$row[8],$row[9],$row[10]\n";
 					}
 
 
 					$output = $outputHeader . $outputContent;
-					exportCSVFile($output);
+					exportCSVFile($output);	
 
 					include_once('../../library/closedb.php');
 				}
@@ -83,12 +83,12 @@ if (isset($_GET['reportFormat'])) {
 
 				        $res = $dbSocket->query($sql);
 
-				        while($row = $res->fetchRow()) {
+				        while($row = $res->fetch()) {
 						$outputContent .= "$row[0],$row[1],$row[2],$row[3]\n";
 					}
 
 					$output = $outputHeader . $outputContent;
-					exportCSVFile($output);
+					exportCSVFile($output);	
 
 					include_once('../../library/closedb.php');
 				}
@@ -107,8 +107,8 @@ if (isset($_GET['reportFormat'])) {
 
 				if ($reportFormat == "csv") {
 					$res = $dbSocket->query($sql);
-
-						while($row = $res->fetchRow()) {
+	
+						while($row = $res->fetch()) {
 						$outputContent .= "$row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6]\n";
 					}
 					$output = $outputHeader . $outputContent;
@@ -131,8 +131,8 @@ if (isset($_GET['reportFormat'])) {
 
 				if ($reportFormat == "csv") {
 					$res = $dbSocket->query($sql);
-
-						while($row = $res->fetchRow()) {
+	
+						while($row = $res->fetch()) {
 						$outputContent .= "$row[0],$row[1],$row[2],$row[3]\n";
 					}
 					$output = $outputHeader . $outputContent;
@@ -162,8 +162,8 @@ if (isset($_GET['reportFormat'])) {
 
 				if ($reportFormat == "csv") {
 					$res = $dbSocket->query($sql);
-
-					while($row = $res->fetchRow()) {
+	
+					while($row = $res->fetch()) {
 						$outputContent .= "$row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],$row[9]\n";
 					}
 
@@ -199,8 +199,8 @@ if (isset($_GET['reportFormat'])) {
 
 				if ($reportFormat == "csv") {
 					$res = $dbSocket->query($sql);
-
-						while($row = $res->fetchRow()) {
+	
+						while($row = $res->fetch()) {
 						$outputContent .= "$row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6]\n";
 					}
 					$output = $outputHeader . $outputContent;
@@ -224,8 +224,8 @@ if (isset($_GET['reportFormat'])) {
 
 				if ($reportFormat == "csv") {
 					$res = $dbSocket->query($sql);
-
-					while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+	
+					while($row = $res->fetch(PDO::FETCH_ASSOC)) {
 						$outputContent .= $row['batch_name'].",".$row['username'].",".$row['acctstarttime']."\n";
 					}
 					$output = $outputHeader . $outputContent;
@@ -249,8 +249,8 @@ if (isset($_GET['reportFormat'])) {
 					$res = $dbSocket->query($sql);
 
 						$batch_cost = 0;
-						while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
-
+						while($row = $res->fetch(PDO::FETCH_ASSOC)) {
+							
 							$batch_cost = ($row['active_users'] * $row['plancost']);
 							$outputContent .= $row['batch_name'].",".$row['HotspotName'].",".$row['batch_status'].",".$row['total_users'].",".$row['active_users'].
 										",".$row['planname'].",".$row['plancost'].",".$batch_cost.",".$row['creationdate'].
@@ -296,8 +296,8 @@ if (isset($_GET['reportFormat'])) {
 					$res = $dbSocket->query($sql);
 
 						$batch_cost = 0;
-						while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
-
+						while($row = $res->fetch(PDO::FETCH_ASSOC)) {
+							
 							$outputContent .= $row['batch_name'].",".$row['username'].",".$row['Value']."\n";
 					}
 					$output = $outputHeader . $outputContent;
@@ -323,7 +323,7 @@ if (isset($_GET['reportFormat'])) {
 					$res = $dbSocket->query($sql);
 
 						$balance = 0;
-						while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+						while($row = $res->fetch(PDO::FETCH_ASSOC)) {
 							$balance = ($row['totalpayed'] - $row['totalbilled']);
 							$outputContent .= $row['id'].",".$row['contactperson'].",".$row['username'].",".$row['date'].",".$row['totalbilled'].",".$row['totalpayed'].",".$balance.",".$row['status']."\n";
 						}

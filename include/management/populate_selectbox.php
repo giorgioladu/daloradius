@@ -43,7 +43,7 @@ function populate_payment_type_id($defaultOption = "Select Payment Type", $eleme
         $sql = "(SELECT id, value FROM ".$configValues['CONFIG_DB_TBL_DALOPAYMENTTYPES'].")";
         $res = $dbSocket->query($sql);
 
-        while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+        while($row = $res->fetch(PDO::FETCH_ASSOC)) {
                 echo "
                         <option value='".$row['id']."'>".$row['value']."</option>
                         ";
@@ -78,7 +78,7 @@ function populate_customer_id($defaultOption = "Select Customer", $elementName =
         $sql = "(SELECT id, value FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICESTATUS'].")";
         $res = $dbSocket->query($sql);
 
-        while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+        while($row = $res->fetch(PDO::FETCH_ASSOC)) {
                 echo "  
                         <option value='".$row['id']."'>".$row['value']."</option>
                         ";
@@ -114,7 +114,7 @@ function populate_invoice_status_id($defaultOption = "Select Status", $elementNa
         $sql = "(SELECT id, value FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICESTATUS'].")";
         $res = $dbSocket->query($sql);
 
-        while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+        while($row = $res->fetch(PDO::FETCH_ASSOC)) {
                 echo "  
                         <option value='".$row['id']."'>".$row['value']."</option>
                         ";
@@ -152,7 +152,7 @@ function populate_invoice_type_id($defaultOption = "Select Status", $elementName
         $sql = "(SELECT id, value FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICETYPE'].")";
         $res = $dbSocket->query($sql);
 
-        while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+        while($row = $res->fetch(PDO::FETCH_ASSOC)) {
                 echo "  
                         <option value='".$row['id']."'>".$row['value']."</option>
                         ";
@@ -191,7 +191,7 @@ function populate_hotspots($defaultOption = "Select Hotspot", $elementName = "",
         $sql = "(SELECT distinct(id), name FROM ".$configValues['CONFIG_DB_TBL_DALOHOTSPOTS'].")";
         $res = $dbSocket->query($sql);
 
-        while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+        while($row = $res->fetch(PDO::FETCH_ASSOC)) {
                 echo "  
                         <option value='".$row['id']."'>".$row['name']."</option>
                         ";
@@ -220,7 +220,7 @@ function populate_plans($defaultOption = "Select Plan", $elementName = "", $cssC
 		$sql = "SELECT distinct(planName), id FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGPLANS']." WHERE planActive = 'yes' ORDER BY planName ASC;";
         $res = $dbSocket->query($sql);
 
-        while($row = $res->fetchRow()) {
+        while($row = $res->fetch()) {
 			
 
         	if ($valueIsId === true)
@@ -263,7 +263,7 @@ function populate_groups($defaultOption = "Select Group", $elementName = "", $cs
 			"UNION (SELECT distinct(GroupName) FROM ".$configValues['CONFIG_DB_TBL_RADGROUPCHECK'].");";
         $res = $dbSocket->query($sql);
 
-        while($row = $res->fetchRow()) {
+        while($row = $res->fetch()) {
                 echo "  
                         <option value='$row[0]'> $row[0] </option>
                         ";
@@ -299,7 +299,7 @@ function populate_vendors($defaultOption = "Select Vendor",$elementName = "", $c
         $sql = "SELECT distinct(Vendor) as Vendor FROM ".$configValues['CONFIG_DB_TBL_DALODICTIONARY']." ORDER BY Vendor ASC;";
         $res = $dbSocket->query($sql);
 
-        while($row = $res->fetchRow()) {
+        while($row = $res->fetch()) {
                 echo "  
                         <option value='$row[0]'> $row[0] </option>
                         ";
@@ -337,7 +337,7 @@ function populate_realms($defaultOption = "Select Realm",$elementName = "", $css
         $sql = "SELECT distinct(RealmName) as Realm FROM ".$configValues['CONFIG_DB_TBL_DALOREALMS']." ORDER BY Realm ASC;";
         $res = $dbSocket->query($sql);
 
-        while($row = $res->fetchRow()) {
+        while($row = $res->fetch()) {
                 echo "  
                         <option value='$row[0]'> $row[0] </option>
                         ";
@@ -378,7 +378,7 @@ function populate_proxys($defaultOption = "Select Proxy",$elementName = "", $css
         $sql = "SELECT distinct(ProxyName) as Proxy FROM ".$configValues['CONFIG_DB_TBL_DALOPROXYS']." ORDER BY Proxy ASC;";
         $res = $dbSocket->query($sql);
 
-        while($row = $res->fetchRow()) {
+        while($row = $res->fetch()) {
                 echo "  
                         <option value='$row[0]'> $row[0] </option>
                         ";

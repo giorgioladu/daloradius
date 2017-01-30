@@ -12,9 +12,9 @@ if (isset($_GET['retBandwidthInfo'])) {
 
 	$sql = "SELECT SUM(AcctInputOctets) AS Upload, SUM(AcctOutputOctets) AS Download FROM ".
 		$configValues['CONFIG_DB_TBL_RADACCT']." WHERE UserName='".
-		$dbSocket->escapeSimple($username)."'";
+		htmlspecialchars($username)."'";
 	$res = $dbSocket->query($sql);
-	$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+	$row = $res->fetch(PDO::FETCH_ASSOC);
 
 	$upload = toxbyte($row['Upload']);
 	$download = toxbyte($row['Download']);

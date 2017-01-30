@@ -21,7 +21,7 @@
 
 	$groupOptions = "";
 
-	while($row = $res->fetchRow()) {			
+	while($row = $res->fetch()) {			
 		$groupOptions .= "<option value='$row[0]'> $row[0] </option>";
 	}
 
@@ -40,16 +40,16 @@
 <?php
 
 	$sql = "SELECT GroupName, priority FROM ".$configValues['CONFIG_DB_TBL_RADUSERGROUP']
-		." WHERE UserName='".$dbSocket->escapeSimple($username)."';";
+		." WHERE UserName='".htmlspecialchars($username)."';";
 	$res = $dbSocket->query($sql);
 
-	if ($res->numRows() == 0) {
+	if ($res->rowCount() == 0) {
 		echo "<center> ".$l['messages']['nogroupdefinedforuser']." <br/></center>";
 	} else {
 
 		$counter = 0;
 
-		while($row = $res->fetchRow()) {
+		while($row = $res->fetch()) {
 
 			echo "
 

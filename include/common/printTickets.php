@@ -35,14 +35,14 @@ $ticketLogoFile = "/images/daloradius_small.png";
 
 
 if (isset($_REQUEST['type']) && $_REQUEST['type'] == "batch") {
-
+	
 	$format = $_REQUEST['format'];
 	$plan = $_REQUEST['plan'];
 
 	// accounts is a string with the format of "username1,password1||username2,password2||..."
 	$accounts_temp = $_REQUEST['accounts'];
 	$accounts = explode("||", $accounts_temp);
-
+	
 	include_once('../../library/opendb.php');
 	include_once('../management/pages_common.php');
 
@@ -53,17 +53,17 @@ if (isset($_REQUEST['type']) && $_REQUEST['type'] == "batch") {
 			$configValues['CONFIG_DB_TBL_DALOBILLINGPLANS'].
 				" WHERE ".$configValues['CONFIG_DB_TBL_DALOBILLINGPLANS'].".planName=".
 				" '$plan' ";
-
+				
 	$res = $dbSocket->query($sql);
-	$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
-
+	$row = $res->fetch(PDO::FETCH_ASSOC);
+	
 	$ticketCurrency = $row['planCurrency'];
 	$ticketCost = $row['planCost'] ." " . $ticketCurrency;
 	$ticketTime = time2str($row['planTimeBank']);
-
+	
 	printTicketsHTMLTable($accounts, $ticketCost, $ticketTime);
 
-
+	
 }
 
 
@@ -82,8 +82,8 @@ function printTicketsHTMLTable($accounts, $ticketCost, $ticketTime) {
 	// for each 4th entry of a new ticket table we put it in a new row of it's own
 	$trCounter = 0;
 	foreach($accounts as $userpass) {
-
-		list($user, $pass) = explode(",", $userpass);
+		
+		list($user, $pass) = split(",", $userpass);
 
 		if ($trCounter > 2)
 			$trCounter = 0;
@@ -175,10 +175,10 @@ function printTicketsHTMLTable($accounts, $ticketCost, $ticketTime) {
 				<tbody>
 							$output
 				</tbody>
-			</table>
+			</table>	
 		</body></html>
 	";
-
+	
 }
 
 

@@ -81,10 +81,10 @@
 				" LEFT JOIN ".$configValues['CONFIG_DB_TBL_DALOBILLINGPLANS']." AS bp2 ON (bp2.id = d2.plan_id) ".
 				" LEFT JOIN (SELECT SUM(e.amount) as totalpayed, invoice_id FROM ". 
 				$configValues['CONFIG_DB_TBL_DALOPAYMENTS']." AS e GROUP BY e.invoice_id) AS e2 ON (e2.invoice_id = a.id) ".
-				" WHERE a.id = '".$dbSocket->escapeSimple($invoice_id)."'".
+				" WHERE a.id = '".htmlspecialchars($invoice_id)."'".
 				" GROUP BY a.id ";
 		$res = $dbSocket->query($sql);	
-		$invoiceDetails = $res->fetchRow(DB_FETCHMODE_ASSOC);
+		$invoiceDetails = $res->fetch(PDO::FETCH_ASSOC);
 
 		if (empty($invoiceDetails['email']))
 			$customer_email = $invoiceDetails['emailinvoice'];
@@ -131,7 +131,7 @@
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 		
-		while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+		while($row = $res->fetch(PDO::FETCH_ASSOC)) {
 
 			$invoice_items .= "". 
 				"<tr>".

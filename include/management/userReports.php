@@ -38,7 +38,7 @@ function userSubscriptionAnalysis($username, $drawTable) {
 	include_once('include/management/pages_common.php');
 	include 'library/opendb.php';
 
-	$username = $dbSocket->escapeSimple($username);			// sanitize variable for sql statement
+	$username = htmlspecialchars($username);			// sanitize variable for sql statement
 	
 
 	/*
@@ -49,7 +49,7 @@ function userSubscriptionAnalysis($username, $drawTable) {
 		" COUNT(DISTINCT AcctSessionID) AS 'Logins' ".
 		" FROM ".$configValues['CONFIG_DB_TBL_RADACCT']." WHERE UserName='$username' AND acctstoptime>0";
 	$res = $dbSocket->query($sql);
-	$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+	$row = $res->fetch(PDO::FETCH_ASSOC);
 
 	(isset($row['SUMSession'])) ? $userSumMaxAllSession = time2str($row['SUMSession']) : $userSumMaxAllSession = "unavailable";
 	(isset($row['SUMDownload'])) ? $userSumDownload = toxbyte($row['SUMDownload']) : $userSumDownload = "unavailable";
@@ -73,8 +73,8 @@ function userSubscriptionAnalysis($username, $drawTable) {
 		" COUNT(DISTINCT AcctSessionID) AS 'Logins' ".
 		" FROM ".$configValues['CONFIG_DB_TBL_RADACCT'].
 		" WHERE AcctStartTime<'$nextMonth' AND AcctStartTime>='$currMonth' AND UserName='$username' AND acctstoptime>0";
-	$res = $dbSocket->query($sql);
-	$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+        $res = $dbSocket->query($sql);
+	$row = $res->fetch(PDO::FETCH_ASSOC);
 
 	(isset($row['SUMSession'])) ? $userSumMaxMonthlySession = time2str($row['SUMSession']) : $userSumMaxMonthlySession = "unavailable";
 	(isset($row['SUMDownload'])) ? $userSumMonthlyDownload = toxbyte($row['SUMDownload']) : $userSumMonthlyDownload = "unavailable";
@@ -97,7 +97,7 @@ function userSubscriptionAnalysis($username, $drawTable) {
 		" FROM ".$configValues['CONFIG_DB_TBL_RADACCT'].
 		" WHERE AcctStartTime<'$nextDay' AND AcctStartTime>='$currDay' AND UserName='$username' AND acctstoptime>0";
 	$res = $dbSocket->query($sql);
-	$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+	$row = $res->fetch(PDO::FETCH_ASSOC);
 
 	(isset($row['SUMSession'])) ? $userSumMaxWeeklySession = time2str($row['SUMSession']) : $userSumMaxWeeklySession = "unavailable";
 	(isset($row['SUMDownload'])) ? $userSumWeeklyDownload = toxbyte($row['SUMDownload']) : $userSumWeeklyDownload = "unavailable";
@@ -124,7 +124,7 @@ function userSubscriptionAnalysis($username, $drawTable) {
 		" FROM ".$configValues['CONFIG_DB_TBL_RADACCT'].
 		" WHERE AcctStartTime<'$nextDay' AND AcctStartTime>='$currDay' AND UserName='$username' AND acctstoptime>0";
 	$res = $dbSocket->query($sql);
-	$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+	$row = $res->fetch(PDO::FETCH_ASSOC);
 
 	(isset($row['SUMSession'])) ? $userSumMaxDailySession = time2str($row['SUMSession']) : $userSumMaxDailySession = "unavailable";
 	(isset($row['SUMDownload'])) ? $userSumDailyDownload = toxbyte($row['SUMDownload']) : $userSumDailyDownload = "unavailable";
@@ -144,7 +144,7 @@ function userSubscriptionAnalysis($username, $drawTable) {
         $sql = "SELECT Value AS 'Expiration' FROM ".$configValues['CONFIG_DB_TBL_RADCHECK'].
 		" WHERE (UserName='$username') AND (Attribute='Expiration')";
 	$res = $dbSocket->query($sql);
-	$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+	$row = $res->fetch(PDO::FETCH_ASSOC);
 
 	(isset($row['Expiration'])) ? $userExpiration = $row['Expiration'] : $userExpiration = "unset";
 
@@ -156,7 +156,7 @@ function userSubscriptionAnalysis($username, $drawTable) {
         $sql = "SELECT Value AS 'Session-Timeout' FROM ".$configValues['CONFIG_DB_TBL_RADREPLY'].
 		" WHERE (UserName='$username') AND (Attribute='Session-Timeout')";
 	$res = $dbSocket->query($sql);
-	$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+	$row = $res->fetch(PDO::FETCH_ASSOC);
 
 	(isset($row['Session-Timeout'])) ? $userSessionTimeout = $row['Session-Timeout'] : $userSessionTimeout = "unset";
 
@@ -171,7 +171,7 @@ function userSubscriptionAnalysis($username, $drawTable) {
                 " WHERE (Attribute ='Idle-Timeout') AND (GroupName IN (SELECT groupname from ".$configValues['CONFIG_DB_TBL_RADUSERGROUP'] .
                                 " WHERE username ='$username' order by priority)) LIMIT 1";
 	$res = $dbSocket->query($sql);
-	$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+	$row = $res->fetch(PDO::FETCH_ASSOC);
 
 	(isset($row['Idle-Timeout'])) ? $userIdleTimeout = $row['Idle-Timeout'] : $userIdleTimeout = "unset";
 	
@@ -355,7 +355,7 @@ function userPlanInformation($username, $drawTable) {
 			$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'].".username='$username' ";
 			
 	$res = $dbSocket->query($sql);
-	$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+	$row = $res->fetch(PDO::FETCH_ASSOC);
 
 	
 	empty($row['planName']) ? $planName = "unavailable" : $planName = $row['planName'];
@@ -377,7 +377,7 @@ function userPlanInformation($username, $drawTable) {
 	$sql  = "SELECT SUM(AcctSessionTime), SUM(AcctOutputOctets), SUM(AcctInputOctets) ".
 		" FROM ".$configValues['CONFIG_DB_TBL_RADACCT']." WHERE username='$username'";
 	$res = $dbSocket->query($sql);
-	$row = $res->fetchRow();
+	$row = $res->fetch();
     $totalTimeUsed = $row[0];
     $totalTrafficDown = $row[1];
     $totalTrafficUp = $row[2];
@@ -532,13 +532,13 @@ function userConnectionStatus($username, $drawTable) {
 	include_once('include/management/pages_common.php');
 	include 'library/opendb.php';
 
-	$username = $dbSocket->escapeSimple($username);			// sanitize variable for sql statement
+	$username = htmlspecialchars($username);			// sanitize variable for sql statement
 
         $sql = "SELECT AcctStartTime,CASE WHEN AcctStopTime is NULL THEN timestampdiff(SECOND,AcctStartTime,NOW()) ELSE AcctSessionTime END AS AcctSessionTime,NASIPAddress,CalledStationId,FramedIPAddress,CallingStationId".
 		",AcctInputOctets,AcctOutputOctets FROM ".$configValues['CONFIG_DB_TBL_RADACCT'].
 		" WHERE Username='$username' ORDER BY RadAcctId DESC LIMIT 1";
 	$res = $dbSocket->query($sql);
-	$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+	$row = $res->fetch(PDO::FETCH_ASSOC);
 
 	$userUpload = toxbyte($row['AcctInputOctets']);
 	$userDownload = toxbyte($row['AcctOutputOctets']);
@@ -665,12 +665,12 @@ function checkUserOnline($username) {
 
 	include 'library/opendb.php';
 
-	$username = $dbSocket->escapeSimple($username);
+	$username = htmlspecialchars($username);
 
         $sql = "SELECT Username FROM ".$configValues['CONFIG_DB_TBL_RADACCT'].
 		" WHERE (AcctStopTime IS NULL AND Username='$username') OR (AcctStopTime = '0000-00-00 00:00:00' AND Username='$username')";
 	$res = $dbSocket->query($sql);
-	if ($numrows = $res->numRows() >= 1) {
+	if ($numrows = $res->rowCount() >= 1) {
 		$userStatus = "User is online";
 	} else {
 		$userStatus = "User is offline";

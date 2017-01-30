@@ -64,7 +64,7 @@ function userDisable($username, $divContainer) {
 
 	foreach ($username as $variable=>$value) {
 	
-		$user = $dbSocket->escapeSimple($value);		// clean username argument from harmful code
+		$user = htmlspecialchars($value);		// clean username argument from harmful code
 
 		$sql = "INSERT IGNORE INTO ".$configValues['CONFIG_DB_TBL_RADUSERGROUP']." (Username,Groupname,Priority) ".
 				" VALUES ('$user','daloRADIUS-Disabled-Users',0) ";		
@@ -98,7 +98,7 @@ function userEnable($username, $divContainer) {
 
 	foreach ($username as $variable=>$value) {
 	
-		$user = $dbSocket->escapeSimple($value);		// clean username argument from harmful code
+		$user = htmlspecialchars($value);		// clean username argument from harmful code
 		if ($user) {
 	        $sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_RADUSERGROUP'].
 	                " WHERE username='$user' AND groupname='daloRADIUS-Disabled-Users'";
@@ -124,12 +124,12 @@ function checkDisabled($username) {
 
 	include 'library/opendb.php';
 
-	$username = $dbSocket->escapeSimple($username);
+	$username = htmlspecialchars($username);
 
         $sql = "SELECT Username FROM ".$configValues['CONFIG_DB_TBL_RADUSERGROUP'].
 			" WHERE Username='$username' AND Groupname='daloRADIUS-Disabled-Users'";
 	$res = $dbSocket->query($sql);
-	if ($numrows = $res->numRows() >= 1) {
+	if ($numrows = $res->rowCount() >= 1) {
 	
 	        echo "<div class='failure'>
 	              	Please note, the user <b>$username</b> is currently disabled.<br/>
@@ -159,7 +159,7 @@ function userRefillSessionTime($username, $divContainer) {
 
 	foreach ($username as $variable=>$value) {
 	
-		$user = $dbSocket->escapeSimple($value);		// clean username argument from harmful code
+		$user = htmlspecialchars($value);		// clean username argument from harmful code
 		$allUsers .= $user . ", ";
 
 		// we update the sessiontime value to be 0 - this will only work though
@@ -180,7 +180,7 @@ function userRefillSessionTime($username, $divContainer) {
 	// take care of recording the billing action in billing_history table
 	foreach ($username as $variable=>$value) {
 
-		$user = $dbSocket->escapeSimple($value);                // clean username argument from harmful code
+		$user = htmlspecialchars($value);                // clean username argument from harmful code
 
 		$sql = "SELECT ".
 			$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'].".id, ".
@@ -204,7 +204,7 @@ function userRefillSessionTime($username, $divContainer) {
 			" AND ".
 			"(".$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'].".username='".$user."')";
 		$res = $dbSocket->query($sql);
-		$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+		$row = $res->fetch(PDO::FETCH_ASSOC);
 
 		$refillCost = $row['planTimeRefillCost'];
 
@@ -275,7 +275,7 @@ function userRefillSessionTraffic($username, $divContainer) {
 
 	foreach ($username as $variable=>$value) {
 	
-	        $user = $dbSocket->escapeSimple($value);		// clean username argument from harmful code
+	        $user = htmlspecialchars($value);		// clean username argument from harmful code
 		$allUsers .= $user . ", ";
 
 		$sql = "UPDATE ".$configValues['CONFIG_DB_TBL_RADACCT'].
@@ -288,7 +288,7 @@ function userRefillSessionTraffic($username, $divContainer) {
 	// take care of recording the billing action in billing_history table
 	foreach ($username as $variable=>$value) {
 
-                $user = $dbSocket->escapeSimple($value);                // clean username argument from harmful code
+                $user = htmlspecialchars($value);                // clean username argument from harmful code
 
                 $sql = "SELECT ".
                 		$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'].".id, ".
@@ -312,7 +312,7 @@ function userRefillSessionTraffic($username, $divContainer) {
                         " AND ".
                         "(".$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'].".username='".$user."')";
                 $res = $dbSocket->query($sql);
-                $row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+                $row = $res->fetch(PDO::FETCH_ASSOC);
 
                 $refillCost = $row['planTrafficRefillCost'];
 
