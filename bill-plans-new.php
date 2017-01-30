@@ -55,11 +55,11 @@
 		
 		include 'library/opendb.php';
 
-		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGPLANS']." WHERE planName='".$dbSocket->escapeSimple($planName)."'";
+		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGPLANS']." WHERE planName='".htmlspecialchars($planName)."'";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 
-		if ($res->numRows() == 0) {
+		if ($res->rowCount() == 0) {
 			if (trim($planName) != "") {
 
 				$currDate = date('Y-m-d H:i:s');
@@ -70,26 +70,26 @@
 				" planTrafficTotal, planTrafficUp, planTrafficDown, planTrafficRefillCost, planRecurring, planRecurringPeriod, ".
 				" planRecurringBillingSchedule, planCost, planSetupCost, planTax, planCurrency, planGroup, ".
 				"  creationdate, creationby, updatedate, updateby) ".
-				" VALUES (0, '".$dbSocket->escapeSimple($planName)."', '".
-				$dbSocket->escapeSimple($planId)."', '".
-				$dbSocket->escapeSimple($planType)."', '".
-				$dbSocket->escapeSimple($planTimeBank)."', '".
-				$dbSocket->escapeSimple($planTimeType)."', '".
-				$dbSocket->escapeSimple($planTimeRefillCost)."', '".
-				$dbSocket->escapeSimple($planBandwidthUp)."', '".
-				$dbSocket->escapeSimple($planBandwidthDown)."', '".
-				$dbSocket->escapeSimple($planTrafficTotal)."', '".
-				$dbSocket->escapeSimple($planTrafficUp)."', '".
-				$dbSocket->escapeSimple($planTrafficDown)."', '".
-				$dbSocket->escapeSimple($planTrafficRefillCost)."', '".
-				$dbSocket->escapeSimple($planRecurring)."', '".
-				$dbSocket->escapeSimple($planRecurringPeriod)."', '".
-				$dbSocket->escapeSimple($planRecurringBillingSchedule)."', '".
-				$dbSocket->escapeSimple($planCost)."', '".
-				$dbSocket->escapeSimple($planSetupCost)."', '".
-				$dbSocket->escapeSimple($planTax)."', '".
-				$dbSocket->escapeSimple($planCurrency)."', '".
-				$dbSocket->escapeSimple($planGroup)."', ".
+				" VALUES (0, '".htmlspecialchars($planName)."', '".
+				htmlspecialchars($planId)."', '".
+				htmlspecialchars($planType)."', '".
+				htmlspecialchars($planTimeBank)."', '".
+				htmlspecialchars($planTimeType)."', '".
+				htmlspecialchars($planTimeRefillCost)."', '".
+				htmlspecialchars($planBandwidthUp)."', '".
+				htmlspecialchars($planBandwidthDown)."', '".
+				htmlspecialchars($planTrafficTotal)."', '".
+				htmlspecialchars($planTrafficUp)."', '".
+				htmlspecialchars($planTrafficDown)."', '".
+				htmlspecialchars($planTrafficRefillCost)."', '".
+				htmlspecialchars($planRecurring)."', '".
+				htmlspecialchars($planRecurringPeriod)."', '".
+				htmlspecialchars($planRecurringBillingSchedule)."', '".
+				htmlspecialchars($planCost)."', '".
+				htmlspecialchars($planSetupCost)."', '".
+				htmlspecialchars($planTax)."', '".
+				htmlspecialchars($planCurrency)."', '".
+				htmlspecialchars($planGroup)."', ".
 				" '$currDate', '$currBy', NULL, NULL)";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
@@ -126,7 +126,7 @@
 
 				if (trim($group) != "") {
 					$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_DALOBILLINGPLANSPROFILES']." (id,plan_name,profile_name) ".
-						" VALUES (0, '".$dbSocket->escapeSimple($planName)."', '".$dbSocket->escapeSimple($group)."') ";
+						" VALUES (0, '".htmlspecialchars($planName)."', '".htmlspecialchars($group)."') ";
 					$res = $dbSocket->query($sql);
 					$logDebugSQL .= $sql . "\n";
 				}

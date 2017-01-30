@@ -44,11 +44,11 @@
 		
 		include 'library/opendb.php';
 
-		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOPAYMENTS']." WHERE invoice_id=".$dbSocket->escapeSimple($payment_invoice_id)." AND amount=".$dbSocket->escapeSimple($payment_amount)." AND date='".$dbSocket->escapeSimple($payment_date)."'";
+		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOPAYMENTS']." WHERE invoice_id=".htmlspecialchars($payment_invoice_id)." AND amount=".htmlspecialchars($payment_amount)." AND date='".htmlspecialchars($payment_date)."'";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 
-		if ($res->numRows() == 0) {
+		if ($res->rowCount() == 0) {
 			if (trim($payment_invoice_id) != "" and trim($payment_amount)!="" and trim($payment_date)!="") {
 
 				$currDate = date('Y-m-d H:i:s');
@@ -58,11 +58,11 @@
 				$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_DALOPAYMENTS'].
 					" (id, invoice_id, amount,date,type_id, notes, ".
 					"  creationdate, creationby, updatedate, updateby) ".
-					" VALUES (0, ".$dbSocket->escapeSimple($payment_invoice_id).", ".
-					"".$dbSocket->escapeSimple($payment_amount).", ".
-					"'".$dbSocket->escapeSimple($payment_date)."', ".
-					"'".$dbSocket->escapeSimple($payment_type_id)."', ".
-					"'".$dbSocket->escapeSimple($payment_notes)."', ".
+					" VALUES (0, ".htmlspecialchars($payment_invoice_id).", ".
+					"".htmlspecialchars($payment_amount).", ".
+					"'".htmlspecialchars($payment_date)."', ".
+					"'".htmlspecialchars($payment_type_id)."', ".
+					"'".htmlspecialchars($payment_notes)."', ".
 					" '$currDate', '$currBy', NULL, NULL)";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";

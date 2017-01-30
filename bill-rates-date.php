@@ -56,9 +56,9 @@
 </head>
 <script src="library/javascript/pages_common.js" type="text/javascript"></script>
 <?php
-
+	
 	include("menu-bill-rates.php");
-
+	
 ?>
 
 	<div id="contentnorightbar">
@@ -78,27 +78,27 @@
 	include 'include/management/pages_common.php';
 	include 'include/management/pages_numbering.php';		// must be included after opendb because it needs to read the CONFIG_IFACE_TABLES_LISTING variable from the config file
 
-	// we can only use the $dbSocket after we have included 'library/opendb.php' which initialzes the connection and the $dbSocket object
-	$username = $dbSocket->escapeSimple($username);
-	$startdate = $dbSocket->escapeSimple($startdate);
-	$enddate = $dbSocket->escapeSimple($enddate);
-	$ratename = $dbSocket->escapeSimple($ratename);
+	// we can only use the $dbSocket after we have included 'library/opendb.php' which initialzes the connection and the $dbSocket object	
+	$username = htmlspecialchars($username);
+	$startdate = htmlspecialchars($startdate);
+	$enddate = htmlspecialchars($enddate);
+	$ratename = htmlspecialchars($ratename);
 
         include_once('include/management/userBilling.php');
         userBillingRatesSummary($username, $startdate, $enddate, $ratename, 1);				// draw the billing rates summary table
 
         include 'library/opendb.php';
 
-	// get rate type
+	// get rate type 
 	$sql = "SELECT rateType FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGRATES']." WHERE ".$configValues['CONFIG_DB_TBL_DALOBILLINGRATES'].".rateName = '$ratename'";
 	$res = $dbSocket->query($sql);
 
-	if ($res->numRows() == 0)
+	if ($res->rowCount() == 0)
 		$failureMsg = "Rate was not found in database, check again please";
 	else {
 
-		$row = $res->fetchRow();
-		list($ratetypenum, $ratetypetime) = explode("/",$row[0]);
+		$row = $res->fetch();
+		list($ratetypenum, $ratetypetime) = split("/",$row[0]);
 
 		switch ($ratetypetime) {					// we need to translate any kind of time into seconds, so a minute is 60 seconds, an hour is 3600,
 			case "second":						// and so on...
@@ -134,9 +134,9 @@
 		$configValues['CONFIG_DB_TBL_DALOBILLINGRATES'].".rateCost ".
 		" FROM ".$configValues['CONFIG_DB_TBL_RADACCT'].", ".$configValues['CONFIG_DB_TBL_DALOBILLINGRATES']." WHERE (AcctStartTime >= '$startdate') and (AcctStartTime <= '$enddate') and (UserName = '$username') and (".$configValues['CONFIG_DB_TBL_DALOBILLINGRATES'].".rateName = '$ratename')";
 	$res = $dbSocket->query($sql);
-	$numrows = $res->numRows();
+	$numrows = $res->rowCount();
 
-
+	
 	$sql = "SELECT distinct(".$configValues['CONFIG_DB_TBL_RADACCT'].".username), ".$configValues['CONFIG_DB_TBL_RADACCT'].".NASIPAddress, ".
 		$configValues['CONFIG_DB_TBL_RADACCT'].".AcctStartTime, ".$configValues['CONFIG_DB_TBL_RADACCT'].".AcctSessionTime, ".
 		$configValues['CONFIG_DB_TBL_DALOBILLINGRATES'].".rateCost ".
@@ -157,7 +157,7 @@
 		echo "<br/>";
 	}
 
-
+	
 	echo "<table border='0' class='table1'>\n";
         echo "
                 <thead>
@@ -180,7 +180,7 @@
 	} else  if ($orderType == "desc") {
 			$orderTypeNextPage = "asc";
 	}
-
+	
         echo "<thread> <tr>
 		<th scope='col'>
 		<br/>
@@ -211,8 +211,8 @@
 	$sumBilled = 0;
 	$sumSession = 0;
 
-	while($row = $res->fetchRow()) {
-
+	while($row = $res->fetch()) {
+		
 		$sessionTime = $row[3];
 		$rateCost = $row[4];
 		$billed = (($sessionTime/$rateDivisor)*$rateCost);
@@ -245,7 +245,7 @@
 
 	include 'library/closedb.php';
 ?>
-
+			
 		</div>
 
 
@@ -254,14 +254,14 @@
 ?>
 
 		<div id="footer">
-
+		
 								<?php
         include 'page-footer.php';
 ?>
 
-
+		
 		</div>
-
+		
 </div>
 </div>
 

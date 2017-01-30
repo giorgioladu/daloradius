@@ -76,10 +76,10 @@
 		include 'include/management/pages_numbering.php';		// must be included after opendb because it needs to read the CONFIG_IFACE_TABLES_LISTING variable from the config file
 
 		// let's sanitize the values passed to us:
-		$username = $dbSocket->escapeSimple($username);
-		$billaction = $dbSocket->escapeSimple($billaction);
-		$startdate = $dbSocket->escapeSimple($startdate);
-		$enddate = $dbSocket->escapeSimple($enddate);
+		$username = htmlspecialchars($username);
+		$billaction = htmlspecialchars($billaction);
+		$startdate = htmlspecialchars($startdate);
+		$enddate = htmlspecialchars($enddate);
 
 //	        include_once('include/management/userBilling.php');
 //	        userBillingPayPalSummary($startdate, $enddate, $payer_email, $payment_address_status, $payer_status, $payment_status, 1);
@@ -99,7 +99,7 @@
 		}
 
 		// we should also sanitize the array that we will be passing to this page in the next query
-		$getFields = $dbSocket->escapeSimple($getFields);
+		$getFields = htmlspecialchars($getFields);
 
 
 		$getQuery = "";
@@ -110,14 +110,14 @@
 
 		$select = implode(",", $sqlfields);
 		// sanitizing the array passed to us in the get request
-		$select = $dbSocket->escapeSimple($select);
+		$select = htmlspecialchars($select);
 
 
 		$sql = "SELECT $select FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGHISTORY']." WHERE ".
 			" (username LIKE '$username') AND ".
 			" (billAction LIKE '$billaction') ";
 		$res = $dbSocket->query($sql);
-		$numrows = $res->numRows();
+		$numrows = $res->rowCount();
 
 
 		$sql = "SELECT $select FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGHISTORY']." WHERE ".
@@ -234,7 +234,7 @@
 
 
 	// inserting the values of each field from the database to the table
-	while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+	while($row = $res->fetch(PDO::FETCH_ASSOC)) {
 		echo "<tr>";
 		foreach ($sqlfields as $value) {
 			echo "<td> " . $row[$value] . "</td>";

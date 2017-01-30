@@ -56,36 +56,36 @@
 				include 'library/opendb.php';
 				
 				// get user id from userbillinfo table 
-				$sql = "SELECT id FROM ".$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO']." WHERE username='".$dbSocket->escapeSimple($username)."'";
+				$sql = "SELECT id FROM ".$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO']." WHERE username='".htmlspecialchars($username)."'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
-				$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+				$row = $res->fetch(PDO::FETCH_ASSOC);
 				$userId = $row['id'];
 				
 				
 				// delete all attributes associated with a username
-				$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_RADCHECK']." WHERE Username='".$dbSocket->escapeSimple($username)."'";
+				$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_RADCHECK']." WHERE Username='".htmlspecialchars($username)."'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 
-				$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_RADREPLY']." WHERE Username='".$dbSocket->escapeSimple($username)."'";
+				$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_RADREPLY']." WHERE Username='".htmlspecialchars($username)."'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 
-				$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_DALOUSERINFO']." WHERE Username='".$dbSocket->escapeSimple($username)."'";
+				$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_DALOUSERINFO']." WHERE Username='".htmlspecialchars($username)."'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 
-				$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO']." WHERE Username='".$dbSocket->escapeSimple($username)."'";
+				$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO']." WHERE Username='".htmlspecialchars($username)."'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 
-				$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_RADUSERGROUP']." WHERE Username='".$dbSocket->escapeSimple($username)."'";
+				$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_RADUSERGROUP']." WHERE Username='".htmlspecialchars($username)."'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 
 				if (strtolower($delradacct) == "yes") {
-					$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_RADACCT']." WHERE Username='".$dbSocket->escapeSimple($username)."'";
+					$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_RADACCT']." WHERE Username='".htmlspecialchars($username)."'";
 					$res = $dbSocket->query($sql);
 					$logDebugSQL .= $sql . "\n";
 				}
@@ -95,7 +95,7 @@
 				$sql1 = "SELECT id FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICE']." WHERE user_id=".$userId;
 				$res2 = $dbSocket->query($sql1);
 				$logDebugSQL .= $sql1 . "\n";
-				while ($row = $res2->fetchRow(DB_FETCHMODE_ASSOC)) {
+				while ($row = $res2->fetch(PDO::FETCH_ASSOC)) {
 
 					// delete all invoice items
 					$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICEITEMS']." WHERE invoice_id='".$row['id']."'";

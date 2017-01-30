@@ -81,11 +81,11 @@
 		}
 
 		// let's sanitize the values passed to us:
-		$where = $dbSocket->escapeSimple($where);
-		$operator = $dbSocket->escapeSimple($operator);
-		$value = $dbSocket->escapeSimple($value);
-		$startdate = $dbSocket->escapeSimple($startdate);
-		$enddate = $dbSocket->escapeSimple($enddate);
+		$where = htmlspecialchars($where);
+		$operator = htmlspecialchars($operator);
+		$value = htmlspecialchars($value);
+		$startdate = htmlspecialchars($startdate);
+		$enddate = htmlspecialchars($enddate);
 
 		// since we need to span through pages, which we do using GET queries I can't rely on this page
 		// to be processed through POST but rather using GET only (with the current design anyway).
@@ -99,7 +99,7 @@
 		}
 
 		// we should also sanitize the array that we will be passing to this page in the next query
-		$getFields = $dbSocket->escapeSimple($getFields);
+		$getFields = htmlspecialchars($getFields);
 
 
 		$getQuery = "";
@@ -110,13 +110,13 @@
 	
 		$select = implode(",", $sqlfields);
 		// sanitizing the array passed to us in the get request
-		$select = $dbSocket->escapeSimple($select);
+		$select = htmlspecialchars($select);
 
 
 		$sql = "SELECT $select FROM ".$configValues['CONFIG_DB_TBL_RADACCT']." WHERE ($where $op '$value') AND (AcctStartTime>'$startdate'
 			 AND AcctStartTime<'$enddate');";
 		$res = $dbSocket->query($sql);
-		$numrows = $res->numRows();
+		$numrows = $res->rowCount();
 
 
 		$sql = "SELECT $select FROM ".$configValues['CONFIG_DB_TBL_RADACCT']." WHERE ($where $op '$value') AND (AcctStartTime>'$startdate'
@@ -161,7 +161,7 @@
 
 
 	// inserting the values of each field from the database to the table
-	while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+	while($row = $res->fetch(PDO::FETCH_ASSOC)) {
 		echo "<tr>";
 		foreach ($sqlfields as $value) {
 			echo "<td> " . $row[$value] . "</td>";

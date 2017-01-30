@@ -56,11 +56,11 @@
 			
 			$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICE'].
 			" (id, user_id, date, status_id, type_id, notes, creationdate, creationby, updatedate, updateby) ".
-			" VALUES (0, '".$dbSocket->escapeSimple($user_id)."', '".
-			$dbSocket->escapeSimple($invoice_date)."', '".
-			$dbSocket->escapeSimple($invoice_status_id)."', '".
-			$dbSocket->escapeSimple($invoice_type_id)."', '".
-			$dbSocket->escapeSimple($invoice_notes)."', ".
+			" VALUES (0, '".htmlspecialchars($user_id)."', '".
+			htmlspecialchars($invoice_date)."', '".
+			htmlspecialchars($invoice_status_id)."', '".
+			htmlspecialchars($invoice_type_id)."', '".
+			htmlspecialchars($invoice_notes)."', ".
 			" '$currDate', '$currBy', NULL, NULL)";
 			$res = $dbSocket->query($sql);
 			$logDebugSQL .= $sql . "\n";
@@ -121,10 +121,10 @@
 							" (id, invoice_id, plan_id, amount, tax_amount, notes, ".
 							" creationdate, creationby, updatedate, updateby) ".
 							" VALUES (0, '".$invoice_id."', '".
-							$dbSocket->escapeSimple($planId)."', '".
-							$dbSocket->escapeSimple($amount)."', '".
-							$dbSocket->escapeSimple($tax)."', '".
-							$dbSocket->escapeSimple($notes)."', ".
+							htmlspecialchars($planId)."', '".
+							htmlspecialchars($amount)."', '".
+							htmlspecialchars($tax)."', '".
+							htmlspecialchars($notes)."', ".
 							" '$currDate', '$currBy', NULL, NULL)";
 	
 					$res = $dbSocket->query($sql);
@@ -141,9 +141,9 @@
 	// let's try to get the user_id from the username 
 	if (empty($user_id)) {
 		$sql = "SELECT id FROM ".$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'].
-		" WHERE username = '".$dbSocket->escapeSimple($username)."'";
+		" WHERE username = '".htmlspecialchars($username)."'";
 		$res = $dbSocket->query($sql);
-		$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+		$row = $res->fetch(PDO::FETCH_ASSOC);
 		$user_id = $row['id'];
 		$logDebugSQL .= $sql . "\n";
 	}
@@ -153,9 +153,9 @@
 	if (isset($user_id) && (!empty($user_id))) {
 
 		$sql = "SELECT id, contactperson, city, state, username FROM ".$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'].
-		" WHERE id = '".$dbSocket->escapeSimple($user_id)."'";
+		" WHERE id = '".htmlspecialchars($user_id)."'";
 		$res = $dbSocket->query($sql);
-		$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+		$row = $res->fetch(PDO::FETCH_ASSOC);
 		
 		$userInfo['contactperson'] = $row['contactperson'];
 		$userInfo['username'] = $row['username'];

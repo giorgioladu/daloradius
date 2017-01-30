@@ -78,7 +78,7 @@
 	//orig: used as maethod to get total rows - this is required for the pages_numbering.php page
 	$sql = "SELECT id, rateName, rateType, rateCost FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGRATES'].";";
 	$res = $dbSocket->query($sql);
-	$numrows = $res->numRows();
+	$numrows = $res->rowCount();
 
 	$sql = "SELECT id, rateName, rateType, rateCost FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGRATES']." ORDER BY $orderBy $orderType LIMIT $offset, $rowsPerPage;";
 	$res = $dbSocket->query($sql);
@@ -143,7 +143,7 @@
 		</th>
 
 	</tr> </thread>";
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		printqn("<tr>
                         <td> <input type='checkbox' name='ratename[]' value='$row[1]'> $row[0] </td>
 

@@ -79,7 +79,7 @@
 	//orig: used as maethod to get total rows - this is required for the pages_numbering.php page
 	$sql = "SELECT id, value AS paymentName, notes FROM ".$configValues['CONFIG_DB_TBL_DALOPAYMENTTYPES'].";";
 	$res = $dbSocket->query($sql);
-	$numrows = $res->numRows();
+	$numrows = $res->rowCount();
 
 	$sql = "SELECT id, value AS paymentName, notes FROM ".$configValues['CONFIG_DB_TBL_DALOPAYMENTTYPES']." ORDER BY $orderBy $orderType LIMIT $offset, $rowsPerPage;";
 	$res = $dbSocket->query($sql);
@@ -139,7 +139,7 @@
 
 
 	</tr> </thread>";
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		printqn("<tr>
                         <td> <input type='checkbox' name='paymentname[]' value='$row[1]'> $row[0] </td>
 

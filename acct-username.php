@@ -69,7 +69,7 @@
 	include 'include/management/pages_numbering.php';		// must be included after opendb because it needs to read the CONFIG_IFACE_TABLES_LISTING variable from the config file
 
 	// we can only use the $dbSocket after we have included 'library/opendb.php' which initialzes the connection and the $dbSocket object	
-	$username = $dbSocket->escapeSimple($username);	
+	$username = htmlspecialchars($username);	
 
 	// setup php session variables for exporting
 	$_SESSION['reportTable'] = $configValues['CONFIG_DB_TBL_RADACCT'];
@@ -103,7 +103,7 @@
 			".calledstationid = ".$configValues['CONFIG_DB_TBL_DALOHOTSPOTS'].
 			".mac WHERE UserName='$username';";
 		$res = $dbSocket->query($sql);
-		$numrows = $res->numRows();
+		$numrows = $res->rowCount();
 		
 		$sql = "SELECT ".$configValues['CONFIG_DB_TBL_RADACCT'].".RadAcctId, ".$configValues['CONFIG_DB_TBL_DALOHOTSPOTS'].
 			".name as hotspot, ".$configValues['CONFIG_DB_TBL_RADACCT'].
@@ -210,7 +210,7 @@
 			</th>
 			</tr> </thread>";
 			
-			while($row = $res->fetchRow()) {
+			while($row = $res->fetch()) {
 
 				printqn("<tr>
 						<td> $row[0] </td>

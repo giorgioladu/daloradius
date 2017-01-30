@@ -38,11 +38,11 @@
 		
 		include 'library/opendb.php';
 
-		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOPAYMENTTYPES']." WHERE value='".$dbSocket->escapeSimple($paymentname)."'";
+		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOPAYMENTTYPES']." WHERE value='".htmlspecialchars($paymentname)."'";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 
-		if ($res->numRows() == 0) {
+		if ($res->rowCount() == 0) {
 			if (trim($paymentname) != "") {
 
 				$currDate = date('Y-m-d H:i:s');
@@ -52,8 +52,8 @@
 				$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_DALOPAYMENTTYPES'].
 					" (id, value, notes, ".
 					"  creationdate, creationby, updatedate, updateby) ".
-					" VALUES (0, '".$dbSocket->escapeSimple($paymentname)."', '".
-					$dbSocket->escapeSimple($paymentnotes)."', ".
+					" VALUES (0, '".htmlspecialchars($paymentname)."', '".
+					htmlspecialchars($paymentnotes)."', ".
 					" '$currDate', '$currBy', NULL, NULL)";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";

@@ -44,11 +44,11 @@
 
 			$deleteEnddate = "";
 			if (trim($enddate) != "")
-				$deleteEnddate = " AND AcctStartTime<'".$dbSocket->escapeSimple($enddate)."'";
+				$deleteEnddate = " AND AcctStartTime<'".htmlspecialchars($enddate)."'";
 
 			$deleteStartdate = "";
 			if (trim($startdate) != "")
-				$deleteStartdate = " AND AcctStartTime>'".$dbSocket->escapeSimple($startdate)."'";
+				$deleteStartdate = " AND AcctStartTime>'".htmlspecialchars($startdate)."'";
 
 
 			$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_RADACCT'].

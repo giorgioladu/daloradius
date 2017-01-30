@@ -19,7 +19,7 @@
  *
  *********************************************************************************************************
  */
-
+ 
     include ("library/checklogin.php");
     $operator = $_SESSION['operator_user'];
 
@@ -53,33 +53,33 @@
 			$ratetype = "$ratetypenum/$ratetypetime";
 
 			$sql = "UPDATE ".$configValues['CONFIG_DB_TBL_DALOBILLINGRATES']." SET ".
-			" rateName='".$dbSocket->escapeSimple($ratename)."', ".
-			" rateType='".$dbSocket->escapeSimple($ratetype).	"', ".
-			" rateCost='".$dbSocket->escapeSimple($ratecost)."', ".
+			" rateName='".htmlspecialchars($ratename)."', ".
+			" rateType='".htmlspecialchars($ratetype).	"', ".
+			" rateCost='".htmlspecialchars($ratecost)."', ".
 			" updatedate='$currDate', updateby='$currBy' ".
-			" WHERE rateName='".$dbSocket->escapeSimple($ratename)."'";
+			" WHERE rateName='".htmlspecialchars($ratename)."'";
 			$res = $dbSocket->query($sql);
 			$logDebugSQL = "";
 			$logDebugSQL .= $sql . "\n";
-
+			
 			$successMsg = "Updated rate: <b> $ratename </b>";
 			$logAction .= "Successfully updated rate [$ratename] on page: ";
-
+			
 		} else {
 			$failureMsg = "no rate name was entered, please specify a rate name to edit.";
 			$logAction .= "Failed updating rate [$ratename] on page: ";
 		}
-
+		
 	}
+	
 
-
-	$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGRATES']." WHERE rateName='".$dbSocket->escapeSimple($ratename)."'";
+	$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGRATES']." WHERE rateName='".htmlspecialchars($ratename)."'";
 	$res = $dbSocket->query($sql);
 	$logDebugSQL .= $sql . "\n";
 
-	$row = $res->fetchRow();
+	$row = $res->fetch();
 	$ratename = $row[1];
-	list($ratetypenum, $ratetypetime) = explode("/",$row[2]);
+	list($ratetypenum, $ratetypetime) = split("/",$row[2]);
 	$ratecost = $row[3];
 	$creationdate = $row[4];
 	$creationby = $row[5];
@@ -97,7 +97,7 @@
 	include_once('library/config_read.php');
 	$log = "visited page: ";
 
-
+	
 ?>
 
 
@@ -113,12 +113,12 @@
 <?php
 	include_once ("library/tabber/tab-layout.php");
 ?>
-
+ 
 <?php
 	include ("menu-bill-rates.php");
-?>
+?>		
 	<div id="contentnorightbar">
-
+		
 		<h2 id="Intro" onclick="javascript:toggleShowDiv('helpPage')"><?php echo $l['Intro']['billratesedit.php'] ?>
 		:: <?php if (isset($ratename)) { echo $ratename; } ?><h144>+</h144></a></h2>
 
@@ -267,3 +267,8 @@
 
 </body>
 </html>
+
+
+
+
+

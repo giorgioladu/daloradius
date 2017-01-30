@@ -51,13 +51,13 @@
 			$currBy = $_SESSION['operator_user'];
 
 			$sql = "UPDATE ".$configValues['CONFIG_DB_TBL_DALOPAYMENTS']." SET ".
-			" invoice_id=".$dbSocket->escapeSimple($payment_invoice_id).", ".
-			" amount=".$dbSocket->escapeSimple($payment_amount).", ".
-			" date='".$dbSocket->escapeSimple($payment_date)."', ".
-			" type_id=".$dbSocket->escapeSimple($payment_type_id).", ".
-			" notes='".$dbSocket->escapeSimple($payment_notes)."', ".
+			" invoice_id=".htmlspecialchars($payment_invoice_id).", ".
+			" amount=".htmlspecialchars($payment_amount).", ".
+			" date='".htmlspecialchars($payment_date)."', ".
+			" type_id=".htmlspecialchars($payment_type_id).", ".
+			" notes='".htmlspecialchars($payment_notes)."', ".
 			" updatedate='$currDate', updateby='$currBy' ".
-			" WHERE id=".$dbSocket->escapeSimple($payment_id)."";
+			" WHERE id=".htmlspecialchars($payment_id)."";
 			$res = $dbSocket->query($sql);
 			$logDebugSQL = "";
 			$logDebugSQL .= $sql . "\n";
@@ -87,14 +87,14 @@
                 " FROM ".$configValues['CONFIG_DB_TBL_DALOPAYMENTS'].
                 " LEFT JOIN ".$configValues['CONFIG_DB_TBL_DALOPAYMENTTYPES'].
                 " ON ".$configValues['CONFIG_DB_TBL_DALOPAYMENTS'].".type_id=".$configValues['CONFIG_DB_TBL_DALOPAYMENTTYPES'].".id ".
-		" WHERE ".$configValues['CONFIG_DB_TBL_DALOPAYMENTS'].".id=".$dbSocket->escapeSimple($payment_id)."";
+		" WHERE ".$configValues['CONFIG_DB_TBL_DALOPAYMENTS'].".id=".htmlspecialchars($payment_id)."";
 
 
 
 	$res = $dbSocket->query($sql);
 	$logDebugSQL .= $sql . "\n";
 
-	$row = $res->fetchRow();
+	$row = $res->fetch();
 	$payment_id = $row[0];
 	$payment_invoice_id = $row[1];
 	$payment_amount = $row[2];

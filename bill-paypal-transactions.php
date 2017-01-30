@@ -85,13 +85,13 @@
 		include 'include/management/pages_numbering.php';		// must be included after opendb because it needs to read the CONFIG_IFACE_TABLES_LISTING variable from the config file
 
 		// let's sanitize the values passed to us:
-		$payer_email = $dbSocket->escapeSimple($payer_email);
-		$payment_address_status = $dbSocket->escapeSimple($payment_address_status);
-		$payer_status = $dbSocket->escapeSimple($payer_status);
-		$payment_status = $dbSocket->escapeSimple($payment_status);
-		$vendor_type = $dbSocket->escapeSimple($vendor_type);
-		$startdate = $dbSocket->escapeSimple($startdate);
-		$enddate = $dbSocket->escapeSimple($enddate);
+		$payer_email = htmlspecialchars($payer_email);
+		$payment_address_status = htmlspecialchars($payment_address_status);
+		$payer_status = htmlspecialchars($payer_status);
+		$payment_status = htmlspecialchars($payment_status);
+		$vendor_type = htmlspecialchars($vendor_type);
+		$startdate = htmlspecialchars($startdate);
+		$enddate = htmlspecialchars($enddate);
 
 	        include_once('include/management/userBilling.php');
 	        userBillingPayPalSummary($startdate, $enddate, $payer_email, $payment_address_status, $payer_status, $payment_status, $vendor_type, 1);
@@ -111,7 +111,7 @@
 		}
 
 		// we should also sanitize the array that we will be passing to this page in the next query
-		$getFields = $dbSocket->escapeSimple($getFields);
+		$getFields = htmlspecialchars($getFields);
 
 
 		$getQuery = "";
@@ -125,7 +125,7 @@
 
 		$select = implode(",", $sqlfields);
 		// sanitizing the array passed to us in the get request
-		$select = $dbSocket->escapeSimple($select);
+		$select = htmlspecialchars($select);
 
 
 		$sql = "SELECT $select FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGMERCHANT']." WHERE ".
@@ -136,7 +136,7 @@
 			" (vendor_type LIKE '$vendor_type') AND ".
 			" (payment_date>'$startdate' AND payment_date<'$enddate')";
 		$res = $dbSocket->query($sql);
-		$numrows = $res->numRows();
+		$numrows = $res->rowCount();
 
 
 		$sql = "SELECT $select FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGMERCHANT']." WHERE ".
@@ -281,7 +281,7 @@
 
 
 	// inserting the values of each field from the database to the table
-	while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+	while($row = $res->fetch(PDO::FETCH_ASSOC)) {
 		echo "<tr>";
 		foreach ($sqlfields as $value) {
 			echo "<td> " . $row[$value] . "</td>";

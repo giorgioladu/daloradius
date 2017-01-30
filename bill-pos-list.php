@@ -84,7 +84,7 @@
 	include 'library/opendb.php';
 	include 'include/management/pages_numbering.php';		// must be included after opendb because it needs to read the CONFIG_IFACE_TABLES_LISTING variable from the config file
 	
-	$planname = $dbSocket->escapeSimple($planname);
+	$planname = htmlspecialchars($planname);
 
 	$_where = "";
 	if (!empty($planname) && ($planname != "%") )
@@ -106,7 +106,7 @@
 		$_where.
 		" GROUP BY UserName ";
 	$res = $dbSocket->query($sql);
-	$numrows = $res->numRows();
+	$numrows = $res->rowCount();
 
 
 	/* we are searching for both kind of attributes for the password, being User-Password, the more
@@ -214,7 +214,7 @@
 
 		</tr> </thread>";
 
-	while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+	while($row = $res->fetch(PDO::FETCH_ASSOC)) {
 		
 		echo "
 			<tr>

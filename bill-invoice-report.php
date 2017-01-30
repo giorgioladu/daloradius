@@ -87,10 +87,10 @@
 	$sql_WHERE = ' WHERE (a.date>="'.$startdate.'" AND a.date<="'.$enddate.'") ';
 	
 	if (!empty($username) && $username != '%')
-		$sql_WHERE .= ' AND (b.username LIKE  "'.$dbSocket->escapeSimple($username).'") ';
+		$sql_WHERE .= ' AND (b.username LIKE  "'.htmlspecialchars($username).'") ';
 		
 	if (!empty($invoice_status) && $invoice_status != '%')
-		$sql_WHERE .= ' AND (a.status_id = "'.$dbSocket->escapeSimple($invoice_status).'") ';
+		$sql_WHERE .= ' AND (a.status_id = "'.htmlspecialchars($invoice_status).'") ';
 
 	//orig: used as maethod to get total rows - this is required for the pages_numbering.php page
 	$sql = "SELECT a.id, a.date, a.status_id, a.type_id, b.contactperson, b.username, ".
@@ -106,7 +106,7 @@
 			$sql_WHERE.
 			" GROUP BY a.id ";
 	$res = $dbSocket->query($sql);
-	$numrows = $res->numRows();		
+	$numrows = $res->rowCount();		
 	
 	
 	// setup php session variables for exporting
@@ -207,7 +207,7 @@
 		
 	</tr> </thread>";
 
-	while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+	while($row = $res->fetch(PDO::FETCH_ASSOC)) {
 		
 		echo '<tr>';
 		

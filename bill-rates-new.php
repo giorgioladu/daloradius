@@ -41,11 +41,11 @@
 		
 		include 'library/opendb.php';
 
-		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGRATES']." WHERE rateName='".$dbSocket->escapeSimple($ratename)."'";
+		$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGRATES']." WHERE rateName='".htmlspecialchars($ratename)."'";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 
-		if ($res->numRows() == 0) {
+		if ($res->rowCount() == 0) {
 			if (trim($ratename) != "" and trim($ratetypenum) != "" and trim($ratetypetime) != "" and trim($ratecost) != "") {
 
 				$currDate = date('Y-m-d H:i:s');
@@ -57,8 +57,8 @@
 				$sql = "INSERT INTO ".$configValues['CONFIG_DB_TBL_DALOBILLINGRATES'].
 					" (id, ratename, ratetype, ratecost, ".
 					"  creationdate, creationby, updatedate, updateby) ".
-					" VALUES (0, '".$dbSocket->escapeSimple($ratename)."', '".
-					$dbSocket->escapeSimple($ratetype)."',".$dbSocket->escapeSimple($ratecost).",".
+					" VALUES (0, '".htmlspecialchars($ratename)."', '".
+					htmlspecialchars($ratetype)."',".htmlspecialchars($ratecost).",".
 					" '$currDate', '$currBy', NULL, NULL)";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";

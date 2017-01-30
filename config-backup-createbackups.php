@@ -233,10 +233,10 @@
 					break;
 				}
 
-				if ($res->numRows() == 0)
+				if ($res->rowCount() == 0)
 					continue;
 
-				$row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+				$row = $res->fetch(PDO::FETCH_ASSOC);
 				foreach($row as $key=>$value) {				// $key is the table field and $value is the field's value
 					$sqlTableQuery .= "$key, ";
 					$colLength++;
@@ -257,7 +257,7 @@
 				$i = 0;
 				$currRow = "";
 	
-				while($row = $res->fetchRow()) {
+				while($row = $res->fetch()) {
 	
 					$currRow = " (";
 					for ($i = 0; $i < $colLength; $i++) {

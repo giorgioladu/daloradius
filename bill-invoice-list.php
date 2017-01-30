@@ -83,23 +83,23 @@
 
 	// if provided username, we'll need to turn that into the userbillinfo user id
 	if (!empty($username)) {
-		$username = $dbSocket->escapeSimple($username);
+		$username = htmlspecialchars($username);
 		$sql = 'SELECT id FROM '.$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'].
 				' WHERE username="'.$username.'"';
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 		
-		$row = $res->fetchRow();
+		$row = $res->fetch();
 		$user_id = $row[0];	
 	}
 	
 	
 	$sql_WHERE = ' WHERE 1=1 ';
 	if (!empty($user_id))
-		$sql_WHERE .= ' AND a.user_id = \''.$dbSocket->escapeSimple($user_id).'\'';
+		$sql_WHERE .= ' AND a.user_id = \''.htmlspecialchars($user_id).'\'';
 
 	if (!empty($edit_invoice_status_id))
-		$sql_WHERE .= ' AND a.status_id = '.$dbSocket->escapeSimple($edit_invoice_status_id);
+		$sql_WHERE .= ' AND a.status_id = '.htmlspecialchars($edit_invoice_status_id);
 		
 	//orig: used as maethod to get total rows - this is required for the pages_numbering.php page
 	$sql = "SELECT a.id, a.date, a.status_id, a.type_id, b.contactperson, b.username, ".
@@ -115,7 +115,7 @@
 			$sql_WHERE.
 			" GROUP BY a.id ";
 	$res = $dbSocket->query($sql);
-	$numrows = $res->numRows();		
+	$numrows = $res->rowCount();		
 	
 	$sql = "SELECT a.id, a.date, a.status_id, a.type_id, b.contactperson, b.username, ".
 			" c.value AS status, COALESCE(e2.totalpayed, 0) as totalpayed, COALESCE(d2.totalbilled, 0) as totalbilled ".
@@ -207,7 +207,7 @@
 		
 	</tr> </thread>";
 
-	while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+	while($row = $res->fetch(PDO::FETCH_ASSOC)) {
 		
 		echo '<tr>';
 		

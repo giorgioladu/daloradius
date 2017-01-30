@@ -51,13 +51,13 @@
 			$currDate = date('Y-m-d H:i:s');
 			$currBy = $_SESSION['operator_user'];
 
-			$invoice_id = $dbSocket->escapeSimple($invoice_id);
+			$invoice_id = htmlspecialchars($invoice_id);
 			
 			$sql = "UPDATE ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICE']." SET ".
-			" date='".$dbSocket->escapeSimple($invoice_date)."', ".
-			" status_id='".$dbSocket->escapeSimple($invoice_status_id)."', ".
-			" type_id='".$dbSocket->escapeSimple($invoice_type_id)."', ".
-			" notes='".$dbSocket->escapeSimple($invoice_notes)."', ".
+			" date='".htmlspecialchars($invoice_date)."', ".
+			" status_id='".htmlspecialchars($invoice_status_id)."', ".
+			" type_id='".htmlspecialchars($invoice_type_id)."', ".
+			" notes='".htmlspecialchars($invoice_notes)."', ".
 			" updatedate='$currDate', updateby='$currBy' ".
 			" WHERE id='".$invoice_id."'";
 			$res = $dbSocket->query($sql);
@@ -123,10 +123,10 @@
 							" (id, invoice_id, plan_id, amount, tax_amount, notes, ".
 							" creationdate, creationby, updatedate, updateby) ".
 							" VALUES (0, '".$invoice_id."', '".
-							$dbSocket->escapeSimple($planId)."', '".
-							$dbSocket->escapeSimple($amount)."', '".
-							$dbSocket->escapeSimple($tax)."', '".
-							$dbSocket->escapeSimple($notes)."', ".
+							htmlspecialchars($planId)."', '".
+							htmlspecialchars($amount)."', '".
+							htmlspecialchars($tax)."', '".
+							htmlspecialchars($notes)."', ".
 							" '$currDate', '$currBy', NULL, NULL)";
 	
 					$res = $dbSocket->query($sql);
@@ -155,13 +155,13 @@
 				" LEFT JOIN ".$configValues['CONFIG_DB_TBL_DALOBILLINGPLANS']." AS bp2 ON (bp2.id = d2.plan_id) ".
 				" LEFT JOIN (SELECT SUM(e.amount) as totalpayed, invoice_id FROM ". 
 				$configValues['CONFIG_DB_TBL_DALOPAYMENTS']." AS e GROUP BY e.invoice_id) AS e2 ON (e2.invoice_id = a.id) ".
-				" WHERE a.id = '".$dbSocket->escapeSimple($invoice_id)."'".
+				" WHERE a.id = '".htmlspecialchars($invoice_id)."'".
 				" GROUP BY a.id ";
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 	
 		$edit_invoiceid = $invoice_id;
-		$invoiceDetails = $res->fetchRow(DB_FETCHMODE_ASSOC);
+		$invoiceDetails = $res->fetch(PDO::FETCH_ASSOC);
 				
 	}
 	
@@ -431,7 +431,7 @@ function removeTableRow(rowCounter) {
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 				
-				while($row = $res->fetchRow(DB_FETCHMODE_ASSOC)) {
+				while($row = $res->fetch(PDO::FETCH_ASSOC)) {
 					
 					$itemName = $row['id'];
 					

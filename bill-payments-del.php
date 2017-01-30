@@ -49,7 +49,7 @@
 
 				// delete all payment types 
 				$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_DALOPAYMENTS']." WHERE id=".
-						$dbSocket->escapeSimple($id)."";
+						htmlspecialchars($id)."";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 				

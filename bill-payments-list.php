@@ -85,19 +85,19 @@
 	$sql_JOIN = '';
 	// if invoice_id then we need to lookup specific invoices
 	if (!empty($invoice_id)) {
-		$sql_WHERE .= ' invoice_id = \''.$dbSocket->escapeSimple($invoice_id).'\'';
+		$sql_WHERE .= ' invoice_id = \''.htmlspecialchars($invoice_id).'\'';
 		$sql_WHERE .= ' AND ';
 	}
 	
 	// if provided username, we'll need to turn that into the userbillinfo user id
 	if (!empty($username)) {
-		$username = $dbSocket->escapeSimple($username);
+		$username = htmlspecialchars($username);
 		$sql = 'SELECT id FROM '.$configValues['CONFIG_DB_TBL_DALOUSERBILLINFO'].
 				' WHERE username="'.$username.'"';
 		$res = $dbSocket->query($sql);
 		$logDebugSQL .= $sql . "\n";
 		
-		$row = $res->fetchRow();
+		$row = $res->fetch();
 		$user_id = $row[0];	
 	}
 	
@@ -105,7 +105,7 @@
 	if ($user_id && !empty($user_id)) {
 		$sql_JOIN .= ' JOIN '.$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICE'].' ON '.
 						$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICE'].'.id = '.$configValues['CONFIG_DB_TBL_DALOPAYMENTS'].'.invoice_id';
-		$sql_WHERE .= $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICE'].'.user_id = '.$dbSocket->escapeSimple($user_id);
+		$sql_WHERE .= $configValues['CONFIG_DB_TBL_DALOBILLINGINVOICE'].'.user_id = '.htmlspecialchars($user_id);
 		$sql_WHERE .= ' AND ';
 	}
 		
@@ -124,7 +124,7 @@
             " ON ".$configValues['CONFIG_DB_TBL_DALOPAYMENTS'].".type_id=".$configValues['CONFIG_DB_TBL_DALOPAYMENTTYPES'].".id ".
 			$sql_WHERE;
 	$res = $dbSocket->query($sql);
-	$numrows = $res->numRows();
+	$numrows = $res->rowCount();
 
     $sql = "SELECT ".$configValues['CONFIG_DB_TBL_DALOPAYMENTS'].".id, ".
 			$configValues['CONFIG_DB_TBL_DALOPAYMENTS'].".invoice_id, ".
@@ -208,7 +208,7 @@
 
 
 	</tr> </thread>";
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		printqn("<tr>
                         <td> <input type='checkbox' name='payment_id[]' value='$row[0]'> 
 

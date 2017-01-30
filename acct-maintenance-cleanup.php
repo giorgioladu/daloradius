@@ -37,7 +37,7 @@
 
 			// delete all stale sessions in the database that occur until $enddate
 			$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_RADACCT'].
-					" WHERE AcctStartTime<'".$dbSocket->escapeSimple($enddate)."'".
+					" WHERE AcctStartTime<'".htmlspecialchars($enddate)."'".
 					" AND (AcctStopTime='0000-00-00 00:00:00' OR AcctStopTime IS NULL)";
 			$res = $dbSocket->query($sql);
 			$logDebugSQL .= $sql . "\n";

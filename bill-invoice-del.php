@@ -48,13 +48,13 @@
 
 				// remove invoice id 
 				$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICE'].
-						" WHERE id='".$dbSocket->escapeSimple($invoice_id_single)."'";
+						" WHERE id='".htmlspecialchars($invoice_id_single)."'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 
 				// remove invoice items associated with this invoice id
 				$sql = "DELETE FROM ".$configValues['CONFIG_DB_TBL_DALOBILLINGINVOICEITEMS'].
-						" WHERE invoice_id='".$dbSocket->escapeSimple($invoice_id_single)."'";
+						" WHERE invoice_id='".htmlspecialchars($invoice_id_single)."'";
 				$res = $dbSocket->query($sql);
 				$logDebugSQL .= $sql . "\n";
 				

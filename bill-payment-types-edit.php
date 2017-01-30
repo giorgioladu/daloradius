@@ -48,10 +48,10 @@
 			$currBy = $_SESSION['operator_user'];
 
 			$sql = "UPDATE ".$configValues['CONFIG_DB_TBL_DALOPAYMENTTYPES']." SET ".
-			" value='".$dbSocket->escapeSimple($paymentname)."', ".
-			" notes='".$dbSocket->escapeSimple($paymentnotes).	"', ".
+			" value='".htmlspecialchars($paymentname)."', ".
+			" notes='".htmlspecialchars($paymentnotes).	"', ".
 			" updatedate='$currDate', updateby='$currBy' ".
-			" WHERE value='".$dbSocket->escapeSimple($paymentname)."'";
+			" WHERE value='".htmlspecialchars($paymentname)."'";
 			$res = $dbSocket->query($sql);
 			$logDebugSQL = "";
 			$logDebugSQL .= $sql . "\n";
@@ -67,11 +67,11 @@
 	}
 	
 
-	$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOPAYMENTTYPES']." WHERE value='".$dbSocket->escapeSimple($paymentname)."'";
+	$sql = "SELECT * FROM ".$configValues['CONFIG_DB_TBL_DALOPAYMENTTYPES']." WHERE value='".htmlspecialchars($paymentname)."'";
 	$res = $dbSocket->query($sql);
 	$logDebugSQL .= $sql . "\n";
 
-	$row = $res->fetchRow();
+	$row = $res->fetch();
 	$paymenttype = $row[1];
 	$paymentnotes = $row[2];
 	$creationdate = $row[3];
