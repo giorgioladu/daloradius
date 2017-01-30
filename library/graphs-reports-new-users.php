@@ -42,7 +42,7 @@
                         " GROUP BY Month ORDER BY Date(Month);";
         $res = $dbSocket->query($sql);
 
-        while($row = $res->fetchRow()) {
+        while($row = $res->fetch()) {
                 $chart->addPoint(new Point("$row[1]", "$row[0]"));
         }
 

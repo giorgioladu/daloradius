@@ -48,7 +48,7 @@ function daily($orderBy, $orderType) {
 
 
 
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 
 		// The table that is being procuded is in the format of:
 		// +--------+------+
@@ -127,7 +127,7 @@ function monthly($orderBy, $orderType) {
 	$array_logins = array();
 	$array_months = array();
 
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 
 		// The table that is being procuded is in the format of:
 		// +--------+--------+
@@ -205,7 +205,7 @@ function yearly($orderBy, $orderType) {
 	$array_logins = array();
 	$array_years = array();
 
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 
 		// The table that is being procuded is in the format of:
 		// +--------+-------+

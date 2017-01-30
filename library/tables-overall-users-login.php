@@ -46,7 +46,7 @@ function daily($username, $orderBy, $orderType) {
 	$array_days = array();
 
 	$user = "";
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 
 		// The table that is being procuded is in the format of:
 		// +----------+----------------------+------+
@@ -128,7 +128,7 @@ function monthly($username, $orderBy, $orderType) {
 
 	$user = "";
 
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 
 		// The table that is being procuded is in the format of:
 		// +----------+----------------------+--------+
@@ -215,7 +215,7 @@ function yearly($username, $orderBy, $orderType) {
 
 	$user = "";
 
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		// The table that is being procuded is in the format of:
 		// +----------+----------------------+-------+
 		// | UserName | count(AcctStartTime) | Year  |

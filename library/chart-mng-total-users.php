@@ -36,7 +36,7 @@ $res = $dbSocket->query($sql);
 
 $array_users = array();
 
-while($row = $res->fetchRow()) {
+while($row = $res->fetch()) {
 	$chart->addPoint(new Point("Users", "$row[0]"));
 }
 

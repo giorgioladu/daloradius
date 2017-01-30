@@ -50,7 +50,7 @@ if (is_readable($logfile) == false) {
                                 if (preg_match("/$bootFilter/i", $line)) {
                                         if ($counter == 0)
                                                 break;
-                                        $ret = preg_replace("/\n/i", "<br>", $line);
+                                        $ret = eregi_replace("\n", "<br>", $line);
                                         echo $ret;
                                         $counter--;
                                 }

@@ -91,7 +91,7 @@ function graph_day($day,$month,$year) {
 		$date = "$year-$month-$day $i:00:00";
 		$sql = "select count(radacctid) from radacct where (acctstarttime <= '$date' and acctstoptime >= '$date') or (acctstarttime <= '$date' and acctsessiontime = 0 and acctinputoctets = 0 and acctoutputoctets = 0);";
 		$result = $dbSocket->query($sql);
-		$row = $result->fetchRow();
+		$row = $result->fetch();
 		$chart->addPoint(new Point("$i","$row[0]"));
 		if (($i > date("G")) and ($day == date("j"))) {
 			$i = 24;
@@ -122,7 +122,7 @@ function graph_month($month,$year) {
 			$date = "$year-$month-$i $j:00:00";
 			$sql = "select count(radacctid) from radacct where (acctstarttime <= '$date' and acctstoptime >= '$date') or (acctstarttime <= '$date' and acctsessiontime = 0 and acctinputoctets = 0 and acctoutputoctets = 0);";
 			$result = $dbSocket->query($sql);
-			$row = $result->fetchRow();
+			$row = $result->fetch();
 			$cnt = $row[0];
 			if ($cnt < $measure[$i]['min']) {
 				$measure[$i]['min'] = $cnt;

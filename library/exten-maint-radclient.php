@@ -24,8 +24,8 @@
  *
  *********************************************************************************************************
  */
-
-
+ 
+ 
 // user_auth function
 // sends to the radius server an authentication request packet (for the sake of testing a user)
 // $radiusaddr	- the server address, this would most likely be the radius server IP Address/Hostname
@@ -40,7 +40,7 @@ function user_auth($options,$user,$pass,$radiusaddr,$radiusport,$secret,$command
 	$args = escapeshellarg("$radiusaddr:$radiusport")." ".escapeshellarg($command).
 		" ".escapeshellarg($secret);
 	$query = "User-Name=$user,User-Password=$pass";
-
+	
 	$radclient = "radclient"; 		// or you can change this with the full path if the binary radcilent program can not be
 									// found within your $PATH variable
 
@@ -77,6 +77,7 @@ function user_auth($options,$user,$pass,$radiusaddr,$radiusport,$secret,$command
 // $nasaddr	- NAS address to receive the coa or disconnect request packet
 // $nasport	- NAS Port address (depends on the configuration on the NAS, this may be a different port for either CoA or Disconnect packets).
 function user_disconnect($options,$user,$nasaddr,$nasport="3779",$nassecret,$command="disconnect",$additional="") {
+
 
 	$user = escapeshellarg($user);
 
@@ -118,3 +119,4 @@ function user_disconnect($options,$user,$nasaddr,$nasport="3779",$nassecret,$com
 }
 
 ?>
+

@@ -33,12 +33,12 @@
 	// getting total users
 	$sql = "SELECT DISTINCT(UserName) FROM ".$configValues['CONFIG_DB_TBL_RADCHECK'];
 	$res = $dbSocket->query($sql);
-	$totalUsers = $res->numRows();
+	$totalUsers = $res->rowCount();
 
 	// get total users online
 	$sql = "SELECT DISTINCT(UserName) FROM ".$configValues['CONFIG_DB_TBL_RADACCT']." WHERE (AcctStopTime is NULL OR AcctStopTime = '0000-00-00 00:00:00')";
 	$res = $dbSocket->query($sql);
-	$totalUsersOnline = $res->numRows();
+	$totalUsersOnline = $res->rowCount();
 
 	if ($totalUsers != 0) {
 		$totalUsersOffline = $totalUsers - $totalUsersOnline;

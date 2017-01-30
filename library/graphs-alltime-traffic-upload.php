@@ -64,7 +64,7 @@ function daily() {
 			$configValues['CONFIG_DB_TBL_RADACCT']." group by day;";
 	$res = $dbSocket->query($sql);
 
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		$uploads = floor($row[0]/$sizeDivision);
 		$chart->addPoint(new Point("$row[1]", "$uploads"));
 	}
@@ -99,7 +99,7 @@ function monthly() {
 		$configValues['CONFIG_DB_TBL_RADACCT']." group by month;";
 	$res = $dbSocket->query($sql);
 
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		$uploads = floor($row[0]/$sizeDivision);
 		$chart->addPoint(new Point("$row[1]", "$uploads"));
 	}
@@ -134,7 +134,7 @@ function yearly() {
 			$configValues['CONFIG_DB_TBL_RADACCT']." group by year;";
 	$res = $dbSocket->query($sql);
 
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		$uploads = floor($row[0]/$sizeDivision);
 		$chart->addPoint(new Point("$row[1]", "$uploads"));
 	}

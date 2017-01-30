@@ -37,7 +37,7 @@
 		" WHERE operator_id='".$_SESSION['operator_id']."' AND file='".$currFile."'";
 		
     $res = $dbSocket->query($sql);
-    $row = $res->fetchRow(DB_FETCHMODE_ASSOC);
+    $row = $res->fetch(PDO::FETCH_ASSOC);
 
 
 	// the following checks if the access field is set to 1 or 0, 1 is access granted

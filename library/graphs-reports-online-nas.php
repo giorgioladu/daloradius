@@ -37,7 +37,7 @@
 				".$configValues['CONFIG_DB_TBL_RADACCT'].".nasipaddress WHERE (acctstoptime
 				IS NULL OR acctstoptime =  '0000-00-00 00:00:00') group by nasipaddress;";
        $res = $dbSocket->query($sql);
-       while($row = $res->fetchRow()) {
+       while($row = $res->fetch()) {
                $chart->addPoint(new Point("$row[0]", "$row[1]"));
        }
        $chart->setTitle("Online Users By NAS");

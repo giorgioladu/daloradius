@@ -50,7 +50,7 @@ function daily() {
 			$configValues['CONFIG_DB_TBL_RADACCT']." group by Day;";
 	$res = $dbSocket->query($sql);
 
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		$chart->addPoint(new Point("$row[1]", "$row[0]"));
 	}
 
@@ -81,7 +81,7 @@ function monthly() {
 			$configValues['CONFIG_DB_TBL_RADACCT']." group by Month;";
 	$res = $dbSocket->query($sql);
 
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		$chart->addPoint(new Point("$row[1]", "$row[0]"));
 	}
 
@@ -112,7 +112,7 @@ function yearly() {
 			$configValues['CONFIG_DB_TBL_RADACCT']." group by Year;";
 	$res = $dbSocket->query($sql);
 
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		$chart->addPoint(new Point("$row[1]", "$row[0]"));
 	}
 

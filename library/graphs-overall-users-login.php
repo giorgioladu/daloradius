@@ -45,7 +45,7 @@ function daily($username) {
 	include 'opendb.php';
 	include 'libchart/libchart.php';
 
-	$username = $dbSocket->escapeSimple($username);
+	$username = htmlspecialchars($username);
 	
 	header("Content-type: image/png");
 
@@ -55,7 +55,7 @@ function daily($username) {
 		$configValues['CONFIG_DB_TBL_RADACCT']." WHERE username='$username' AND acctstoptime>0 GROUP BY Day;";
 	$res = $dbSocket->query($sql);
 
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		$chart->addPoint(new Point("$row[2]", "$row[1]"));
 	}
 
@@ -78,7 +78,7 @@ function monthly($username) {
 	include 'opendb.php';
 	include 'libchart/libchart.php';
 
-	$username = $dbSocket->escapeSimple($username);
+	$username = htmlspecialchars($username);
 	
 	header("Content-type: image/png");
 
@@ -89,7 +89,7 @@ function monthly($username) {
 	$res = $dbSocket->query($sql);
 
 
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		$chart->addPoint(new Point("$row[2]", "$row[1]"));
 	}
 
@@ -112,7 +112,7 @@ function yearly($username) {
 	include 'opendb.php';
 	include 'libchart/libchart.php';
 	
-	$username = $dbSocket->escapeSimple($username);
+	$username = htmlspecialchars($username);
 
 	header("Content-type: image/png");
 
@@ -122,7 +122,7 @@ function yearly($username) {
 		$configValues['CONFIG_DB_TBL_RADACCT']." WHERE username='$username' GROUP BY Year;";
 	$res = $dbSocket->query($sql);
 
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		$chart->addPoint(new Point("$row[2]", "$row[1]"));
 	}
 

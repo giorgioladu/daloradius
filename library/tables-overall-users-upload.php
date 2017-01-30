@@ -47,7 +47,7 @@ function daily($username, $orderBy, $orderType) {
 	$array_uploads = array();
 	$array_days = array();
 
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 
 		// The table that is being procuded is in the format of:
 		// +--------+------+
@@ -122,7 +122,7 @@ function monthly($username, $orderBy, $orderType) {
 	$array_uploads = array();
 	$array_months = array();
 
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 
 		// The table that is being procuded is in the format of:
 		// +--------+--------+
@@ -202,7 +202,7 @@ function yearly($username, $orderBy, $orderType) {
 	$array_years = array();
 
 
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 
 		// The table that is being procuded is in the format of:
 		// +--------+-------+

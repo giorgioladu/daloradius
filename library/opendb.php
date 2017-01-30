@@ -19,13 +19,13 @@
  *
  *********************************************************************************************************
  */
-
+ 
 	include (dirname(__FILE__).'/config_read.php');
 	include (dirname(__FILE__).'/tableConventions.php');
 
 	// setup database connectio information according to the session's location name which is held in $SESSION['location_name'].
 	// this is introduced in order to provide daloRADIUS to authenticate and manage several database backends without having to
-	// install several web directories of daloradius
+	// install several web directories of daloradius 
 
 	if ((isset($_SESSION['location_name'])) && ($_SESSION['location_name'] == "default")) {
 
@@ -38,9 +38,9 @@
 
 		if (!$mydbPort)
 			$mydbPort = '3306';
-
-		$dbConnectString = $mydbEngine . "://".$mydbUser.":".$mydbPass."@".
-					$mydbHost.":".$mydbPort."/".$mydbName;
+		
+		/*$dbConnectString = $mydbEngine . "://".$mydbUser.":".$mydbPass."@".
+					$mydbHost.":".$mydbPort."/".$mydbName;*/
 
 	} elseif ((isset($_SESSION['location_name'])) && ($_SESSION['location_name'] != "default")) {
 
@@ -53,9 +53,9 @@
 
 		if (!$mydbPort)
 			$mydbPort = '3306';
-
-		$dbConnectString = $mydbEngine . "://".$mydbUser.":".$mydbPass."@".
-					$mydbHost.":".$mydbPort."/".$mydbName;
+		
+		/*$dbConnectString = $mydbEngine . "://".$mydbUser.":".$mydbPass."@".
+					$mydbHost.":".$mydbPort."/".$mydbName;	*/
 	} else {
 		// TODO
 		// requires handling of un-initialized session variable incase opendb.php is called not inside
@@ -71,9 +71,9 @@
 
 		if (!$mydbPort)
 			$mydbPort = '3306';
-
-		$dbConnectString = $mydbEngine . "://".$mydbUser.":".$mydbPass."@".
-					$mydbHost.":".$mydbPort."/".$mydbName;
+		
+		/*$dbConnectString = $mydbEngine . "://".$mydbUser.":".$mydbPass."@".
+					$mydbHost.":".$mydbPort."/".$mydbName;*/
 	}
 
 
@@ -81,18 +81,33 @@
 	// to different technologies like mysql, oracle, postgresql, etc...
 	// until everything is completely migrated we will leave these commented out
 
-	include_once ('DB.php');
+	//include_once ('DB.php');
+	
+	//mysql:dbname=testdb;host=127.0.0.1;port=3333
+	
+$dbConnectString = $mydbEngine.":dbname=".$mydbName.";host=".$mydbHost.";port=".$mydbPort;
 
-	$dbSocket = DB::connect($dbConnectString);
+	//$dbSocket = DB::connect($dbConnectString);
+	
+	try {
+		$dbSocket = new PDO($dbConnectString,$mydbUser,$mydbPass);
+    // set the PDO error mode to exception
+    $dbSocket->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-	if (DB::isError ($dbSocket))
+    }
+catch(PDOException $e)
+    {
+    echo "Connection failed: " . $e->getMessage();
+    }
+
+	/*if (DB::isError ($dbSocket))
 		die ("<b>Database connection error</b><br/>
-			<b>Error Message</b>: " . $dbSocket->getMessage () . "<br/>"
-			);
+			<b>Error Message</b>: " . $dbSocket->getMessage () . "<br/>" 
+			);*/
 
-
+	
 	include_once (dirname(__FILE__).'/errorHandling.php');		// we declare the errorHandler() function in errorHandling.php
 
-	$dbSocket->setErrorHandling(PEAR_ERROR_CALLBACK, 'errorHandler');	// setting errorHandler function for the dbSocket obj
+	//$dbSocket->setErrorHandling(PEAR_ERROR_CALLBACK, 'errorHandler');	// setting errorHandler function for the dbSocket obj
 
-  $dbSocket->query("SET SESSION sql_mode = '';");
+ // $dbSocket->query("SET SESSION sql_mode = '';");

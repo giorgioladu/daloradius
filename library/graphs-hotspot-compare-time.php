@@ -38,7 +38,7 @@
 			$configValues['CONFIG_DB_TBL_DALOHOTSPOTS'].".mac) GROUP BY ".$configValues['CONFIG_DB_TBL_DALOHOTSPOTS'].".name;";
 	$res = $dbSocket->query($sql);
 
-	while($row = $res->fetchRow()) {
+	while($row = $res->fetch()) {
 		$chart->addPoint(new Point("$row[0] ($row[3] seconds)", "$row[3]"));
 	}
 
